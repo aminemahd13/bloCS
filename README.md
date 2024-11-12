@@ -88,10 +88,12 @@ python main.py
 ---
 
 ## Team Members
-- **[Name 1]**
+- **[Name 1]** Zakaria El Ouahidi 
 - **[Name 2]**
 - **[Name 3]** 
 - **[Name 4]** 
+- **[Name 5]** 
+- **[Name 6]** 
 
 ---
 
