@@ -55,11 +55,11 @@ The **2048 Games Project** expands on the original **2048 game**, a puzzle game 
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://gitlab-cw1.centralesupelec.fr/paolo.ballarini/jeu2048.git
+   git clone https://gitlab-cw1.centralesupelec.fr/amine.mahdane/cw-2048.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd jeu2048
+   cd cw-2048
    ```
 3. (Optional) Set up a virtual environment:
    ```bash
