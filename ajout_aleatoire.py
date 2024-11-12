@@ -17,3 +17,6 @@ def add_random(grille : list) -> None:
         else:
             new_number=2 #choisis le nombre à ajouter sur la case séléctionnée avec une proba de 1/5 pour 4 et 4/5 pour 2
         grille[x][y]=new_number #modifie la grille
+        
+def rien():
+    print("rien")
