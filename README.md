@@ -1,93 +1,106 @@
-# CW 2048
 
+# 2048 Games Project
 
+## Overview
+This project is part of our coding week at CentraleSupélec, where we are tasked with developing various versions of the classic **2048 game** in Python. The project explores innovative twists to the original gameplay, offering multiple versions with unique rules, designs, and objectives. 
 
-## Getting started
+The project's repository can be accessed through the school’s GitLab: [2048 Project Repository](https://gitlab-cw1.centralesupelec.fr/paolo.ballarini/jeu2048/-/tree/main).
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Table of Contents
+- [Project Description](#project-description)
+- [Game Variants](#game-variants)
+- [Getting Started](#getting-started)
+- [Technologies Used](#technologies-used)
+- [Team Members](#team-members)
+- [Future Enhancements](#future-enhancements)
+- [Acknowledgments](#acknowledgments)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
+## Project Description
+The **2048 Games Project** expands on the original **2048 game**, a puzzle game in which players combine tiles to reach a goal tile, typically 2048. We have designed multiple game variants, each introducing new mechanics and challenges to enhance the gameplay experience.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### Objectives:
+1. Develop multiple Python-based 2048 versions, each with unique gameplay rules.
+2. Apply Python programming fundamentals and modular design practices.
+3. Experiment with interactive game design using text and graphical interfaces.
 
+---
+
+## Game Variants
+
+### 1. **Classic 2048**
+   - The traditional game with a 4x4 grid, where the player’s goal is to merge tiles until they reach the 2048 tile.
+
+### 2. **Time Attack 2048**
+   - Players must reach 2048 within a time limit, adding urgency to the game.
+
+### 3. **Hexagonal 2048**
+   - A new hexagonal grid format introduces unique movement and tile-merging strategies.
+
+### 4. **Reverse 2048**
+   - Start with the 2048 tile and merge tiles down to a lower target number in a limited number of moves.
+
+### 5. **Themed 2048 (e.g., Space Theme)**
+   - A visual overhaul with a futuristic or space-inspired theme, adding animations and sound effects.
+
+---
+
+## Getting Started
+
+### Prerequisites
+- **Python 3.8+**
+- Recommended: **Virtual Environment** for dependencies
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://gitlab-cw1.centralesupelec.fr/paolo.ballarini/jeu2048.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd jeu2048
+   ```
+3. (Optional) Set up a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+4. Install required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Running the Project
+To start a game variant, run the appropriate Python script:
+```bash
+python main.py
 ```
-cd existing_repo
-git remote add origin https://gitlab-cw1.centralesupelec.fr/amine.mahdane/cw-2048.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+---
 
-- [ ] [Set up project integrations](https://gitlab-cw1.centralesupelec.fr/amine.mahdane/cw-2048/-/settings/integrations)
+## Technologies Used
+- **Python**: Core programming language for game logic and UI.
+- **Tkinter**: For graphical interface in some versions.
+- **Pygame**: Used in advanced or animated game versions.
+- **Git/GitLab**: Version control and project collaboration.
 
-## Collaborate with your team
+---
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Team Members
+- **[Name 1]**
+- **[Name 2]**
+- **[Name 3]** 
+- **[Name 4]** 
 
-## Test and Deploy
+---
 
-Use the built-in continuous integration in GitLab.
+## Enhancements
+- **Leaderboards**: Implement local leaderboards for each game variant.
+- **Additional Themes**: Create more themes, such as historical or nature-inspired.
+- **Multiplayer Mode**: Develop a competitive or collaborative multiplayer mode.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+---
 
-***
 
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Enjoy exploring our versions of the 2048 game!
