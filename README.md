@@ -89,7 +89,7 @@ python main.py
 
 ## Team Members
 - **Zakaria El Ouahidi** 
-- **[Name 2]**
+- **Amine Mahdane**
 - **[Name 3]** 
 - **[Name 4]** 
 - **[Name 5]** 
