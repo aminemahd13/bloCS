@@ -88,7 +88,7 @@ python main.py
 ---
 
 ## Team Members
-- **[Name 1]**
+- **Amine Mahdane**
 - **[Name 2]**
 - **[Name 3]** 
 - **[Name 4]** 
