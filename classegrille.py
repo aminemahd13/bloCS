@@ -1,7 +1,7 @@
 from random import randint
 
 def add_random(grille : dict) -> None:
-    pass
+    pass #A définir
 
 class Grille() :
     def __init__(self , taille : int , theme : str) :
@@ -14,7 +14,7 @@ class Grille() :
         for i in range(n):
             add_random(grille = self.liste)
     
-    def _longueur_max(self) -> int:
+    def _longueur_max(self) -> int :
         """
         Donne la longueur maximale de caractères de la grille
         en fonction du thème (fonction cachée).
@@ -62,3 +62,86 @@ class Grille() :
             G = G + "\n" + L + "\n" + T
         print(G) #Affichage de la grille
 
+    def verif_gauche(self) -> bool :
+        """
+        Renvoie True si la grille peut être tassée à gauche,
+        False sinon.
+        """
+        return True #A définir
+        #Renvoie True or False
+    
+    def gauche(self) -> None :
+        """
+        Tasse la grille à gauche.
+        """
+        pass #A définir
+    
+    def _rotation_horaire(self) -> None :
+        """
+        Tourne la grille dans le sens horaire.
+        """
+        pass #A définir
+    
+    def _rotation_antihoraire(self) -> None :
+        """
+        Tourne la grille dans le sens antihoraire.
+        """
+        pass #A définir
+    
+    def verif_droite(self) -> None :
+        """
+        Renvoie True si la grille peut être tassée à droite,
+        False sinon.
+        """
+        self._rotation_horaire()
+        self._rotation_horaire()
+        test = self.verif_gauche()
+        self._rotation_antihoraire()
+        self._rotation_antihoraire()
+        return test
+    
+    def droite(self) -> None :
+        """
+        Tasse la grille à droite.
+        """
+        self._rotation_horaire()
+        self._rotation_horaire()
+        self.gauche()
+        self._rotation_antihoraire()
+        self._rotation_antihoraire()
+    
+    def verif_haut(self) -> None :
+        """
+        Renvoie True si la grille peut être tassée en haut,
+        False sinon.
+        """
+        self._rotation_antihoraire()
+        test = self.verif_gauche()
+        self._rotation_horaire()
+        return test
+    
+    def haut(self) -> None :
+        """
+        Tasse la grille en haut.
+        """
+        self._rotation_antihoraire()
+        self.gauche()
+        self._rotation_horaire()
+    
+    def verif_bas(self) -> None :
+        """
+        Renvoie True si la grille peut être tassée en bas,
+        False sinon.
+        """
+        self._rotation_horaire()
+        test = self.verif_gauche()
+        self._rotation_antihoraire()
+        return test
+    
+    def bas(self) -> None :
+        """
+        Tasse la grille en bas.
+        """
+        self._rotation_horaire()
+        self.gauche()
+        self._rotation_antihoraire()
