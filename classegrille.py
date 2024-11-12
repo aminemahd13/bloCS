@@ -1,33 +1,37 @@
-from random import randint
+import ajout_aleatoire
+import gauche
 
-def add_random(grille : list) -> None :
-    liste_zeros=[] #Liste qui contient les coordonnées des cases vides
+add_random = ajout_aleatoire.add_random
+gauche_ligne = gauche.gauche_ligne
+
+
+def copie(grille : list) -> list:
+    """
+    Copie terme à terme le tableau.
+    """
+    grille_copie = [] #Création d'un tableau vide
     for i in range(len(grille)) :
+        #On copie terme à terme chaque ligne
+        ligne = []
         for j in range(len(grille)) :
-            if grille[i][j] == 0 :
-                liste_zeros.append((i , j))# ajoute dans liste_zeros toutes les coordonnées des cases vides
-    
-    if len(liste_zeros) > 0: #on n'effectue le programme que si la grille comporte des cases vides
-        case_select = liste_zeros[randint(0 , len(liste_zeros))] #select une case vide aléatoirement
-        (x , y) = case_select
-        proba = randint(1 , 5)
-        new_number = 0
-        if proba == 1 :
-            new_number = 4
-        else :
-            new_number = 2 #choisis le nombre à ajouter sur la case séléctionnée avec une proba de 1/5 pour 4 et 4/5 pour 2
-        grille[x][y] = new_number #modifie la grille
+            ligne.append(grille[i][j])
+        grille_copie.append(ligne) #On ajoute la ligne dans la copie
+    return grille_copie
+
+
 
 class Grille() :
     def __init__(self , taille : int , theme : str) :
-        L = [0 for i in range(taille)]
-        self.liste = [L for i in range(taille)]
+        L=[[0 for i in range(taille)] for i in range(taille)]
+        self.grille = copie(L) #Création d'un tableau vide
         self.theme = theme
         self.taille = taille
+        self.score = 0
         self.__THEMES = {"0" : {"name" : "Default" , 0 : "" , 2 : "2" , 4 : "4" , 8 : "8" , 16 : "16" , 32 : "32" , 64 : "64" , 128 : "128" , 256 : "256" , 512 : "512" , 1024 : "1024" , 2048 : "2048" , 4096 : "4096" , 8192 : "8192"} , "1" : {"name" : "Chemistry" , 0 : "" , 2 : "H" , 4 : "He" , 8 : "Li" , 16 : "Be" , 32 : "B" , 64 : "C" , 128 : "N" , 256 : "O" , 512 : "F" , 1024 : "Ne" , 2048 : "Na" , 4096 : "Mg" , 8192 : "Al"} , "2" : {"name" : "Alphabet" , 0 : "" , 2 : "A" , 4 : "B" , 8 : "C" , 16 : "D" , 32 : "E" , 64 : "F" , 128 : "G" , 256 : "H" , 512 : "I" , 1024 : "J" , 2048 : "K" , 4096 : "L" , 8192 : "M"}}
-        n = (taille * taille) // 8
+        n = (taille * taille) // 8 #On rempli initialement 1/8 de la grille
         for i in range(n):
-            add_random(grille = self.liste)
+            #On ajoute des nombres randoms et on met le score
+            self.score = add_random(grille = self.grille , score = self.score)
     
     def _longueur_max(self) -> int :
         """
@@ -37,7 +41,7 @@ class Grille() :
         m = 0
         for i in range(self.taille):
             for j in range(self.taille):
-                ch = self.liste[i][j]
+                ch = self.grille[i][j]
                 l = len(self.__THEMES[self.theme][ch])
                 if l > m:
                     m = l
@@ -48,17 +52,19 @@ class Grille() :
         Affiche la grille en fonction
         du thème choisi.
         """
-        grille_modif = self.liste.copy() #Grille avec les caractèmes personnalisés
+        grille_str = [] #Grille contenant les caractères "graphiques"
         n = self._longueur_max() #Longueur à utiliser dans les cases
         for i in range(self.taille):
+            L = [] #Ligne contenant les caractères
             for j in range(self.taille):
-                car = self.__THEMES[self.theme][self.liste[i][j]]
+                car = self.__THEMES[self.theme][self.grille[i][j]]
                 longueur = n - len(car) #Nombre d'espaces à rajouter
                 #On rajoute les espaces équitablement pour combler
                 if longueur%2 == 0:
-                    grille_modif[i][j] = longueur//2*" " + car + longueur//2*" "
+                    L.append(longueur//2*" " + car + longueur//2*" ")
                 else:
-                    grille_modif[i][j] = longueur//2*" " + car + (longueur//2+1)*" "
+                    L.append(longueur//2*" " + car + (longueur//2+1)*" ")
+            grille_str.append(L)
         
         tiret = (n+2)*"-" #Nombre de "-" à mettre pour bien afficher la grille
         #Création de T, une ligne qui sépare les cases
@@ -66,97 +72,119 @@ class Grille() :
         for i in range(self.taille-1): #On crée les cases
             T = T + str(tiret) + " "
         T = T + str(tiret) 
+        
         #Création de la chaine de caractères G pour afficher la grille
         G = T
         for i in range(self.taille):
             #Création d'une liste L contenant les caractères des cases etc
             L  ="|"
             for j in range(self.taille):
-                L = L + " " + str(grille_modif[i][j]) + " |"
+                L = L + " " + str(grille_str[i][j]) + " |"
             #On met L et T dans la grille
             G = G + "\n" + L + "\n" + T
         print(G) #Affichage de la grille
-
-    def verif_gauche(self) -> bool :
-        """
-        Renvoie True si la grille peut être tassée à gauche,
-        False sinon.
-        """
-        return True #A définir
-        #Renvoie True or False
     
-    def gauche(self) -> None :
+    
+    def gauche(self) -> bool :
         """
-        Tasse la grille à gauche.
+        Tasse la grille à gauche et renvoie True ou False
+        s'il y a eu un changement ou non.
         """
-        pass #A définir
+        changement = False #Initialement pas de changements
+        grille = copie(self.grille)
+        for i in range(self.taille) :
+            L = grille[i]
+            gauche_ligne(L) #On tasse la ligne
+            grille[i] = L
+            if L != self.grille[i]:
+                changement = True #Passe à True au moindre changement de ligne
+        
+        if changement :
+            #On actualise la grille et le score, et on ajoute des cases
+            self.grille = copie(grille)
+            self.score = add_random(self.grille , self.score)
+        
+        return changement
+    
     
     def _rotation_horaire(self) -> None :
         """
         Tourne la grille dans le sens horaire.
         """
-        pass #A définir
+        matrice_rotated = [[0] * self.taille for _ in range(self.taille)]  # Crée une matrice vide de même taille
+        
+        for i in range(self.taille):
+            for j in range(self.taille):
+                matrice_rotated[j][self.taille - i - 1] = self.grille[i][j]
     
-    def _rotation_antihoraire(self) -> None :
-        """
-        Tourne la grille dans le sens antihoraire.
-        """
-        pass #A définir
+        self.grille = matrice_rotated
     
-    def verif_droite(self) -> None :
+    def droite(self) -> bool :
         """
-        Renvoie True si la grille peut être tassée à droite,
-        False sinon.
+        Tasse la grille à droite et renvoie True ou False
+        s'il y a eu un changement ou non.
         """
         self._rotation_horaire()
         self._rotation_horaire()
-        test = self.verif_gauche()
-        self._rotation_antihoraire()
-        self._rotation_antihoraire()
-        return test
+        changement = self.gauche()
+        self._rotation_horaire()
+        self._rotation_horaire()
+        return changement
     
-    def droite(self) -> None :
+    def haut(self) -> bool :
         """
-        Tasse la grille à droite.
-        """
-        self._rotation_horaire()
-        self._rotation_horaire()
-        self.gauche()
-        self._rotation_antihoraire()
-        self._rotation_antihoraire()
-    
-    def verif_haut(self) -> None :
-        """
-        Renvoie True si la grille peut être tassée en haut,
-        False sinon.
-        """
-        self._rotation_antihoraire()
-        test = self.verif_gauche()
-        self._rotation_horaire()
-        return test
-    
-    def haut(self) -> None :
-        """
-        Tasse la grille en haut.
-        """
-        self._rotation_antihoraire()
-        self.gauche()
-        self._rotation_horaire()
-    
-    def verif_bas(self) -> None :
-        """
-        Renvoie True si la grille peut être tassée en bas,
-        False sinon.
+        Tasse la grille en haut et renvoie True ou False
+        s'il y a eu un changement ou non.
         """
         self._rotation_horaire()
-        test = self.verif_gauche()
-        self._rotation_antihoraire()
-        return test
+        self._rotation_horaire()
+        self._rotation_horaire()
+        changement = self.gauche()
+        self._rotation_horaire()
+        return changement
     
     def bas(self) -> None :
         """
-        Tasse la grille en bas.
+        Tasse la grille en bas et renvoie True ou False
+        s'il y a eu un changement ou non.
         """
         self._rotation_horaire()
-        self.gauche()
-        self._rotation_antihoraire()
+        changement = self.gauche()
+        self._rotation_horaire()
+        self._rotation_horaire()
+        self._rotation_horaire()
+        return changement
+    
+    def verif(self) -> bool :
+        """
+        Renvoie True si le jeu peut continuer,
+        False sinon.
+        """
+        grille = copie(self.grille)
+        score = self.score
+        
+        if self.droite() : #Si la grille a bougée en tassant à droite
+            self.grille = grille
+            self.score = score
+            return True #Un mouvement est bel et bien possible
+        #La grille n'a pas bougée
+
+        if self.gauche() : #Si la grille a bougée en tassant à gauche
+            self.grille = grille
+            self.score = score
+            return True #Un mouvement est bel et bien possible
+        #La grille n'a pas bougée
+        
+        if self.haut() : #Si la grille a bougée en tassant en haut
+            self.grille = grille
+            self.score = score
+            return True #Un mouvement est bel et bien possible
+        #La grille n'a pas bougée
+        
+        if self.bas() : #Si la grille a bougée en tassant en bas
+            self.grille = grille
+            self.score = score
+            return True #Un mouvement est bel et bien possible
+        #La grille n'a pas bougée
+        
+        return False
