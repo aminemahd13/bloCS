@@ -30,9 +30,9 @@ def grid_to_string(grille : list , theme : str) -> str :
             car = THEMES[theme][grille[i][j]]
             longueur = n - len(car)
             if longueur%2 == 0:
-                grille_modif[i][j] = l//2*" " + car + l//2*" "
+                grille_modif[i][j] = longueur//2*" " + car + longueur//2*" "
             else:
-                grille_modif[i][j] = l//2*" " + car + (l//2+1)*" "
+                grille_modif[i][j] = longueur//2*" " + car + (longueur//2+1)*" "
     
     egal=(n+2)*"="
     a=f"""
@@ -50,4 +50,4 @@ def grid_to_string(grille : list , theme : str) -> str :
 
 grille=[[2048, 16, 32, 0], [0, 4, 0, 2], [0, 0, 0, 32], [512, 1024, 0, 2]]
 theme="2"
-print(grid_to_string(grille , theme))
+print(grid_to_string(grille = grille , theme = theme))
