@@ -1,5 +1,2 @@
-random
-os
-sys
 keyboard
 threading

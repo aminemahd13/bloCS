@@ -5,6 +5,7 @@ import sys
 SIZE = 4
 WINNING_TILE = 2048
 
+
 class Game2048:
     def __init__(self):
         self.board = [[0] * SIZE for _ in range(SIZE)]
@@ -13,10 +14,12 @@ class Game2048:
         self.add_new_tile()
 
     def reset_screen(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system("cls" if os.name == "nt" else "clear")
 
     def add_new_tile(self):
-        empty_tiles = [(i, j) for i in range(SIZE) for j in range(SIZE) if self.board[i][j] == 0]
+        empty_tiles = [
+            (i, j) for i in range(SIZE) for j in range(SIZE) if self.board[i][j] == 0
+        ]
         if empty_tiles:
             i, j = random.choice(empty_tiles)
             self.board[i][j] = 4 if random.random() > 0.9 else 2
@@ -106,14 +109,20 @@ class Game2048:
         self.print_board()
         while True:
             move = input("Use W/A/S/D to move (Q to quit): ").lower()
-            if move == 'q':
+            if move == "q":
                 print("Thanks for playing!")
                 break
-            elif move in ['w', 'a', 's', 'd']:
-                if move == 'a' and self.move_left() or \
-                   move == 'd' and self.move_right() or \
-                   move == 's' and self.move_up() or \
-                   move == 'w' and self.move_down():
+            elif move in ["w", "a", "s", "d"]:
+                if (
+                    move == "a"
+                    and self.move_left()
+                    or move == "d"
+                    and self.move_right()
+                    or move == "s"
+                    and self.move_up()
+                    or move == "w"
+                    and self.move_down()
+                ):
                     self.add_new_tile()
                     self.print_board()
 
@@ -127,6 +136,7 @@ class Game2048:
                     print("Move not possible. Try a different direction.")
             else:
                 print("Invalid input. Use W/A/S/D to move.")
+
 
 if __name__ == "__main__":
     game = Game2048()
