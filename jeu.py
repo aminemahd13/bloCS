@@ -1,32 +1,51 @@
 import time
-import key_handler
+import key_handler as key
 from classegrille import Grille
 
-# Initialize the game grid
-grille = Grille(theme="0")
+touche={"haut" : False, "bas" : False, "droite" : False, "gauche" : False}
 
 def jeu():
+    # Initialize the game grid
+    grille = Grille(theme="0")
+    
     yield grille
-    handler = key_handler.KeyHandler()
 
     try:
         while True:
-            # Get the direction from the key handler
-            direction = handler.get_direction()
-
             # Attempt to move based on direction
             moved = False
-            if direction == "haut":
-                moved = grille.haut()  # Move up
-            elif direction == "gauche":
-                moved = grille.gauche()  # Move left
-            elif direction == "bas":
-                moved = grille.bas()  # Move down
-            elif direction == "droite":
-                moved = grille.droite()  # Move right
-            elif direction == "quitter":
-                break #On arrête le jeu
-
+            if key.up():
+                if not touche["haut"] and not moved:
+                    touche["haut"]=True
+                    moved = grille.haut()  # Move up
+            else:
+                touche["haut"]=False
+            
+            if key.left() :
+                if not touche["gauche"] and not moved:
+                    touche["gauche"]=True
+                    moved = grille.gauche()  # Move left
+            else:
+                touche["gauche"]=False
+            
+            
+            if key.down():
+                if not touche["bas"] and not moved:
+                    touche["bas"]=True
+                    moved = grille.bas()  # Move down
+            else:
+                touche["bas"]=False
+            
+            if key.right():
+                if not touche["droite"] and not moved:
+                    touche["droite"]=True
+                    moved = grille.droite()  # Move right
+            else:
+                touche["droite"]=False
+            
+            if key.close():
+                break
+            
             if not moved:
                 continue  # Ignore invalid or unsuccessful moves
 
@@ -37,10 +56,9 @@ def jeu():
             if not grille.verif():
                 break  # End game if no moves left
 
-            time.sleep(0.05)
+            time.sleep(0.03)
 
     except KeyboardInterrupt:
         pass  # Handle exit gracefully if interrupted
     
-    print("Game over !")
-    print(f"Score final : {grille.score}")
+    grille.fin_du_jeu()
