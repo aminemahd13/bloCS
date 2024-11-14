@@ -108,7 +108,7 @@ class Grille:
         for i in range(self.taille):
             ligne = []  # Ligne contenant les caractères
             for j in range(self.taille):
-                car = self.__THEMES[self.theme][self.grille[i][j]]
+                car = self.__dict_themes[self.theme][self.grille[i][j]]
                 longueur = n - len(car)  # Nombre d'espaces à rajouter
                 # On rajoute les espaces équitablement pour combler
                 if longueur % 2 == 0:
