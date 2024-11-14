@@ -1,8 +1,7 @@
 import classegrille
 import time
-import KeyHandler
+import key_handler
 import os
-import threading
 
 grille = classegrille.Grille(taille=4, theme="0")
 
@@ -16,7 +15,7 @@ grille.affiche()
 print(f"Score : {grille.score}")
 
 
-handler = KeyHandler.KeyHandler()
+handler = key_handler.KeyHandler()
 
 try:
     while True:
