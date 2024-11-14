@@ -125,15 +125,15 @@ class Grille:
         ligne_tirets = ligne_tirets + str(tiret)
 
         # Création de la chaine de caractères G pour afficher la grille
-        grille_str = ligne_tirets
+        grille_print = ligne_tirets
         for i in range(self.taille):
             # Création d'une liste L contenant les caractères des cases etc
             ligne = "|"
             for j in range(self.taille):
                 ligne = ligne + " " + str(grille_str[i][j]) + " |"
             # On met L et T dans la grille
-            grille_str = grille_str + "\n" + ligne + "\n" + ligne_tirets
-        print(grille_str)  # Affichage de la grille
+            grille_print = grille_print + "\n" + ligne + "\n" + ligne_tirets
+        print(grille_print)  # Affichage de la grille
 
     def gauche(self) -> bool:
         """
