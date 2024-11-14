@@ -42,5 +42,4 @@ def jeu():
     except KeyboardInterrupt:
         pass  # Handle exit gracefully if interrupted
     
-    print("Game over !")
-    print(f"Score final : {grille.score}")
+    grille.fin_du_jeu()
