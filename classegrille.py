@@ -1,241 +1,142 @@
 import ajout_aleatoire
 import gauche
+import tkinter as tk
 
 add_random = ajout_aleatoire.add_random
 gauche_ligne = gauche.gauche_ligne
-
 
 def copie(grille: list) -> list:
     """
     Copie terme à terme le tableau.
     """
-    grille_copie = []  # Création d'un tableau vide
-    for i in range(len(grille)):
-        # On copie terme à terme chaque ligne
-        ligne = []
-        for j in range(len(grille)):
-            ligne.append(grille[i][j])
-        grille_copie.append(ligne)  # On ajoute la ligne dans la copie
-    return grille_copie
+    return [row[:] for row in grille]
 
+def create_filled_circle(canvas, x, y, radius, couleur):
+    # Dessine un cercle plein avec le centre en (x, y) et le rayon spécifié
+    canvas.create_oval(x - radius, y - radius, x + radius-1, y + radius-1, fill=couleur, width=0)
+
+def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius, couleur):
+    create_filled_circle(canvas, x1+radius, y1+radius, radius, couleur)
+    create_filled_circle(canvas, x2-radius, y1+radius, radius, couleur)
+    create_filled_circle(canvas, x1+radius, y2-radius, radius, couleur)
+    create_filled_circle(canvas, x2-radius, y2-radius, radius, couleur)
+    canvas.create_rectangle(x1+radius, y1, x2-radius, y2, fill=couleur, width=0)
+    canvas.create_rectangle(x1, y1+radius, x2, y2-radius, fill=couleur, width=0)
+
+def get_couleur(value, dict_couleur):
+    if value<=2048:
+        return dict_couleur[value]
+    else:
+        return "#3C3A32"
 
 class Grille:
-    def __init__(self, taille: int, theme: str):
-        grille_zero = [[0 for i in range(taille)] for i in range(taille)]
-        self.grille = copie(grille_zero)  # Création d'un tableau vide
+    def __init__(self, theme: str):
+        grille_zero = [[0 for _ in range(4)] for _ in range(4)]
+        self.grille = copie(grille_zero)
         self.theme = theme
-        self.taille = taille
         self.score = 0
-        self.__dict_themes = {
-            "0": {
-                "name": "Default",
-                0: "",
-                2: "2",
-                4: "4",
-                8: "8",
-                16: "16",
-                32: "32",
-                64: "64",
-                128: "128",
-                256: "256",
-                512: "512",
-                1024: "1024",
-                2048: "2048",
-                4096: "4096",
-                8192: "8192",
-            },
-            "1": {
-                "name": "Chemistry",
-                0: "",
-                2: "H",
-                4: "He",
-                8: "Li",
-                16: "Be",
-                32: "B",
-                64: "C",
-                128: "N",
-                256: "O",
-                512: "F",
-                1024: "Ne",
-                2048: "Na",
-                4096: "Mg",
-                8192: "Al",
-            },
-            "2": {
-                "name": "Alphabet",
-                0: "",
-                2: "A",
-                4: "B",
-                8: "C",
-                16: "D",
-                32: "E",
-                64: "F",
-                128: "G",
-                256: "H",
-                512: "I",
-                1024: "J",
-                2048: "K",
-                4096: "L",
-                8192: "M",
-            },
-        }
-        n = (taille * taille) // 8  # On rempli initialement 1/8 de la grille
-        for i in range(n):
-            # On ajoute des nombres randoms et on met le score
+        for _ in range(2):
             self.score = add_random(grille=self.grille, score=self.score)
-
-    def _longueur_max(self) -> int:
-        """
-        Donne la longueur maximale de caractères de la grille
-        en fonction du thème (fonction cachée).
-        """
-        m = 0
-        for i in range(self.taille):
-            for j in range(self.taille):
-                ch = self.grille[i][j]
-                l = len(self.__dict_themes[self.theme][ch])
-                if l > m:
-                    m = l
-        return m
-
-    def affiche(self) -> None:
-        """
-        Affiche la grille en fonction
-        du thème choisi.
-        """
-        grille_str = []  # Grille contenant les caractères "graphiques"
-        n = self._longueur_max()  # Longueur à utiliser dans les cases
-        for i in range(self.taille):
-            ligne = []  # Ligne contenant les caractères
-            for j in range(self.taille):
-                car = self.__dict_themes[self.theme][self.grille[i][j]]
-                longueur = n - len(car)  # Nombre d'espaces à rajouter
-                # On rajoute les espaces équitablement pour combler
-                if longueur % 2 == 0:
-                    ligne.append(longueur // 2 * " " + car + longueur // 2 * " ")
+        # Couleurs pour chaque valeur de tuile
+        self.__dict_couleur = {
+            0: "#CDC1B4",
+            2: "#EEE4DA",
+            4: "#EDE0C8",
+            8: "#F2B179",
+            16: "#F59563",
+            32: "#F67C5F",
+            64: "#F65E3B",
+            128: "#EDCF72",
+            256: "#EDCC61",
+            512: "#EDC850",
+            1024: "#EDC53F",
+            2048: "#EDC22E"
+        }
+        self.__radius = 10
+        self.__taille_tuile = 100
+        self.__taille_espace = 10
+        self.__taille_grille = 4 * (self.__taille_tuile + self.__taille_espace) + self.__taille_espace
+        # Configuration de la fenêtre principale
+        self.__root = tk.Tk()
+        self.__root.title("2048")
+        self.__root.geometry(f"{self.__taille_grille}x{self.__taille_grille+100}")
+        self.__root.config(bg="#BBADA0")
+        
+        # Crée un canvas pour dessiner la grille
+        self.__canvas = tk.Canvas(self.__root, width=self.__taille_grille, height=self.__taille_grille+100, bg="#BBADA0")
+        self.__canvas.pack()
+    
+    def affiche(self):
+        self.__canvas.delete("all")
+        for i in range(4):
+            for j in range(4):
+                valeur = self.grille[i][j]
+                longueur = len(str(valeur))
+                x1, y1 = self.__taille_espace + j * (self.__taille_espace + self.__taille_tuile) , self.__taille_espace + i * (self.__taille_espace + self.__taille_tuile)
+                x2, y2 = x1 + self.__taille_tuile, y1 + self.__taille_tuile
+                couleur = get_couleur(valeur, self.__dict_couleur)
+                create_rounded_rectangle(self.__canvas, x1, y1, x2, y2, self.__radius, couleur)
+                if longueur<=2:
+                    police = 36
+                elif longueur==3:
+                    police = 30
                 else:
-                    ligne.append(longueur // 2 * " " + car + (longueur // 2 + 1) * " ")
-            grille_str.append(ligne)
-
-        tiret = (n + 2) * "-"  # Nombre de "-" à mettre pour bien afficher la grille
-        # Création de T, une ligne qui sépare les cases
-        ligne_tirets = " "
-        for i in range(self.taille - 1):  # On crée les cases
-            ligne_tirets = ligne_tirets + str(tiret) + " "
-        ligne_tirets = ligne_tirets + str(tiret)
-
-        # Création de la chaine de caractères G pour afficher la grille
-        grille_print = ligne_tirets
-        for i in range(self.taille):
-            # Création d'une liste L contenant les caractères des cases etc
-            ligne = "|"
-            for j in range(self.taille):
-                ligne = ligne + " " + str(grille_str[i][j]) + " |"
-            # On met L et T dans la grille
-            grille_print = grille_print + "\n" + ligne + "\n" + ligne_tirets
-        print(grille_print)  # Affichage de la grille
-
+                    police=24
+                if valeur != 0:
+                    if valeur<=4 :
+                        self.__canvas.create_text((x1 + x2) // 2, (y1 + y2) // 2, text=str(valeur), font=("Helvetica", police, "bold"), fill="black")
+                    else:
+                        self.__canvas.create_text((x1 + x2) // 2, (y1 + y2) // 2, text=str(valeur), font=("Helvetica", police, "bold"), fill="white")
+        text_score = "Score : "+str(self.score)
+        self.__canvas.create_text(self.__taille_grille//2,self.__taille_grille+50, text=text_score, font=("Helvetica", 24, "bold"), fill="black")
+        self.__root.update()
+        
     def gauche(self) -> bool:
-        """
-        Tasse la grille à gauche et renvoie True ou False
-        s'il y a eu un changement ou non.
-        """
-        changement = False  # Initialement pas de changements
-        grille = copie(self.grille)
-        for i in range(self.taille):
-            ligne = grille[i]
-            gauche_ligne(ligne)  # On tasse la ligne
-            grille[i] = ligne
-            if ligne != self.grille[i]:
-                changement = True  # Passe à True au moindre changement de ligne
+        changement = False
+        new_grille = copie(self.grille)
+        for i, row in enumerate(new_grille):
+            gauche_ligne(row)
+            if row != self.grille[i]:
+                changement = True
 
         if changement:
-            # On actualise la grille et le score, et on ajoute des cases
-            self.grille = copie(grille)
+            self.grille = copie(new_grille)
             self.score = add_random(grille=self.grille, score=self.score)
-
         return changement
 
     def _rotation_horaire(self) -> None:
-        """
-        Tourne la grille dans le sens horaire.
-        """
-        matrice_rotated = [
-            [0] * self.taille for _ in range(self.taille)
-        ]  # Crée une matrice vide de même taille
-
-        for i in range(self.taille):
-            for j in range(self.taille):
-                matrice_rotated[j][self.taille - i - 1] = self.grille[i][j]
-
-        self.grille = matrice_rotated
+        self.grille = [[self.grille[4 - j - 1][i] for j in range(4)] for i in range(4)]
 
     def droite(self) -> bool:
-        """
-        Tasse la grille à droite et renvoie True ou False
-        s'il y a eu un changement ou non.
-        """
         self._rotation_horaire()
         self._rotation_horaire()
-        changement = self.gauche()
+        changed = self.gauche()
         self._rotation_horaire()
         self._rotation_horaire()
-        return changement
+        return changed
 
     def haut(self) -> bool:
-        """
-        Tasse la grille en haut et renvoie True ou False
-        s'il y a eu un changement ou non.
-        """
         self._rotation_horaire()
         self._rotation_horaire()
         self._rotation_horaire()
-        changement = self.gauche()
+        changed = self.gauche()
         self._rotation_horaire()
-        return changement
+        return changed
 
-    def bas(self) -> None:
-        """
-        Tasse la grille en bas et renvoie True ou False
-        s'il y a eu un changement ou non.
-        """
+    def bas(self) -> bool:
         self._rotation_horaire()
-        changement = self.gauche()
+        changed = self.gauche()
         self._rotation_horaire()
         self._rotation_horaire()
         self._rotation_horaire()
-        return changement
+        return changed
 
     def verif(self) -> bool:
-        """
-        Renvoie True si le jeu peut continuer,
-        False sinon.
-        """
-        grille = copie(self.grille)
-        score = self.score
-
-        if self.droite():  # Si la grille a bougée en tassant à droite
-            self.grille = grille
-            self.score = score
-            return True  # Un mouvement est bel et bien possible
-        # La grille n'a pas bougée
-
-        if self.gauche():  # Si la grille a bougée en tassant à gauche
-            self.grille = grille
-            self.score = score
-            return True  # Un mouvement est bel et bien possible
-        # La grille n'a pas bougée
-
-        if self.haut():  # Si la grille a bougée en tassant en haut
-            self.grille = grille
-            self.score = score
-            return True  # Un mouvement est bel et bien possible
-        # La grille n'a pas bougée
-
-        if self.bas():  # Si la grille a bougée en tassant en bas
-            self.grille = grille
-            self.score = score
-            return True  # Un mouvement est bel et bien possible
-        # La grille n'a pas bougée
-
+        grille_copy = copie(self.grille)
+        original_score = self.score
+        for move in [self.droite, self.gauche, self.haut, self.bas]:
+            if move():
+                self.grille = grille_copy
+                self.score = original_score
+                return True
         return False
