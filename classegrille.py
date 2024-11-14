@@ -144,7 +144,7 @@ class Grille:
         grille = copie(self.grille)
         for i in range(self.taille):
             ligne = grille[i]
-            gauche_ligne(L)  # On tasse la ligne
+            gauche_ligne(ligne)  # On tasse la ligne
             grille[i] = ligne
             if ligne != self.grille[i]:
                 changement = True  # Passe à True au moindre changement de ligne
