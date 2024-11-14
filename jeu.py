@@ -2,10 +2,10 @@ import time
 import key_handler
 from classegrille import Grille
 
-# Initialize the game grid
-grille = Grille(theme="0")
-
 def jeu():
+    # Initialize the game grid
+    grille = Grille(theme="0")
+    
     yield grille
     handler = key_handler.KeyHandler()
 
