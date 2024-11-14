@@ -1,12 +1,12 @@
 import time
 import key_handler
 from classegrille import Grille
-import os
 
 # Initialize the game grid
-grille = Grille(taille=4, theme="0")
+grille = Grille(theme="0")
 
 def jeu():
+    yield grille
     handler = key_handler.KeyHandler()
 
     try:
@@ -39,4 +39,6 @@ def jeu():
 
     except KeyboardInterrupt:
         pass  # Handle exit gracefully if interrupted
-
+    
+    print("Game over !")
+    print(f"Score final : {grille.score}")
