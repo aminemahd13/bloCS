@@ -1,4 +1,4 @@
-from jeu import jeu
+from functions.jeu import jeu
 
 # Run the game and display each game state
 for current_grille in jeu():
