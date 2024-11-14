@@ -56,7 +56,7 @@ def jeu():
             if not grille.verif():
                 break  # End game if no moves left
 
-            time.sleep(0.05)
+            time.sleep(0.03)
 
     except KeyboardInterrupt:
         pass  # Handle exit gracefully if interrupted
