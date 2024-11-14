@@ -1,3 +1,5 @@
+import os
+
 
 def affiche(grille: list, score: int, theme: str) -> None:
     """
@@ -44,3 +46,12 @@ def affiche(grille: list, score: int, theme: str) -> None:
         ligne = "|" + "|".join(f" {car} " for car in row) + "|"
         grille_print += f"\n{ligne}\n{ligne_tirets}"
     print(grille_print)
+
+
+
+def display_game_state(grille):
+    # Clear the screen and print the grid and score
+    os.system("cls" if os.name == "nt" else "clear")
+    for row in grille.grille:
+        print(" ".join(map(str, row)))  # Display each row of the grid
+    print(f"Score: {grille.score}")

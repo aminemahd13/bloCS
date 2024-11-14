@@ -1,20 +1,12 @@
-import os
 from jeu import jeu
-from affiche import affiche
+from affiche import display_game_state
 from classegrille import Grille
 
-def reset_screen():
-    os.system("cls" if os.name == "nt" else "clear")
+# Initialize the game grid
+grille = Grille(taille=4, theme="0")
 
-grille = Grille(taille=4, theme="0") 
+# Run the game and display each game state
+for current_grille in jeu():
+    display_game_state(current_grille)
 
-game_state = jeu()
-def display_game_state(grille):
-    reset_screen()
-    # Print the current board and score
-    for row in grille.grille:
-        print(" ".join(map(str, row)))  # Display each row of the grid
-    print(f"Score: {grille.score}")
-
-while True :
-    display_game_state(grille)
+print("Game over!")
