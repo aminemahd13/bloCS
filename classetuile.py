@@ -19,7 +19,13 @@ def get_couleur(value, dict_couleur):
         return "#3C3A32"
 
 class Tuile:
-    def __init__(self, n_ligne, n_colonne, radius, taille_tuile, taille_espace):
-        self.x = taille_espace + n_colonne*taille_tuile + taille_tuile//2
-        
+    def __init__(self, n_ligne, n_colonne, value):
+        self.__radius = 10
+        self.__taille_tuile = 100
+        self.__taille_espace = 10
+        self.x = self.__taille_espace + n_colonne*(self.__taille_tuile + self.__taille_espace) + self.__taille_tuile//2
+        self.y = self.__taille_espace + n_ligne*(self.__taille_tuile + self.__taille_espace) + self.__taille_tuile//2
+        self.value = value
+    
+    
         
