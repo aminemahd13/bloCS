@@ -1,5 +1,5 @@
-import ajout_aleatoire
-import gauche
+import functions.ajout_aleatoire as ajout_aleatoire
+import functions.gauche as gauche
 import tkinter as tk
 
 add_random = ajout_aleatoire.add_random
