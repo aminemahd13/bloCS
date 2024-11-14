@@ -1,11 +1,11 @@
 import keyboard
 
-
 class KeyHandler:
     def __init__(self):
         self.key = None
         self.directions = []  # List to store the directions
         self.direction_map = {
+            # English WASD and arrow keys
             "w": "haut",  # W key
             "up": "haut",  # Up arrow
             "s": "bas",  # S key
@@ -14,6 +14,10 @@ class KeyHandler:
             "left": "gauche",  # Left arrow
             "d": "droite",  # D key
             "right": "droite",  # Right arrow
+            
+            # French ZQSD keys
+            "z": "haut",  # Z key
+            "q": "gauche",  # Q key
         }
 
     def get_pressed_key(self):
@@ -34,12 +38,11 @@ class KeyHandler:
             )  # Return the direction or None if the key isn't mapped
         return None
 
-
-# Usage
-#handler = KeyHandler()
+# Usage example
+# handler = KeyHandler()
 
 # To listen for a direction, call the get_direction method
-#direction = handler.get_direction()
+# direction = handler.get_direction()
 
-# You can access the direction directly
-#print(f"Direction: {direction}")
+# Print the direction
+# print(f"Direction: {direction}")
