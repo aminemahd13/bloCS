@@ -18,6 +18,9 @@ class KeyHandler:
             # French ZQSD keys
             "z": "haut",  # Z key
             "q": "gauche",  # Q key
+            
+            #Quitter
+            "esc" : "quitter"
         }
 
     def get_pressed_key(self):

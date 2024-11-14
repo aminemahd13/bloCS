@@ -24,6 +24,8 @@ def jeu():
                 moved = grille.bas()  # Move down
             elif direction == "droite":
                 moved = grille.droite()  # Move right
+            elif direction == "quitter":
+                break #On arrête le jeu
 
             if not moved:
                 continue  # Ignore invalid or unsuccessful moves
