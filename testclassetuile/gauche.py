@@ -1,5 +1,3 @@
-from classetuile import Tuile
-
 def gauche_ligne(ligne: list) -> bool:
     """
     Modifie la liste en fusionnant tout sur la gauche.

@@ -5,7 +5,7 @@ def create_filled_circle(canvas, x : int, y : int, radius : int, couleur : str) 
     Dessine un cercle plein avec le centre en (x, y) et le rayon spécifié
     sur le canvas, de la couleur spécifiée.
     """
-    canvas.create_oval(x - radius, y - radius, x + radius-1, y + radius-1, fill=couleur, width=0)
+    canvas.create_oval(x - radius , y - radius , x + radius - 1 , y + radius - 1 , fill = couleur , width = 0)
 
 def create_rounded_rectangle(canvas, x1 : int, y1 : int, x2 : int, y2 : int, radius : int, couleur : str) -> None:
     """

@@ -6,13 +6,16 @@ from classetuile import Tuile
 add_random = ajout_aleatoire.add_random
 gauche_ligne = gauche.gauche_ligne
 
+def copie_tuile(tuile : Tuile):
+    return Tuile(x_centre = tuile.x , y_centre = tuile.y , valeur = tuile.valeur , taille = tuile.taille)
+
 def copie_ligne(ligne : list) -> list:
     """
     Copie terme à terme la ligne.
     """
     ligne_copy=[]
     for j in range(4):
-        ligne_copy.append(Tuile(x_centre = ligne[j].x , y_centre = ligne[j].y , valeur = ligne[j].valeur))
+        ligne_copy.append(copie_tuile(ligne[j]))
     return ligne_copy
 
 def copie_grille(grille: list) -> list:
@@ -21,10 +24,7 @@ def copie_grille(grille: list) -> list:
     """
     grille_copy=[]
     for i in range(4):
-        row=[]
-        for j in range(4):
-            row.append(Tuile(x_centre = grille[i][j].x , y_centre = grille[i][j].y , valeur = grille[i][j].valeur))
-        grille_copy.append(row)
+        grille_copy.append(copie_ligne(grille[i]))
     return grille_copy
 
 class Grille:
