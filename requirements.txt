@@ -1,7 +1,2 @@
 keyboard
-threading
-time
-os
-keyboard
-random
 setuptools
