@@ -1,6 +1,5 @@
 from random import randint
 
-
 def add_random(grille: list, score: int) -> None:
     """
     Ajoute, si possible, un nombre aléatoire sur la grille.
@@ -9,7 +8,7 @@ def add_random(grille: list, score: int) -> None:
     liste_zeros = []  # Liste qui contient les coordonnées des cases vides
     for i in range(len(grille)):
         for j in range(len(grille)):
-            if grille[i][j] == 0:
+            if grille[i][j].valeur == 0:
                 liste_zeros.append(
                     (i, j)
                 )  # ajoute dans liste_zeros toutes les coordonnées des cases vides
@@ -27,6 +26,6 @@ def add_random(grille: list, score: int) -> None:
             new_number = 4
         else:
             new_number = 2  # choisis le nombre à ajouter sur la case séléctionnée avec une proba de 1/5 pour 4 et 4/5 pour 2
-        grille[x][y] = new_number  # modifie la grille
+        grille[x][y].valeur = new_number  # modifie la grille
         score += new_number  # On ajoute ça dans le score
     return score
