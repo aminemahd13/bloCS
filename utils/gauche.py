@@ -13,7 +13,7 @@ def gauche_ligne(ligne: list) -> bool:
                 ligne[j].valeur = 0
     # On fusionne les chiffres
     for j in range(1, 4):
-        if ligne[j - 1].valeur == ligne[j].valeur:
+        if ligne[j - 1].valeur == ligne[j].valeur and ligne[j].valeur!=0:
             changement = True
             ligne[j - 1].valeur = ligne[j - 1].valeur * 2
             ligne[j].valeur = 0

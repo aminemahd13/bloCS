@@ -53,5 +53,5 @@ def parcours_liste_gauche(liste : list):
                             tuile[1]=j-1
     return liste_finale
 
-ligne=[0,0,0,2]
+ligne=[0,2,0,2]
 print(parcours_liste_gauche(ligne))
