@@ -31,13 +31,10 @@ def parcours_liste(liste : list):
             ligne_copie[j] = 0
             for tuile in liste_finale:
                 if tuile !=None:
+                    if tuile[1]==j-1:
+                        tuile[2]=True
                     if tuile[1]==j:
                         tuile[1]=j-1
-                        tuile[2]=True
-            for tuile in liste_finale:
-                    if tuile !=None:
-                        if tuile[1]==j-1:
-                            tuile[2]=True
     
     
     for _ in range(taille-1):  

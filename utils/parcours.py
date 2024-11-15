@@ -1,5 +1,5 @@
-def parcours(indice_initial : int , indice_final : int, sens_tassage : str , n : int , n_images : int) -> list:
-    dp = 3 * (100 + 10) / n_images
+def parcours(indice_initial : int , indice_final : int, sens_tassage : str , n : int , n_images : int , d_max : int) -> list:
+    dp = 3 * (100 + 10) / (n_images * d_max / 4)
     P = []
     
     if sens_tassage=="gauche":
