@@ -8,7 +8,7 @@ def jeu():
     # Initialize the game grid
     grille = Grille()
     
-    yield grille
+    yield grille #"Renvoie" la grille
 
     try:
         while True:
@@ -50,7 +50,7 @@ def jeu():
                 continue  # Ignore invalid or unsuccessful moves
 
             # Yield the updated grid after a successful move
-            yield grille
+            yield grille #"Renvoie" la grille
 
             # Check if the game can continue
             if not grille.verif():
