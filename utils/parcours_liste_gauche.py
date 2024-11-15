@@ -1,5 +1,3 @@
-
-
 def copie_ligne(ligne : list) -> list:
     """
     Copie terme à terme la ligne.
@@ -9,7 +7,7 @@ def copie_ligne(ligne : list) -> list:
         ligne_copy.append(ligne[j])
     return ligne_copy
 
-def parcours_liste_gauche(liste : list):
+def parcours_liste(liste : list):
     taille=4
     liste_finale=[None for k in range(taille)]
     for j in range(taille):
@@ -52,6 +50,3 @@ def parcours_liste_gauche(liste : list):
                         if tuile[1]==j:
                             tuile[1]=j-1
     return liste_finale
-
-ligne=[0,0,0,2]
-print(parcours_liste_gauche(ligne))
