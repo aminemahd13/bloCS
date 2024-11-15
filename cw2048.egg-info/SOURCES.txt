@@ -10,9 +10,9 @@ cw2048.egg-info/SOURCES.txt
 cw2048.egg-info/dependency_links.txt
 cw2048.egg-info/requires.txt
 cw2048.egg-info/top_level.txt
-functions/__init__.py
-functions/ajout_aleatoire.py
-functions/gauche.py
-functions/jeu.py
+utils/__init__.py
+utils/ajout_aleatoire.py
+utils/gauche.py
+utils/jeu.py
 input_handlers/__init__.py
 input_handlers/key_handler.py
