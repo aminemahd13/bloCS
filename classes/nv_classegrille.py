@@ -83,9 +83,9 @@ def rotation_horaire_matrice(grille : list) -> list:
 
 class Grille:
     def __init__(self):
-        self.n_images = 30
-        self.tps1 = 0.007
-        self.tps2 = 0.002
+        self.n_images = 20
+        self.tps1 = 0.002
+        self.tps2 = 0.0006
         self.__taille_tuile = 100
         self.__taille_espace = 10
         self.__taille_grille = 4 * (self.__taille_tuile + self.__taille_espace) + self.__taille_espace
@@ -235,13 +235,15 @@ class Grille:
             grille_valeur = rotation_horaire_matrice(grille_valeur)
         
         grille_deplacement=[]
-        d_max=1
+        d_max = 0
         for i in range(4):
             l = parcours_liste(grille_valeur[i])
             for j in l:
                 if j!=None:
                     d_max = max(d_max , abs(j[0] - j[1]))
             grille_deplacement.append(l)
+        
+        n_images = round(self.n_images * d_max / 4)
         
         if direction == "haut":
             grille_deplacement = rotation_horaire_matrice(grille_deplacement)
@@ -268,8 +270,7 @@ class Grille:
                         indice_final = grille_deplacement[i][j][1],
                         sens_tassage = direction,
                         n = n,
-                        n_images = self.n_images,
-                        d_max = d_max
+                        n_images = n_images
                         ))
                 else:
                     row.append(None)
@@ -285,7 +286,7 @@ class Grille:
                         grille_copy[i][j].valeur = grille_copy[i][j].valeur * 2
                         l_taille.append((i,j))
         
-        for image in range(self.n_images):
+        for image in range(n_images):
             self.__canvas.delete("all") #On efface tout
             for i in range(4):
                 for j in range(4):
@@ -345,10 +346,10 @@ class Grille:
                 fill = "black"
                 )
             self.__root.update() #On actualise la fenêtre graphique
-            time.sleep(self.tps1)
+            time.sleep(self.tps1 * d_max / 4)
         
         if len(l_taille)>0:
-            for image in range(self.n_images):
+            for image in range(n_images):
                 self.__canvas.delete("all") #On efface tout
                 for i in range(4):
                     for j in range(4):
@@ -357,12 +358,12 @@ class Grille:
                     for j in range(4):
                         if grille_copy[i][j].valeur!=0 and not([i,j] in l_taille):
                             grille_copy[i][j].affiche(self.__canvas, True)
-                if image<self.n_images//2:
-                    grossissement_police = 1.2 * (image / (self.n_images//2))
-                    nv_taille = 100 + 20 * (image / (self.n_images // 2))
+                if image<n_images//2:
+                    grossissement_police = 1.2 * (image / (n_images//2))
+                    nv_taille = 100 + 20 * (image / (n_images // 2))
                 else:
-                    grossissement_police = 1.2 - 0.2 * (image / self.n_images)
-                    nv_taille = 120 - 20 * (image / self.n_images)
+                    grossissement_police = 1.2 - 0.2 * (image / n_images)
+                    nv_taille = 120 - 20 * (image / n_images)
                 for k in l_taille:
                     i = k[0]
                     j = k[1]
@@ -378,7 +379,7 @@ class Grille:
                     fill = "black"
                     )
                 self.__root.update() #On actualise la fenêtre graphique
-                time.sleep(self.tps2)
+                time.sleep(self.tps2 * d_max / 4)
         
     
     
