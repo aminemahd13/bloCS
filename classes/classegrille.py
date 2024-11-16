@@ -10,11 +10,12 @@ import time
 
 class Grille:
     def __init__(self):
-        self.n_images1 = 20
-        self.n_images2 = 16
-        self.tps = 0.001
-        self.__taille_tuile = 100
-        self.__taille_espace = 10
+        self.n_images1 = 20 #Nombre d'images lors du déplacement d'une tuile au maximum
+        self.n_images2 = 16 #Nombre d'images lors d'une fusion
+        self.tps = 0.001 #Temps entre les images (fixe les fps)
+        self.__taille_tuile = 100 #Taille d'une tuile en px
+        self.__taille_espace = 10 #Taille d'un espace en px
+        #Taille de la grille
         self.__taille_grille = 4 * (self.__taille_tuile + self.__taille_espace) + self.__taille_espace
         # Configuration de la fenêtre principale
         self.__root = tk.Tk()
@@ -61,26 +62,28 @@ class Grille:
         """
         Tasse la grille sur la gauche et renvoie
         True or False si la grille a changée ou non.
+        test, initialement sur False, indique s'il faut changer la grille ou non.
         """
+        #On crée une copie de la grille tassée à gauche
         changement , new_grille = gauche_grille(self.grille)
-        if changement and not(test):
-            #Si la grille a bougée, on ajoute 1 case et on actualise le score et la grille
-            self.transition("gauche")
-            self.grille = copie_grille(new_grille)
-            self.score = add_random(grille = self.grille, score = self.score)
+        if changement and not(test): #Si la grille a bougée et qu'on ne fait pas de test
+            self.transition("gauche") #On affiche la transition
+            self.grille = copie_grille(new_grille) #On actualise la grille
+            self.score = add_random(grille = self.grille, score = self.score) #On rajoute un tuile
         return changement
         
     def droite(self, test = False) -> bool:
         """
         Tasse la grille sur la droite et renvoie
         True or False si la grille a changée ou non.
+        test, initialement sur False, indique s'il faut changer la grille ou non.
         """
+        #On crée une copie de la grille tassée à droite
         grille_rotated = copie_grille(self.grille)
         grille_rotated = rotation_double_grille(grille_rotated)
         changement , new_grille = gauche_grille(grille_rotated)
         new_grille = rotation_double_grille(new_grille)
         if changement and not(test):
-            #Si la grille a bougée, on ajoute 1 case et on actualise le score et la grille
             self.transition("droite")
             self.grille = copie_grille(new_grille)
             self.score = add_random(grille = self.grille, score = self.score)
@@ -91,13 +94,14 @@ class Grille:
         """
         Tasse la grille sur le haut et renvoie
         True or False si la grille a changée ou non.
+        test, initialement sur False, indique s'il faut changer la grille ou non.
         """
+        #On crée une copie de la grille tassée en haut
         grille_rotated = copie_grille(self.grille)
         grille_rotated = rotation_antihoraire_grille(grille_rotated)
         changement , new_grille = gauche_grille(grille_rotated)
         new_grille = rotation_horaire_grille(new_grille)
         if changement and not(test):
-            #Si la grille a bougée, on ajoute 1 case et on actualise le score et la grille
             self.transition("haut")
             self.grille = copie_grille(new_grille)
             self.score = add_random(grille = self.grille, score = self.score)
@@ -108,13 +112,14 @@ class Grille:
         """
         Tasse la grille sur le bas et renvoie
         True or False si la grille a changée ou non.
+        test, initialement sur False, indique s'il faut changer la grille ou non.
         """
+        #On crée une copie de la grille tassée en bas
         grille_rotated = copie_grille(self.grille)
         grille_rotated = rotation_horaire_grille(grille_rotated)
         changement , new_grille = gauche_grille(grille_rotated)
         new_grille = rotation_antihoraire_grille(new_grille)
         if changement and not(test):
-            #Si la grille a bougée, on ajoute 1 case et on actualise le score et la grille
             self.transition("bas")
             self.grille = copie_grille(new_grille)
             self.score = add_random(grille = self.grille, score = self.score)
@@ -127,14 +132,16 @@ class Grille:
         Renvoie True or False
         """
         for move in [self.droite, self.gauche, self.haut, self.bas]:
-            if move(test=True):
-                #Si un mouvement est possible, on remet la grille et le score d'origine
-                #Rem : pas la peine d'actualiser la grille si move()=False
+            if move(test=True): #On indique que c'est un test et qu'il ne faut pas modifier la grille
                 return True
         return False
     
     
-    def transition(self , direction):
+    def transition(self , direction : str) -> None:
+        """
+        Effectue une animation de transition entre
+        la grille actuelle et la prochaine grille.
+        """
         #On crée une grille constitué des valeurs entières de la grille
         grille_valeur = []
         for i in range(4):
@@ -201,14 +208,18 @@ class Grille:
                 
             grille_copy = copie_grille(self.grille)
             
-            #On crée une liste l_taille contenant tout les (i,j) des tuiles qui vont grossir
+            #On crée une liste l_taille contenant tout les (i,j) des tuiles qui vont grossir l_taille
+            #Et une liste contenant toutes les tuiles qui vont se faire "absorber"
             l_taille=[]
+            l_absorb=[]
             for i in range(4):
                 for j in range(4):
                     if grille_deplacement[i][j] is not None:
-                        if grille_deplacement[i][j][2]:
+                        if grille_deplacement[i][j][2]==1:
                             grille_copy[i][j].valeur = grille_copy[i][j].valeur * 2
                             l_taille.append((i,j))
+                        elif grille_deplacement[i][j][2]==2:
+                            l_absorb.append((i,j))
             
             #On affiche les grilles qui bougent image par image
             for image in range(n_images1):
@@ -291,10 +302,10 @@ class Grille:
                     for i in range(4):
                         for j in range(4):
                             self.__grille_zero[i][j].affiche(self.__canvas, False) #On affiche tuile par tuile
-                    #On affiche les tuiles qui ne vont pas grossir
+                    #On affiche les tuiles qui ne vont pas grossir ou se faire absorber
                     for i in range(4):
                         for j in range(4):
-                            if grille_copy[i][j].valeur!=0 and [i,j] not in l_taille:
+                            if grille_copy[i][j].valeur!=0 and [i,j] not in l_taille and [i,j] not in l_absorb:
                                 grille_copy[i][j].affiche(self.__canvas, True)
                     
                     if image<self.n_images2//2: #1ère partie de l'animation : on grossit
@@ -303,7 +314,7 @@ class Grille:
                     else: #2ème partie de l'animation : on rétressit
                         grossissement_police = 1.36 - 0.36 * (image / self.n_images2)
                         nv_taille = 136 - 36 * (image / self.n_images2)
-                    for [i , j] in l_taille:
+                    for [i , j] in l_taille: #On affiche les tuiles qui grossissent
                         grille_copy[i][j].taille = round(nv_taille)
                         grille_copy[i][j].affiche(self.__canvas, True, grossissement_police)
                     

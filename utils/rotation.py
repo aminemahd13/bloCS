@@ -13,7 +13,7 @@ def rotation_horaire_grille(grille : list) -> list:
 
 def rotation_antihoraire_grille(grille : list) -> list:
         """
-        Effectue une rotation horaire de la grille.
+        Effectue une rotation antihoraire de la grille.
         """
         grille_copy = copie_grille(grille)
         for i in range(4):
@@ -24,7 +24,7 @@ def rotation_antihoraire_grille(grille : list) -> list:
 
 def rotation_double_grille(grille : list) -> list:
         """
-        Effectue une rotation horaire de la grille.
+        Effectue une double rotation de la grille.
         """
         grille_copy = copie_grille(grille)
         for i in range(4):
@@ -35,33 +35,30 @@ def rotation_double_grille(grille : list) -> list:
 
 def rotation_horaire_matrice(grille : list) -> list:
         """
-        Effectue une rotation horaire de la grille.
+        Effectue une rotation horaire de la matrice.
         """
         grille_copy = copie_matrice(grille)
         for i in range(4):
             for j in range(4):
-                #On change uniquement les valeurs !!!
                 grille_copy[i][j] = grille[4 - j - 1][i]
         return grille_copy
 
 def rotation_antihoraire_matrice(grille : list) -> list:
         """
-        Effectue une rotation horaire de la grille.
+        Effectue une rotation antihoraire de la matrice.
         """
         grille_copy = copie_matrice(grille)
         for i in range(4):
             for j in range(4):
-                #On change uniquement les valeurs !!!
                 grille_copy[4 - j - 1][i] = grille[i][j]
         return grille_copy
 
 def rotation_double_matrice(grille : list) -> list:
         """
-        Effectue une rotation horaire de la grille.
+        Effectue une double rotation de la matrice.
         """
         grille_copy = copie_matrice(grille)
         for i in range(4):
             for j in range(4):
-                #On change uniquement les valeurs !!!
                 grille_copy[4 - i - 1][4 - j - 1] = grille[i][j]
         return grille_copy
