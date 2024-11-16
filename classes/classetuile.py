@@ -51,7 +51,7 @@ class Tuile:
             2048: "#EDC22E"
         }
         
-    def affiche(self, canvas) -> None:
+    def affiche(self, canvas, chiffre : bool, grossissement = 1) -> None:
         """
         Affiche la tuile à ses coordonnées.
         """
@@ -61,16 +61,17 @@ class Tuile:
         x2, y2 = self.x + self.taille//2 , self.y + self.taille//2
         couleur = get_couleur(self.valeur, self.__dict_couleur) #Couleur de la valeur
         create_rounded_rectangle(canvas, x1, y1, x2, y2, self.__radius, couleur)
-        if longueur<=2:
-            police = 36
-        elif longueur==3:
-            police = 30
-        else:
-            police=24
-        if self.valeur != 0:
-            #On affiche le chiffre dans la case
-            if self.valeur<=4 :
-                canvas.create_text(self.x, self.y, text=str(self.valeur), font=("Helvetica", police, "bold"), fill="black")
+        if chiffre:
+            if longueur<=2:
+                police = round(36 * grossissement)
+            elif longueur==3:
+                police = round(30 * grossissement)
             else:
-                canvas.create_text(self.x, self.y, text=str(self.valeur), font=("Helvetica", police, "bold"), fill="white")
+                police = round(24 * grossissement)
+            if self.valeur != 0:
+                #On affiche le chiffre dans la case
+                if self.valeur<=4 :
+                    canvas.create_text(self.x, self.y, text=str(self.valeur), font=("Helvetica", police, "bold"), fill="black")
+                else:
+                    canvas.create_text(self.x, self.y, text=str(self.valeur), font=("Helvetica", police, "bold"), fill="white")
         
