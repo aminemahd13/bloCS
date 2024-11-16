@@ -8,7 +8,7 @@ def jeu():
     # Initialize the game grid
     grille = Grille()
     
-    yield grille #"Renvoie" la grille
+    grille.affiche() #Affiche la grille
 
     try:
         while True:
@@ -49,8 +49,8 @@ def jeu():
             if not moved:
                 continue  # Ignore invalid or unsuccessful moves
 
-            # Yield the updated grid after a successful move
-            yield grille #"Renvoie" la grille
+            # Show the updated grid after a successful move
+            grille.affiche()
 
             # Check if the game can continue
             if not grille.verif():
