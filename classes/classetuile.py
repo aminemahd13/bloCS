@@ -61,7 +61,7 @@ class Tuile:
         x2, y2 = self.x + self.taille//2 , self.y + self.taille//2
         couleur = get_couleur(self.valeur, self.__dict_couleur) #Couleur de la valeur
         create_rounded_rectangle(canvas, x1, y1, x2, y2, self.__radius, couleur)
-        if chiffre: #Si on souhaite afficher le chiffre
+        if chiffre and grossissement>0: #Si on souhaite afficher le chiffre
             if longueur<=2:
                 police = round(36 * grossissement)
             elif longueur==3:
