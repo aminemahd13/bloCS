@@ -1,5 +1,12 @@
 from class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock
 
+
+
+
+ ############# add block is now False make it true
+
+
+
 def generation_rect_to_pts(liste : list) -> list:
     """
     Renvoie une liste de points en fct des rectangles.
@@ -124,7 +131,7 @@ class Background:
         return None
     
     
-    def add_block(self , block : Block , decalage_auto : bool = True) -> bool:
+    def add_block(self , block : Block , decalage_auto : bool = False) -> bool:
         """
         Ajoute un bloc dans le background.
         Renvoie True si le bloc a été placé, False sinon.
@@ -165,12 +172,12 @@ class Background:
         return False
     
     
-    def render(self) -> None:
+    def render(self, screen) -> None:
         for liste in self.__dict_block.values():
             for block in liste:
                 if 1 - self.__taille_block <= block.x <= self.__width and 1 - self.__taille_block <= block.y <= self.__height:
                     #On affiche uniquement les blocs qui se situent dans la map
-                    block.render()
+                    block.render(screen)
 
 """
 Utilisation
