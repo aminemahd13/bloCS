@@ -17,8 +17,9 @@ class Block:
         self.breakable = breakable
         self.health = health
         self.texture_path = None
-        self.texture = None
         self.drop_item = drop_item
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
 
     def take_damage(self , damage : int) -> bool:
         """
@@ -32,10 +33,6 @@ class Block:
             return False
         return False
 
-    def _load_texture(self):
-        if self.texture_path:
-            self.texture = pygame.image.load(self.texture_path)
-            self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
 
 
     def render(self, surface):
@@ -51,42 +48,32 @@ class DirtBlock(Block):
     def __init__(self , x : int , y : int, texture):
         super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 50)
         self.type = "Dirt"
-        self.texture_path = texture
+        self.texture_path = "/assets/graphics/dirt.png"
 
 
 class StoneBlock(Block):
     def __init__(self , x : int , y : int, texture):
         super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 200)
         self.type = "Stone"
-        self.texture_path = texture
+        self.texture_path = "/assets/graphics/stone.png"
 
 
 class WoodBlock(Block):
     def __init__(self , x : int , y : int, texture):
         super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 100)
         self.type = "Wood"
-        self.texture_path = texture
+        self.texture_path = "/assets/graphics/wood.png"
 
 
 class BedrockBlock(Block):
-    def __init__(self , x : int , y : int, texture):
+    def __init__(self , x : int , y : int):
         super().__init__(x = x , y = y , is_solid = True , breakable = False , health = 100)
         self.type = "Bedrock"
-        self.texture_path = texture
+        self.texture_path = "/assets/graphics/bedrock.png"
 
 
 
 
-BLOCK_PROPERTIES = {
-    DIRT: {"is_solid": True, "breakable": True, "health": 50, "texture": "/assets/png/dirt.png"},
-    STONE: {"is_solid": True, "breakable": True, "health": 200, "texture": "/assets/png/stone.png"},
-    WOOD: {"is_solid": True, "breakable": True, "health": 100, "texture": "/assets/png/wood.png"},
-    BEDROCK: {"is_solid": True, "breakable": False, "health": 100, "texture": "/assets/png/bedrock.png"},
-}
-
-def create_block(x: int, y: int, block_type: str) -> Block:
-    props = BLOCK_PROPERTIES[block_type]
-    return Block(x, y, block_type, props["is_solid"], props["breakable"], props["health"], props["texture"])
 
 
 
@@ -104,10 +91,10 @@ def create_block(x: int, y: int, block_type: str) -> Block:
 Utilisation
 
 Initialisation :
-wood = WoodBlock(x : int , y : int, "/assets/png/wood.png")
-stone = StoneBlock(x :  , y : int, "/assets/png/stone.png")
-dirt = DirtBlock(x : int , y : int, "/assets/png/dirt.png")
-bedrock = BedrockBlock(x : int , y : int, "/assets/png/bedrock.png")
+wood = WoodBlock(x : int , y : int)
+stone = StoneBlock(x :  , y : int
+dirt = DirtBlock(x : int , y : int)
+bedrock = BedrockBlock(x : int , y : int)
 
 Attaquer un bloc :
 block.take_damage(damage : int) -> bool
