@@ -8,7 +8,8 @@ def generation_rect_to_pts(liste : list) -> list:
     for rect in liste:
         for x in range(rect[0] , rect[2] + 1):
             for y in range(rect[1] , rect[3] + 1):
-                liste_result.append([x , y])
+                if [x,y] not in liste_result:
+                    liste_result.append([x , y])
     return liste_result
 
 
