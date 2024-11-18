@@ -1,4 +1,4 @@
-from utils.ajout_aleatoire import add_random
+from utils.ajout_aleatoire import add_random_tuile
 from utils.gauche import gauche_ligne, gauche_grille
 from utils.parcours_liste_gauche import parcours_liste
 from utils.parcours import parcours
@@ -35,9 +35,6 @@ class Grille:
             ) for j in range(4)] for i in range(4)]
         self.grille = copie_grille(self.__grille_zero) #On copie pour éviter tout bug (svp)
         self.score = 0 #On initialise le score
-        for _ in range(2):
-            #On ajoute 2 tuiles au hasard
-            self.score = add_random(grille = self.grille, score = self.score, n_images2=0, tps=None, canvas=None, root=None)
         
     def affiche(self) -> None:
         """
@@ -68,13 +65,8 @@ class Grille:
         #On crée une copie de la grille tassée à gauche
         changement , new_grille = gauche_grille(self.grille)
         if changement and not(test): #Si la grille a bougée et qu'on ne fait pas de test
-            stop_transition = self.transition("gauche") #On affiche la transition
-            if stop_transition:
-                n = 0
-            else:
-                n = 2 * self.n_images2
+            self.transition("gauche") #On affiche la transition
             self.grille = copie_grille(new_grille) #On actualise la grille
-            self.score = add_random(grille = self.grille, score = self.score, n_images2=n, tps=self.tps, canvas=self.__canvas, root=self.__root) #On rajoute un tuile
         return changement
         
     def droite(self, test = False) -> bool:
@@ -89,13 +81,8 @@ class Grille:
         changement , new_grille = gauche_grille(grille_rotated)
         new_grille = rotation_double_grille(new_grille)
         if changement and not(test):
-            stop_transition = self.transition("droite")
-            if stop_transition:
-                n = 0
-            else:
-                n = 2 * self.n_images2
+            self.transition("droite")
             self.grille = copie_grille(new_grille)
-            self.score = add_random(grille = self.grille, score = self.score, n_images2=n, tps=self.tps, canvas=self.__canvas, root=self.__root) #On rajoute un tuile
         return changement
 
     def haut(self, test = False) -> bool:
@@ -110,13 +97,8 @@ class Grille:
         changement , new_grille = gauche_grille(grille_rotated)
         new_grille = rotation_horaire_grille(new_grille)
         if changement and not(test):
-            stop_transition = self.transition("haut")
-            if stop_transition:
-                n = 0
-            else:
-                n = 2 * self.n_images2
+            self.transition("haut")
             self.grille = copie_grille(new_grille)
-            self.score = add_random(grille = self.grille, score = self.score, n_images2=n, tps=self.tps, canvas=self.__canvas, root=self.__root) #On rajoute un tuile
         return changement
 
     def bas(self, test = False) -> bool:
@@ -131,13 +113,8 @@ class Grille:
         changement , new_grille = gauche_grille(grille_rotated)
         new_grille = rotation_antihoraire_grille(new_grille)
         if changement and not(test):
-            stop_transition = self.transition("bas")
-            if stop_transition:
-                n = 0
-            else:
-                n = 2 * self.n_images2
+            self.transition("bas")
             self.grille = copie_grille(new_grille)
-            self.score = add_random(grille = self.grille, score = self.score, n_images2=n, tps=self.tps, canvas=self.__canvas, root=self.__root) #On rajoute un tuile
         return changement
 
     def verif(self) -> bool:
@@ -356,7 +333,39 @@ class Grille:
                         time.sleep(self.tps)
         return stop_transition
     
+    def add_tuile(self , valeur) -> bool:
+        """
+        Ajoute une tuile valeur aléatoirement.
+        Renvoie True si la tuile a été ajoutée,
+        False sinon.
+        """
+        score = self.score
+        self.score = add_random_tuile(grille = self.grille , score = self.score , valeur = valeur)
+        if self.score == score:
+            return False
+        return True
+        
+    def fermer_fenetre(self) -> None:
+        """
+        Ferme la fenêtre.
+        """
+        self.__canvas.destroy()
+        self.__root.destroy()
     
+    def ouvrir_fenetre(self) -> None:
+        """
+        Affiche la fenêtre.
+        """
+        # Configuration de la fenêtre principale
+        self.__root = tk.Tk()
+        self.__root.title("2048")
+        self.__root.geometry(f"{self.__taille_grille}x{self.__taille_grille+100}")
+        self.__root.config(bg="#BBADA0")
+        # Crée un canvas pour dessiner la grille
+        self.__canvas = tk.Canvas(self.__root, width=self.__taille_grille, height=self.__taille_grille+100, bg="#BBADA0")
+        self.__canvas.pack()
+        self.affiche()
+        
     def fin_du_jeu(self) -> None:
         """
         Ferme le jeu.
