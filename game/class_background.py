@@ -17,20 +17,58 @@ class Background:
     def __init__(self , height : int , width : int):
         self.__height = height
         self.__width = width
-        x_spawn = 0 #Indice x en haut à gauche du bloc du spawn
-        y_spawn = 0 #Indice y en haut à gauche du bloc du spawn
+        x_spawn = 33 #Indice x en haut à gauche du bloc du spawn
+        y_spawn = 6 #Indice y en haut à gauche du bloc du spawn
         self.__taille_block = 40
         self.__dict_block = {}
+        
         liste_dirt = generation_rect_to_pts([])
         liste_dirt_block = []
         for i in range(len(liste_dirt)):
-            liste_dirt[i][0] = liste_dirt[i][0] - x_spawn
-            liste_dirt[i][0] = liste_dirt[i][0] * self.__taille_block
-            liste_dirt[i][1] = liste_dirt[i][1] - y_spawn
+            liste_dirt[i][0] = 2 * liste_dirt[i][0] - 2 * x_spawn - 1
+            liste_dirt[i][0] = liste_dirt[i][0] * self.__taille_block // 2
+            liste_dirt[i][0] = liste_dirt[i][0] + self.__width // 2
+            liste_dirt[i][1] = liste_dirt[i][1] - y_spawn - 1
             liste_dirt[i][1] = liste_dirt[i][1] * self.__taille_block
+            liste_dirt[i][1] = liste_dirt[i][1] + self.__height // 2
             liste_dirt_block.append(DirtBlock(x = liste_dirt[i][0] , y = liste_dirt[i][1]))
         self.__dict_block["Dirt"] = liste_dirt_block
 
+        liste_stone = generation_rect_to_pts([])
+        liste_stone_block = []
+        for i in range(len(liste_stone)):
+            liste_stone[i][0] = 2 * liste_stone[i][0] - 2 * x_spawn - 1
+            liste_stone[i][0] = liste_stone[i][0] * self.__taille_block // 2
+            liste_stone[i][0] = liste_stone[i][0] + self.__width // 2
+            liste_stone[i][1] = liste_stone[i][1] - y_spawn - 1
+            liste_stone[i][1] = liste_stone[i][1] * self.__taille_block
+            liste_stone[i][1] = liste_stone[i][1] + self.__height // 2
+            liste_stone_block.append(StoneBlock(x = liste_stone[i][0] , y = liste_stone[i][1]))
+        self.__dict_block["Stone"] = liste_stone_block
+        
+        liste_wood = generation_rect_to_pts([])
+        liste_wood_block = []
+        for i in range(len(liste_wood)):
+            liste_wood[i][0] = 2 * liste_wood[i][0] - 2 * x_spawn - 1
+            liste_wood[i][0] = liste_wood[i][0] * self.__taille_block // 2
+            liste_wood[i][0] = liste_wood[i][0] + self.__width // 2
+            liste_wood[i][1] = liste_wood[i][1] - y_spawn - 1
+            liste_wood[i][1] = liste_wood[i][1] * self.__taille_block
+            liste_wood[i][1] = liste_wood[i][1] + self.__height // 2
+            liste_wood_block.append(WoodBlock(x = liste_wood[i][0] , y = liste_wood[i][1]))
+        self.__dict_block["Wood"] = liste_wood_block
+    
+        liste_bedrock = generation_rect_to_pts([])
+        liste_bedrock_block = []
+        for i in range(len(liste_bedrock)):
+            liste_bedrock[i][0] = 2 * liste_bedrock[i][0] - 2 * x_spawn - 1
+            liste_bedrock[i][0] = liste_bedrock[i][0] * self.__taille_block // 2
+            liste_bedrock[i][0] = liste_bedrock[i][0] + self.__width // 2
+            liste_bedrock[i][1] = liste_bedrock[i][1] - y_spawn - 1
+            liste_bedrock[i][1] = liste_bedrock[i][1] * self.__taille_block
+            liste_bedrock[i][1] = liste_bedrock[i][1] + self.__height // 2
+            liste_bedrock_block.append(BedrockBlock(x = liste_bedrock[i][0] , y = liste_bedrock[i][1]))
+        self.__dict_block["Bedrock"] = liste_bedrock_block
     
      
     def right(self , deplacement : int) -> None:
