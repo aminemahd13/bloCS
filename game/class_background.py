@@ -1,4 +1,4 @@
-from class_block import DirtBlock
+from class_block import Block, DirtBlock
 
 def generation_rect_to_pts(liste : list) -> list:
     """
@@ -16,45 +16,77 @@ class Background:
         x_spawn = 0 #Indice x du block en haut à gauche lors du spawn
         y_spawn = 0 #Indice y du block en haut à gauche lors du spawn
         self.deplacement = 4 #Deplacement en px à chaque boucle
-        taille_block = 40
-        self.dict = {}
+        self.taille_block = 40
+        self.dict_coord = {}
+        self.dict_block = {}
         liste_dirt = generation_rect_to_pts([])
+        liste_dirt_block = []
         for i in range(len(liste_dirt)):
             liste_dirt[i][0] = liste_dirt[i][0] - x_spawn
-            liste_dirt[i][0] = liste_dirt[i][0] * taille_block
+            liste_dirt[i][0] = liste_dirt[i][0] * self.taille_block
             liste_dirt[i][1] = liste_dirt[i][1] - y_spawn
-            liste_dirt[i][1] = liste_dirt[i][1] * taille_block
-            liste_dirt[i] = DirtBlock(position = liste_dirt[i])
-        self.dict["Dirt"] = liste_dirt
+            liste_dirt[i][1] = liste_dirt[i][1] * self.taille_block
+            liste_dirt_block.append(DirtBlock(x = liste_dirt[i][0] , y = liste_dirt[i][1]))
+        self.dict_coord["Dirt"] = liste_dirt
+        self.dict_block["Dirt"] = liste_dirt_block
         
-    def droite(self) -> None:
+        
+    def right(self) -> None:
         """
         Déplace tout les blocs sur la gauche.
         """
-        for list in self.dict.values():
-            for block in list:
+        for liste in self.dict_block.values():
+            for block in liste:
                 block.x = block.x - self.deplacement
+        for liste in self.dict_coord.values():
+            for block in liste:
+                block[0] = block[0] - self.deplacement
     
-    def gauche(self) -> None:
+    def left(self) -> None:
         """
         Déplace tout les blocs sur la droite.
         """
-        for list in self.dict.values():
-            for block in list:
+        for liste in self.dict_block.values():
+            for block in liste:
                 block.x = block.x + self.deplacement
+        for liste in self.dict_coord.values():
+            for block in liste:
+                block[0] = block[0] + self.deplacement
     
-    def haut(self) -> None:
+    def up(self) -> None:
         """
         Déplace tout les blocs sur le bas.
         """
-        for list in self.dict.values():
-            for block in list:
+        for liste in self.dict_block.values():
+            for block in liste:
                 block.y = block.y + self.deplacement
+        for liste in self.dict_coord.values():
+            for block in liste:
+                block[1] = block[1] + self.deplacement
     
-    def bas(self) -> None:
+    def down(self) -> None:
         """
         Déplace tout les blocs sur le haut.
         """
-        for list in self.dict.values():
-            for block in list:
+        for liste in self.dict_block.values():
+            for block in liste:
                 block.y = block.y - self.deplacement
+        for liste in self.dict_coord.values():
+            for block in liste:
+                block[1] = block[1] - self.deplacement
+    
+    def check_block(self , x : int , y : int) -> str:
+        """
+        Renvoie le type du block en x , y.
+        """
+        for cle , liste in self.dict_coord.items():
+            for block in liste:
+                if block[0] <= x < block[0] + self.taille_block and block[1] <= y < block[0] + self.taille_block:
+                    return cle
+        return None
+    
+    def add_block(self , block : Block) -> None:
+        """
+        Ajoute un block dans le background
+        """
+        
