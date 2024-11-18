@@ -15,8 +15,15 @@ class player():
         self.inventory = inventory 
         self.health = health 
         self.skin = skin
-
     
+    def move(self,direction : str):
+        """Player Movement
+        direction --> string, direction of the movement
+        we change skin depending on the direction
+        """
+        if direction == "up":
+            self.skin = 1
+
 
 
 #####################Exemple d'utilisation#####################
