@@ -1,0 +1,4 @@
+keyboard
+setuptools
+pygame-ce
+pytmx
