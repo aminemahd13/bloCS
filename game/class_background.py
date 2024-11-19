@@ -187,12 +187,104 @@ class Background:
         return False
     
     
+    def check_right(self , x_player : int , y_player : int , deplacement : int) -> int:
+        """
+        Renvoie le déplacement maximal pouvant être effectué sur la droite,
+        inférieur à déplacement.
+        """
+        for x in range(deplacement):
+            for y in range(2 * self.__taille_block):
+                block = self.check_block(x = x_player + self.__taille_block + x , y = y_player + y)
+                if block is not None:
+                    return x
+        return deplacement
+    
+    
+    def check_left(self , x_player : int , y_player : int , deplacement : int) -> int:
+        """
+        Renvoie le déplacement maximal pouvant être effectué sur la gauche,
+        inférieur à déplacement.
+        """
+        for x in range(deplacement):
+            for y in range(2 * self.__taille_block):
+                block = self.check_block(x = x_player - 1 - x , y = y_player + y)
+                if block is not None:
+                    return x
+        return deplacement
+    
+    
+    def check_up(self , x_player : int , y_player : int , deplacement : int) -> int:
+        """
+        Renvoie le déplacement maximal pouvant être effectué vers le haut,
+        inférieur à déplacement.
+        """
+        for y in range(deplacement):
+            for x in range(self.__taille_block):
+                block = self.check_block(x = x_player + x , y = y_player - 1 - y)
+                if block is not None:
+                    return y
+        return deplacement
+    
+    
+    def check_down(self , x_player : int , y_player : int , deplacement : int) -> int:
+        """
+        Renvoie le déplacement maximal pouvant être effectué vers le bas,
+        inférieur à déplacement.
+        """
+        for y in range(deplacement):
+            for x in range(self.__taille_block):
+                block = self.check_block(x = x_player + x , y = y_player + 2 * self.__taille_block + y)
+                if block is not None:
+                    return y
+        return deplacement
+    
+    
+    def check_up_left(self , x_player : int , y_player : int , deplacement_up : int , deplacement_left : int) -> tuple:
+        """
+        Renvoie le déplacement maximal pouvant être effectué vers le haut et vers la gauche,
+        inférieur à déplacement.
+        """
+        deplacement_up_max1 = self.check_up(x_player = x_player , y_player = y_player , deplacement = deplacement_up)
+        deplacement_left_max1 = self.check_left(x_player = x_player , y_player = y_player , deplacement = deplacement_left)
+        
+        if deplacement_up_max1 == 0 or deplacement_left_max1 == 0:
+            return deplacement_up_max1 , deplacement_left_max1
+        
+        deplacement_left_max2 = None
+        for x in range(deplacement_left_max1):
+            for y in range(2 * self.__taille_block + deplacement_up_max1):
+                block = self.check_block(x = x_player - 1 - x , y = y_player + 2 * self.__taille_block - 1 - y)
+                if block is not None:
+                    deplacement_left_max2 = x
+                    break
+            if deplacement_left_max2 is not None:
+                break
+        if deplacement_left_max2 is None:
+            deplacement_left_max2 = deplacement_left_max1
+        
+        deplacement_up_max2 = None
+        for y in range(deplacement_up_max1):
+            for x in range(self.__taille_block + deplacement_left_max1):
+                block = self.check_block(x = x_player - 1 - x , y = y_player - 1 - y)
+                if block is not None:
+                    deplacement_up_max2 = y
+                    break
+            if deplacement_up_max2 is not None:
+                break
+        if deplacement_up_max2 is None:
+            deplacement_up_max2 = deplacement_up_max1
+        
+        
+    
+    
     def render(self, screen) -> None:
         for liste in self.__dict_block.values():
             for block in liste:
                 if 1 - self.__taille_block <= block.x <= self.__width and 1 - self.__taille_block <= block.y <= self.__height:
                     #On affiche uniquement les blocs qui se situent dans la map
                     block.render(screen)
+
+"""
 
 # Pygame initialization
 pygame.init()
@@ -244,6 +336,7 @@ while running:
 
 # Quit Pygame
 pygame.quit()
+"""
 
 """
 Utilisation
