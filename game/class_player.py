@@ -14,6 +14,7 @@ class Player:
         """
         self.jump = False
         self.name = name
+        self.mining = False
         self.taille_block = 40
         self.x = height_screen // 2 - self.taille_block // 2
         self.y = width_screen // 2 - self.taille_block
@@ -27,7 +28,7 @@ class Player:
         
 
     
-    def change_skin(self , keyboard_direction : str , mining : bool) -> None:
+    def change_skin(self , keyboard_direction : str) -> None:
         
         """Player Movement
         keyboard_jump --> True or False if jump
@@ -36,7 +37,7 @@ class Player:
         we change skin depending on the direction or if he jump or mining
         """
         #Not mining
-        if not mining:
+        if not self.mining:
             #Jumping
             if self.jump:
                 if keyboard_direction == "right" or (keyboard_direction is None and self.direction == "right"):
@@ -51,8 +52,8 @@ class Player:
             else:
                 #Changing stade --> moving right or left if he was in opposite direction
                 if keyboard_direction == self.direction:
-                    if self.stade == 8:
-                        self.stade = 0
+                    if self.stade == 20:
+                        self.stade = 1
                     else:
                         self.stade += 1
                 else:
@@ -61,25 +62,27 @@ class Player:
                 
                 #Moving right
                 if keyboard_direction == "right" or (keyboard_direction is None and self.direction == "right"):
-                    if self.stade < 8//2:
+                    if self.stade <= 20//2:
                         self.skin_path = "game/assets/graphics/walking_right.png"
                         self.skin = pygame.image.load(self.skin_path)
+                        
                         
                     else :
                         self.skin_path = "game/assets/graphics/standing_right.png"
                         self.skin = pygame.image.load(self.skin_path)
                         
-                        
+                    self.direction = "right"       
                         
                 
                 #Moving left  
                 elif keyboard_direction == "left" or (keyboard_direction is None and self.direction == "left"):
-                    if self.stade < 8//2:
+                    if self.stade <= 20//2:
                         self.skin_path = "game/assets/graphics/walking_left.png"
                         self.skin = pygame.image.load(self.skin_path)
                     else :
                         self.skin_path = "game/assets/graphics/standing_left.png"
                         self.skin = pygame.image.load(self.skin_path)
+                    self.direction = "left"   
                         
             
         
@@ -119,8 +122,6 @@ class Player:
             screen.blit(self.skin, (screen_x, screen_y))
             
         
-        
-    
             
         
 """

@@ -63,6 +63,21 @@ while running:
         background.up(5)
         player.jump = True
         player.change_skin("right" , False)
+    else:
+        player.jump=False
+    
+    #modifier ça pour que le joueur mine avec la souris si on veut pas utiliser les touches
+    if keys[pygame.K_a]:
+        player.mining = True
+        if keys[pygame.K_RIGHT]:
+            player.change_skin("right" , True)
+        elif keys[pygame.K_LEFT]:
+            player.change_skin("left" , True)
+        else: 
+            player.change_skin(player.direction , True)
+    else: 
+        player.mining = False
+        
         
 
     # Simulate damaging a block at (150, 200)
