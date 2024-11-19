@@ -1,7 +1,7 @@
 import keyboard
 
 #Dictionnaire contenant les touches associées à telle ou telle direction
-direction={"up" : ['w','z','up'] , "down" : ['s','down'] , "right" : ['d' , 'right'] , "left" : ['q' , 'a' , 'left'] , "close" : ['esc']}
+direction={"jump" : ["space"] , "up" : ['w','z','up'] , "down" : ['s','down'] , "right" : ['d' , 'right'] , "left" : ['q' , 'a' , 'left'] , "close" : ['esc']}
 
 def up() -> bool:
     """
@@ -50,5 +50,15 @@ def close() -> bool:
     """
     test = False
     for i in direction["close"]:
+        test = test or keyboard.is_pressed(i)
+    return test
+
+def jump() -> bool:
+    """
+    Renvoie True si l'utilisateur appuie sur une touche
+    pour faire sauter, False sinon.
+    """
+    test = False
+    for i in direction["jump"]:
         test = test or keyboard.is_pressed(i)
     return test

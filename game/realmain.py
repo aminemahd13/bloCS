@@ -2,6 +2,8 @@ import pygame
 from class_background import Background
 from class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock
 from class_player import Player
+import key_handler as key
+import time
 
 # Pygame initialization
 pygame.init()
@@ -9,6 +11,12 @@ pygame.init()
 # Screen dimensions
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
+g = 1200
+V0 = 500
+dx = 5
+compteur_jump = 0
+dist_theo=0
+dist_real=0
 
 # Colors
 WHITE = (255, 255, 255)
@@ -20,12 +28,6 @@ pygame.display.set_caption("Terraria-like Game Test")
 # Initialize the background
 background = Background(SCREEN_HEIGHT, SCREEN_WIDTH)
 
-# Add some blocks to the background
-background.add_block(DirtBlock(100, 200))
-background.add_block(StoneBlock(200, 200))
-background.add_block(WoodBlock(300, 200))
-background.add_block(BedrockBlock(400, 200))
-
 #Create the player
 player=Player(height_screen = 1920 , width_screen = 1080 , name = "Player 1")
 
@@ -35,12 +37,10 @@ running = True
 clock = pygame.time.Clock()
 
 
-
 while running:
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    if key.close():
+        running = False
 
     # Clear the screen
     screen.fill(WHITE)
@@ -50,25 +50,64 @@ while running:
     player.render(screen)
 
     # Example interaction (move blocks or damage a block)
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_RIGHT]:
-        background.right(5)
-        player.change_skin("right" , False)
-    if keys[pygame.K_LEFT]:
-        background.left(5)
-        player.change_skin("left" , False)
-    if keys[pygame.K_DOWN]:
-        background.down(5)
-    if keys[pygame.K_UP]:
-        background.up(5)
-        player.jump = True
-        player.change_skin("right" , False)
-        
+    
+    
+    if not player.jump:
+        if background.check_down(x_player = player.x , y_player = player.y , deplacement = 1) == 1:
+            player.jump = True
+            v_ini = 0
+            compteur_jump = 0
+            dist_theo=0
+            dist_real=0
+        elif key.up():
+            player.jump = True
+            v_ini = V0
+            compteur_jump = 0
+            dist_theo=0
+            dist_real=0
+    else:
+        if background.check_down(x_player = player.x , y_player = player.y , deplacement = 1) == 0:
+            player.jump = False
+            v_ini = 0
+            compteur_jump = 0
+            dist_theo=0
+            dist_real=0
+        if background.check_up(x_player = player.x , y_player = player.y , deplacement = 1) == 0:
+            v_ini = 0
+            compteur_jump = 0
+            dist_theo = 0
+            dist_real = 0
 
-    # Simulate damaging a block at (150, 200)
-    if keys[pygame.K_SPACE]:
-        if background.damage_block(150, 200, 10):
-            print("Block destroyed at (150, 200)!")
+    if key.right() and not key.left():
+        player.change_skin("right" , False)
+    if key.left() and not key.right():
+        player.change_skin("left" , False)
+    
+    deplacement_down,deplacement_up,deplacement_right,deplacement_left=None,None,None,None
+    if player.jump:
+        compteur_jump += 1
+        dist_theo = (v_ini - g * compteur_jump // 120) * compteur_jump // 60
+        depl = dist_theo - dist_real
+        dist_real = dist_theo
+        if depl > 0:
+            deplacement_up = background.check_up(x_player = player.x , y_player = player.y , deplacement = depl)
+        elif depl < 0:
+            deplacement_down = background.check_down(x_player = player.x , y_player = player.y , deplacement = -depl)
+
+    if key.right() and not key.left():
+        deplacement_right = background.check_right(x_player = player.x , y_player = player.y , deplacement = dx)
+    if key.left() and not key.right():
+        deplacement_left = background.check_left(x_player = player.x , y_player = player.y , deplacement = dx)
+
+    if deplacement_down is not None:
+        background.down(deplacement_down)
+    if deplacement_up is not None:
+        background.up(deplacement_up)
+    if deplacement_left is not None:
+        background.left(deplacement_left)
+    if deplacement_right is not None:
+        background.right(deplacement_right)
+                    
 
     # Update the screen
     pygame.display.flip()
