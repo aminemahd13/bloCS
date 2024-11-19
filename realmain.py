@@ -17,10 +17,11 @@ SCREEN_HEIGHT = 1080
 V0 = 551 #Vitesse initiale lors d'un saut
 g = round(V0**2 / (2 * 2.3 * 40)) #Gravité, pour sauter d'une hauteur max de 2.3 blocs
 #Paramètres
-dx = 5 #Déplacement en px sur les côtés à chaque mouvement
+dx = 6 #Déplacement en px sur les côtés à chaque mouvement
 compteur_jump = 0 #Lorsqu'un saut ou une chute a lieu, ce compteur augmente de 1 à chaque frame
 dist_theo = 0 #Distance théorique (algébrique, en hauteur) par rapport à l'origine du saut lors d'un saut ou d'une chute
 dist_real = 0 #Distance réelle (algébrique, en hauteur) par rapport à l'origine du saut lors d'un saut ou d'une chute
+
 
 # Colors
 WHITE = (255, 255, 255)
@@ -49,7 +50,7 @@ while running:
     screen.fill(WHITE)
 
     # Render the background and players
-    background.render(screen) #Affiche le background avec les blocs
+    background.render(screen = screen , player = player) #Affiche le background avec les blocs
     player.render(screen) #Affiche le joueur
     
     
@@ -61,8 +62,7 @@ while running:
     
     if not player.jump: #Si le joueur n'est pas en plein saut
         #On vérifie qu'il y a bien qqlq chose en dessous de lui, sinon il chute
-        if background.check_down(x_player = player.x,
-                                 y_player = player.y,
+        if background.check_down(player = player,
                                  deplacement = 1 #On regarde le déplacement possible pour un déplacement "élémentaire"
                                  ) == 1:
             player.jump = True #Le joueur chute
@@ -72,17 +72,19 @@ while running:
         
         #S'il y a un bloc sous ses pieds, on regarde si le joueur veut sauter
         elif key.up():
-            player.jump = True #Le joueur saute
-            v_ini = V0 #La vitesse initiale cette fois vaut V0
-            reinitialisation_saut = True
+            if background.check_up(player = player,
+                                    deplacement = 1 #On regarde le déplacement possible pour un déplacement "élémentaire"
+                                    ) == 1:
+                player.jump = True #Le joueur saute
+                v_ini = V0 #La vitesse initiale cette fois vaut V0
+                reinitialisation_saut = True
     
     
-    else: #Si le joueur est en plein saut
+    else: #Si le joueur est déjà en plein saut
         if (key.right() and not key.left()) or (not hist_touches["right"] and key.right()):
             #Si le joueur veut aller à droite
             #Soit il appuie à droite et pas à gauche, soit il appuyait pas à droite la frame d'avant mais maintenant oui
-            if background.check_down_right(x_player = player.x,
-                                           y_player = player.y,
+            if background.check_down_right(player = player,
                                            deplacement_down = 1, #On regarde le déplacement possible pour un déplacement "élémentaire"
                                            deplacement_right = 1
                                            )[0] == 0:
@@ -93,8 +95,7 @@ while running:
         elif (key.left() and not key.right()) or (not hist_touches["left"] and key.left()):
             #Si le joueur veut aller à gauche
             #Soit il appuie à gauche et pas à droite, soit il appuyait pas à gauche la frame d'avant mais maintenant oui
-            if background.check_down_left(x_player = player.x,
-                                          y_player = player.y,
+            if background.check_down_left(player = player,
                                           deplacement_down = 1, #On regarde le déplacement possible pour un déplacement "élémentaire"
                                           deplacement_left = 1
                                           )[0] == 0:
@@ -104,18 +105,16 @@ while running:
                 reinitialisation_saut = True
         else:
             #S'il n'y a pas de direction particulière (gauche ou droite)
-            if background.check_down(x_player = player.x,
-                                     y_player = player.y,
+            if background.check_down(player = player,
                                      deplacement = 1 #On regarde le déplacement possible pour un déplacement "élémentaire"
                                      ) == 0:
                 #S'il y a qqlq chose en dessous de lui, la chute s'arrête
                 player.jump = False
                 v_ini = 0
                 reinitialisation_saut = True
-        if background.check_up(x_player = player.x,
-                               y_player = player.y,
-                               deplacement = 1 #On regarde le déplacement possible pour un déplacement "élémentaire"
-                               ) == 0:
+        if background.check_up(player = player,
+                               deplacement = 2 #On regarde le déplacement possible pour un déplacement "élémentaire"
+                               ) <= 1:
             #S'il y a un bloc au dessus de lui, la chute ne s'arrête pas mais la vitesse se réinitialise
             v_ini = 0
             reinitialisation_saut = True
@@ -146,8 +145,7 @@ while running:
         moving = False #On ne fait pas l'animation de marche
     player.change_skin(moving)
     
-    
-    
+
     
     #Calcul du déplacement effectué
     
@@ -161,61 +159,52 @@ while running:
         dist_real = dist_theo #On actualise la vraie distance
         #Remarque : s'il y a un mur en haut ou en bas, le personnage n vas pas bouger verticalement de depl
         #Cependant, à la frame d'après, le jeu va détecter s'il est contre ce mur, et la chute va stopper
-
         if depl > 0: #Si on monte
             if (key.right() and not key.left()) or (not hist_touches["right"] and key.right()):
                 #Si on va à droite
                 #On calcule les déplacements qu'on va effectivement réaliser dans les deux directions
-                deplacement_up , deplacement_right = background.check_up_right(x_player = player.x,
-                                                                               y_player = player.y,
+                deplacement_up , deplacement_right = background.check_up_right(player = player,
                                                                                deplacement_up = depl,
                                                                                deplacement_right = dx)
             elif (key.left() and not key.right()) or ((not hist_touches["left"] and key.left())):
                 #Si on va à gauche
                 #On calcule les déplacements qu'on va effectivement réaliser dans les deux directions
-                deplacement_up , deplacement_left = background.check_up_left(x_player = player.x,
-                                                                             y_player = player.y,
+                deplacement_up , deplacement_left = background.check_up_left(player = player,
                                                                              deplacement_up = depl,
                                                                              deplacement_left = dx)
             else:
                 #Si on ne bouge pas horizontalement, on monte simplement
-                deplacement_up = background.check_up(x_player = player.x,
-                                                     y_player = player.y,
+                deplacement_up = background.check_up(player = player,
                                                      deplacement = depl)
         
         elif depl < 0: #Si on descend
             if (key.right() and not key.left()) or (not hist_touches["right"] and key.right()):
                 #Si on va à droite
                 #On calcule les déplacements qu'on va effectivement réaliser dans les deux directions
-                deplacement_down , deplacement_right = background.check_down_right(x_player = player.x,
-                                                                                   y_player = player.y,
+                deplacement_down , deplacement_right = background.check_down_right(player = player,
                                                                                    deplacement_down = -depl,
                                                                                    deplacement_right = dx)
             elif (key.left() and not key.right()) or ((not hist_touches["left"] and key.left())):
                 #Si on va à gauche
                 #On calcule les déplacements qu'on va effectivement réaliser dans les deux directions
-                deplacement_down , deplacement_left = background.check_down_left(x_player = player.x,
-                                                                                 y_player = player.y,
+                deplacement_down , deplacement_left = background.check_down_left(player = player,
                                                                                  deplacement_down = -depl,
                                                                                  deplacement_left = dx)
             else:
                 #Si on ne bouge pas horizontalement, on monte simplement
-                deplacement_down = background.check_down(x_player = player.x,
-                                                         y_player = player.y,
+                deplacement_down = background.check_down(player = player,
                                                          deplacement = -depl)
                 
         else: #Si on ne bouge pas verticalement
             if (key.right() and not key.left()) or (not hist_touches["right"] and key.right()):
                 #Si on va à droite
                 #On calcule le déplacement qu'on va effectivement réaliser dans la direction
-                deplacement_right = background.check_right(x_player = player.x,
-                                                           y_player = player.y,
+                deplacement_right = background.check_right(player = player,
                                                            deplacement = dx)
             elif (key.left() and not key.right()) or (not hist_touches["left"] and key.left()):
                 #Si on va à gauche
                 #On calcule le déplacement qu'on va effectivement réaliser dans la direction
-                deplacement_left=background.check_left(x_player = player.x,
-                                                       y_player = player.y,
+                deplacement_left=background.check_left(player = player,
                                                        deplacement = dx)
 
 
@@ -223,14 +212,12 @@ while running:
         if (key.right() and not key.left()) or (not hist_touches["right"] and key.right()):
             #Si on va à droite
             #On calcule le déplacement qu'on va effectivement réaliser dans la direction
-            deplacement_right = background.check_right(x_player = player.x,
-                                                       y_player = player.y,
+            deplacement_right = background.check_right(player = player,
                                                        deplacement = dx)
         if (key.left() and not key.right()) or (not hist_touches["left"] and key.left()):
             #Si on va à gauche
             #On calcule le déplacement qu'on va effectivement réaliser dans la direction
-            deplacement_left = background.check_left(x_player = player.x,
-                                                     y_player = player.y,
+            deplacement_left = background.check_left(player = player,
                                                      deplacement = dx)
 
     
@@ -239,21 +226,18 @@ while running:
     #On effectue les éventuels déplacements
     
     if deplacement_down is not None:
-        background.down(deplacement_down)
+        player.y += deplacement_down
     if deplacement_up is not None:
-        background.up(deplacement_up)
+        player.y -= deplacement_up
     if deplacement_left is not None:
-        background.left(deplacement_left)
+        player.x -= deplacement_left
     if deplacement_right is not None:
-        background.right(deplacement_right)
-    
-
+        player.x += deplacement_right
     
     
     #On garde en mémoire l'état des touches
     hist_touches["left"] = key.left()
     hist_touches["right"] = key.right()
-
 
     # Update the screen
     pygame.display.flip()

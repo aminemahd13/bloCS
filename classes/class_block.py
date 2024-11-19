@@ -1,4 +1,6 @@
 import pygame
+from utils.coord_to_screen import coord_to_screen
+from classes.class_player import Player
 
 BLOCK_SIZE = 40
 class Block:
@@ -12,6 +14,7 @@ class Block:
         """
         self.x = x
         self.y = y
+        self.taille = 40
         self.type = None
         self.is_solid = is_solid
         self.breakable = breakable
@@ -34,11 +37,10 @@ class Block:
 
 
 
-    def render(self, screen):
+    def render(self, screen , player : Player):
         if self.texture:  # Ensure texture is loaded
-            screen_x = self.x
-            screen_y = self.y
-            screen.blit(self.texture, (screen_x, screen_y))
+            x , y = coord_to_screen(block = self , player = player)
+            screen.blit(self.texture, (x, y))
 
 
 

@@ -3,7 +3,7 @@ import pygame
 
 
 class Player:
-    def __init__(self , height_screen : int , width_screen : int , name : str = "Player 1"):
+    def __init__(self , height_screen : int , width_screen : int , x_spawn : int = 33 , y_spawn : int = 6, name : str = "Player 1"):
         # [x,y] à changer en fonction du milieu de la map
         """Initializes the player
         name --> string, name of the player
@@ -16,10 +16,15 @@ class Player:
         self.name = name
         self.mining = False
         self.taille_block = 40
-        self.x = height_screen // 2 - self.taille_block // 2
-        self.y = width_screen // 2 - self.taille_block
+        self.x_screen = height_screen // 2 - self.taille_block // 2
+        self.y_screen = width_screen // 2 - self.taille_block
+        self.width_screen = width_screen
+        self.height_screen = height_screen
+        self.x = x_spawn * self.taille_block
+        self.y = y_spawn * self.taille_block
         self.direction = "right"
         self.stade = 1
+        self.block_in_screen = []
         
         self.inventory = []
         self.health = 100
@@ -56,8 +61,6 @@ class Player:
                         self.stade = 1
                     else:
                         self.stade += 1
-                else:
-                    self.stade = 1
 
                 
                 #Moving right
@@ -104,9 +107,7 @@ class Player:
     
     def render(self , screen):
         if self.skin:
-            screen_x = self.x
-            screen_y = self.y
-            screen.blit(self.skin, (screen_x, screen_y))
+            screen.blit(self.skin, (self.x_screen, self.y_screen))
             
         
             
