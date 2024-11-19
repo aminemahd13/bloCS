@@ -274,10 +274,247 @@ class Background:
         if deplacement_up_max2 is None:
             deplacement_up_max2 = deplacement_up_max1
         
+        if deplacement_left_max2 >= deplacement_up_max2:
+            if deplacement_left_max1 == deplacement_left_max2:
+                return deplacement_up_max2 , deplacement_left_max2
+            deplacement_up_max3 = None
+            for y in range(deplacement_up_max2):
+                for x in range(self.__taille_block + deplacement_left_max2):
+                    block = self.check_block(x = x_player - 1 - x , y = y_player - 1 - y)
+                    if block is not None:
+                        deplacement_up_max3 = y
+                        break
+                if deplacement_up_max3 is not None:
+                    break
+            if deplacement_up_max3 is None:
+                deplacement_up_max3 = deplacement_up_max2
+            return deplacement_up_max3 , deplacement_left_max2
         
+        else:
+            if deplacement_up_max1 == deplacement_up_max2:
+                return deplacement_up_max2 , deplacement_left_max2
+            deplacement_left_max3 = None
+            for x in range(deplacement_left_max2):
+                for y in range(2 * self.__taille_block + deplacement_up_max2):
+                    block = self.check_block(x = x_player - 1 - x , y = y_player + 2 * self.__taille_block - 1 - y)
+                    if block is not None:
+                        deplacement_left_max3 = x
+                        break
+                if deplacement_left_max3 is not None:
+                    break
+            if deplacement_left_max3 is None:
+                deplacement_left_max3 = deplacement_left_max1
+            return deplacement_up_max2 , deplacement_left_max3
+    
+    
+    def check_up_right(self , x_player : int , y_player : int , deplacement_up : int , deplacement_right : int) -> tuple:
+        """
+        Renvoie le déplacement maximal pouvant être effectué vers le haut et vers la droite,
+        inférieur à déplacement.
+        """
+        deplacement_up_max1 = self.check_up(x_player = x_player , y_player = y_player , deplacement = deplacement_up)
+        deplacement_right_max1 = self.check_right(x_player = x_player , y_player = y_player , deplacement = deplacement_right)
+        
+        if deplacement_up_max1 == 0 or deplacement_right_max1 == 0:
+            return deplacement_up_max1 , deplacement_right_max1
+        
+        deplacement_right_max2 = None
+        for x in range(deplacement_right_max1):
+            for y in range(2 * self.__taille_block + deplacement_up_max1):
+                block = self.check_block(x = x_player + self.__taille_block + x , y = y_player + 2 * self.__taille_block - 1 - y)
+                if block is not None:
+                    deplacement_right_max2 = x
+                    break
+            if deplacement_right_max2 is not None:
+                break
+        if deplacement_right_max2 is None:
+            deplacement_right_max2 = deplacement_right_max1
+        
+        deplacement_up_max2 = None
+        for y in range(deplacement_up_max1):
+            for x in range(self.__taille_block + deplacement_right_max1):
+                block = self.check_block(x = x_player + x , y = y_player - 1 - y)
+                if block is not None:
+                    deplacement_up_max2 = y
+                    break
+            if deplacement_up_max2 is not None:
+                break
+        if deplacement_up_max2 is None:
+            deplacement_up_max2 = deplacement_up_max1
+        
+        if deplacement_right_max2 >= deplacement_up_max2:
+            if deplacement_right_max1 == deplacement_right_max2:
+                return deplacement_up_max2 , deplacement_right_max2
+            deplacement_up_max3 = None
+            for y in range(deplacement_up_max2):
+                for x in range(self.__taille_block + deplacement_right_max2):
+                    block = self.check_block(x = x_player + x , y = y_player - 1 - y)
+                    if block is not None:
+                        deplacement_up_max3 = y
+                        break
+                if deplacement_up_max3 is not None:
+                    break
+            if deplacement_up_max3 is None:
+                deplacement_up_max3 = deplacement_up_max2
+            return deplacement_up_max3 , deplacement_right_max2
+        
+        else:
+            if deplacement_up_max1 == deplacement_up_max2:
+                return deplacement_up_max2 , deplacement_right_max2
+            deplacement_right_max3 = None
+            for x in range(deplacement_right_max2):
+                for y in range(2 * self.__taille_block + deplacement_up_max2):
+                    block = self.check_block(x = x_player + self.__taille_block + x , y = y_player + 2 * self.__taille_block - 1 - y)
+                    if block is not None:
+                        deplacement_right_max3 = x
+                        break
+                if deplacement_right_max3 is not None:
+                    break
+            if deplacement_right_max3 is None:
+                deplacement_right_max3 = deplacement_right_max1
+            return deplacement_up_max2 , deplacement_right_max3
+    
+    
+    def check_down_left(self , x_player : int , y_player : int , deplacement_down : int , deplacement_left : int) -> tuple:
+        """
+        Renvoie le déplacement maximal pouvant être effectué vers le haut et vers la gauche,
+        inférieur à déplacement.
+        """
+        deplacement_down_max1 = self.check_down(x_player = x_player , y_player = y_player , deplacement = deplacement_down)
+        deplacement_left_max1 = self.check_left(x_player = x_player , y_player = y_player , deplacement = deplacement_left)
+        
+        if deplacement_down_max1 == 0 or deplacement_left_max1 == 0:
+            return deplacement_down_max1 , deplacement_left_max1
+        
+        deplacement_left_max2 = None
+        for x in range(deplacement_left_max1):
+            for y in range(2 * self.__taille_block + deplacement_down_max1):
+                block = self.check_block(x = x_player - 1 - x , y = y_player +  y)
+                if block is not None:
+                    deplacement_left_max2 = x
+                    break
+            if deplacement_left_max2 is not None:
+                break
+        if deplacement_left_max2 is None:
+            deplacement_left_max2 = deplacement_left_max1
+        
+        deplacement_down_max2 = None
+        for y in range(deplacement_down_max1):
+            for x in range(self.__taille_block + deplacement_left_max1):
+                block = self.check_block(x = x_player - 1 - x , y = y_player + 2 * self.__taille_block + y)
+                if block is not None:
+                    deplacement_down_max2 = y
+                    break
+            if deplacement_down_max2 is not None:
+                break
+        if deplacement_down_max2 is None:
+            deplacement_down_max2 = deplacement_down_max1
+        
+        if deplacement_left_max2 >= deplacement_down_max2:
+            if deplacement_left_max1 == deplacement_left_max2:
+                return deplacement_down_max2 , deplacement_left_max2
+            deplacement_down_max3 = None
+            for y in range(deplacement_down_max2):
+                for x in range(self.__taille_block + deplacement_left_max2):
+                    block = self.check_block(x = x_player - 1 - x , y = y_player + 2 * self.__taille_block + y)
+                    if block is not None:
+                        deplacement_down_max3 = y
+                        break
+                if deplacement_down_max3 is not None:
+                    break
+            if deplacement_down_max3 is None:
+                deplacement_down_max3 = deplacement_down_max2
+            return deplacement_down_max3 , deplacement_left_max2
+        
+        else:
+            if deplacement_down_max1 == deplacement_down_max2:
+                return deplacement_down_max2 , deplacement_left_max2
+            deplacement_left_max3 = None
+            for x in range(deplacement_left_max2):
+                for y in range(2 * self.__taille_block + deplacement_down_max2):
+                    block = self.check_block(x = x_player - 1 - x , y = y_player + y)
+                    if block is not None:
+                        deplacement_left_max3 = x
+                        break
+                if deplacement_left_max3 is not None:
+                    break
+            if deplacement_left_max3 is None:
+                deplacement_left_max3 = deplacement_left_max1
+            return deplacement_down_max2 , deplacement_left_max3
+    
+    
+    def check_down_right(self , x_player : int , y_player : int , deplacement_down : int , deplacement_right : int) -> tuple:
+        """
+        Renvoie le déplacement maximal pouvant être effectué vers le bas et vers la droite,
+        inférieur à déplacement.
+        """
+        deplacement_down_max1 = self.check_up(x_player = x_player , y_player = y_player , deplacement = deplacement_down)
+        deplacement_right_max1 = self.check_right(x_player = x_player , y_player = y_player , deplacement = deplacement_right)
+        
+        if deplacement_down_max1 == 0 or deplacement_right_max1 == 0:
+            return deplacement_down_max1 , deplacement_right_max1
+        
+        deplacement_right_max2 = None
+        for x in range(deplacement_right_max1):
+            for y in range(2 * self.__taille_block + deplacement_down_max1):
+                block = self.check_block(x = x_player + self.__taille_block + x , y = y_player + y)
+                if block is not None:
+                    deplacement_right_max2 = x
+                    break
+            if deplacement_right_max2 is not None:
+                break
+        if deplacement_right_max2 is None:
+            deplacement_right_max2 = deplacement_right_max1
+        
+        deplacement_down_max2 = None
+        for y in range(deplacement_down_max1):
+            for x in range(self.__taille_block + deplacement_right_max1):
+                block = self.check_block(x = x_player + x , y = y_player + 2 * self.__taille_block + y)
+                if block is not None:
+                    deplacement_down_max2 = y
+                    break
+            if deplacement_down_max2 is not None:
+                break
+        if deplacement_down_max2 is None:
+            deplacement_down_max2 = deplacement_down_max1
+        
+        if deplacement_right_max2 >= deplacement_down_max2:
+            if deplacement_right_max1 == deplacement_right_max2:
+                return deplacement_down_max2 , deplacement_right_max2
+            deplacement_down_max3 = None
+            for y in range(deplacement_down_max2):
+                for x in range(self.__taille_block + deplacement_right_max2):
+                    block = self.check_block(x = x_player + x , y = y_player + 2 * self.__taille_block + y)
+                    if block is not None:
+                        deplacement_down_max3 = y
+                        break
+                if deplacement_down_max3 is not None:
+                    break
+            if deplacement_down_max3 is None:
+                deplacement_down_max3 = deplacement_down_max2
+            return deplacement_down_max3 , deplacement_right_max2
+        
+        else:
+            if deplacement_down_max1 == deplacement_down_max2:
+                return deplacement_down_max2 , deplacement_right_max2
+            deplacement_right_max3 = None
+            for x in range(deplacement_right_max2):
+                for y in range(2 * self.__taille_block + deplacement_down_max2):
+                    block = self.check_block(x = x_player + self.__taille_block + x , y = y_player + y)
+                    if block is not None:
+                        deplacement_right_max3 = x
+                        break
+                if deplacement_right_max3 is not None:
+                    break
+            if deplacement_right_max3 is None:
+                deplacement_right_max3 = deplacement_right_max1
+            return deplacement_down_max2 , deplacement_right_max3
     
     
     def render(self, screen) -> None:
+        """
+        Affiche le background.
+        """
         for liste in self.__dict_block.values():
             for block in liste:
                 if 1 - self.__taille_block <= block.x <= self.__width and 1 - self.__taille_block <= block.y <= self.__height:
