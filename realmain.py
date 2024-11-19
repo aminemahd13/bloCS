@@ -3,7 +3,6 @@ from classes.class_background import Background
 from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock
 from classes.class_player import Player
 import utils.key_handler as key
-import time
 
 # Pygame initialization
 pygame.init()
@@ -11,12 +10,13 @@ pygame.init()
 # Screen dimensions
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
-g = 1200
-V0 = 500
+V0 = 551
+g = round(V0**2 / (2 * 2.3 * 40))
 dx = 5
 compteur_jump = 0
 dist_theo=0
 dist_real=0
+testcompt=0
 
 # Colors
 WHITE = (255, 255, 255)
@@ -66,17 +66,28 @@ while running:
             dist_theo=0
             dist_real=0
     else:
-        if background.check_down(x_player = player.x , y_player = player.y , deplacement = 1) == 0:
-            player.jump = False
+        reini = False
+
+        if key.right() and not key.left():
+            if background.check_down_right(x_player = player.x , y_player = player.y , deplacement_down = 1 , deplacement_right = 1)[0] == 0:
+                player.jump = False
+                reini = True
+        elif key.left() and not key.right():
+            if background.check_down_left(x_player = player.x , y_player = player.y , deplacement_down = 1 , deplacement_left = 1)[0] == 0:
+                player.jump = False
+                reini = True
+        else:
+            if background.check_down(x_player = player.x , y_player = player.y , deplacement = 1) == 0:
+                player.jump = False
+                reini = True
+        if background.check_up(x_player = player.x , y_player = player.y , deplacement = 1) == 0:
+            reini = True
+        if reini: 
             v_ini = 0
             compteur_jump = 0
             dist_theo=0
             dist_real=0
-        if background.check_up(x_player = player.x , y_player = player.y , deplacement = 2) <= 1:
-            v_ini = 0
-            compteur_jump = 0
-            dist_theo=0
-            dist_real=0
+
             
 
     if key.right() and not key.left():
@@ -101,6 +112,7 @@ while running:
                     deplacement_left = background.check_left(x_player = player.x , y_player = player.y , deplacement = dx)
             else:
                 deplacement_up = background.check_up(x_player=player.x,y_player=player.y,deplacement=depl)
+            testcompt+=deplacement_up
         elif depl < 0:
             if key.right() and not key.left():
                 deplacement_down,deplacement_right=background.check_down_right(x_player=player.x,y_player=player.y,deplacement_down=-depl,deplacement_right=dx)
@@ -108,7 +120,7 @@ while running:
                 deplacement_down,deplacement_left=background.check_down_left(x_player=player.x,y_player=player.y,deplacement_down=-depl,deplacement_left=dx)
             else:
                 deplacement_down = background.check_down(x_player=player.x,y_player=player.y,deplacement=-depl)
-
+            testcompt-=deplacement_down
     else:
         if key.right() and not key.left():
             deplacement_right = background.check_right(x_player = player.x , y_player = player.y , deplacement = dx)
@@ -130,6 +142,7 @@ while running:
 
     # Cap the frame rate
     clock.tick(60)
+    print(testcompt)
 
 # Quit Pygame
 pygame.quit()
