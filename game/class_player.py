@@ -109,6 +109,21 @@ print(player.inventory)
 print(player.health)
 print(player.skin)
 
+#Change skin première fois
+player.change_skin(keyboard_direction = "right" , mining = False)
+print(player.skin_path)
+#Change skin deuxième fois --> animation
+player.change_skin(keyboard_direction = "right" , mining = False)
+print(player.skin_path)
+
+player.change_skin(keyboard_direction = "right" , mining = True)
+print(player.skin_path)
+
+
+
+
+
+
         
         
 
