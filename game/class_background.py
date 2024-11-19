@@ -192,7 +192,6 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la droite,
         inférieur à déplacement.
         """
-        return deplacement
         deplacement_min=deplacement
         for liste in self.__dict_block.values():
             for block in liste:
@@ -207,7 +206,6 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la gauche,
         inférieur à déplacement.
         """
-        return deplacement
         for liste in self.__dict_block.values():
             for block in liste:
                 if y_player-self.__taille_block+1<=block.y<=y_player+2*self.__taille_block-2 and x_player-self.__taille_block-deplacement+1<=block.x<=x_player-1:
@@ -221,7 +219,6 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué vers le haut,
         inférieur à déplacement.
         """
-        return deplacement
         for liste in self.__dict_block.values():
             for block in liste:
                 if y_player-self.__taille_block-deplacement+1<=block.y<=y_player-1 and x_player-self.__taille_block+1<=block.x<=x_player+self.__taille_block-1:
@@ -235,7 +232,6 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué vers le bas,
         inférieur à déplacement.
         """
-        return deplacement
         for liste in self.__dict_block.values():
             for block in liste:
                 if y_player+self.__taille_block+1<=block.y<=y_player+2*self.__taille_block+deplacement-1 and x_player-self.__taille_block+1<=block.x<=x_player+self.__taille_block-1:
