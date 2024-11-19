@@ -56,13 +56,14 @@ while running:
         player.change_skin("right" , False)
     if keys[pygame.K_LEFT]:
         background.left(5)
-        player.change_skin("right" , False)
+        player.change_skin("left" , False)
     if keys[pygame.K_DOWN]:
         background.down(5)
     if keys[pygame.K_UP]:
         background.up(5)
         player.jump = True
-        player.change_skin("" , False)
+        player.change_skin("right" , False)
+        
 
     # Simulate damaging a block at (150, 200)
     if keys[pygame.K_SPACE]:

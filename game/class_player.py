@@ -51,27 +51,36 @@ class Player:
             else:
                 #Changing stade --> moving right or left if he was in opposite direction
                 if keyboard_direction == self.direction:
-                    self.stade = 1 - self.stade
+                    if self.stade == 8:
+                        self.stade = 0
+                    else:
+                        self.stade += 1
                 else:
-                    self.stade = 0
+                    self.stade=0
+
                 
                 #Moving right
                 if keyboard_direction == "right" or (keyboard_direction is None and self.direction == "right"):
-                    if self.stade == 1:
+                    if self.stade < 8//2:
                         self.skin_path = "game/assets/graphics/walking_right.png"
                         self.skin = pygame.image.load(self.skin_path)
+                        
                     else :
                         self.skin_path = "game/assets/graphics/standing_right.png"
                         self.skin = pygame.image.load(self.skin_path)
+                        
+                        
+                        
                 
                 #Moving left  
                 elif keyboard_direction == "left" or (keyboard_direction is None and self.direction == "left"):
-                    if self.stade == 1 :
+                    if self.stade < 8//2:
                         self.skin_path = "game/assets/graphics/walking_left.png"
                         self.skin = pygame.image.load(self.skin_path)
                     else :
                         self.skin_path = "game/assets/graphics/standing_left.png"
                         self.skin = pygame.image.load(self.skin_path)
+                        
             
         
         #Mining
