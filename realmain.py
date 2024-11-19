@@ -1,8 +1,8 @@
 import pygame
-from class_background import Background
-from class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock
-from class_player import Player
-import key_handler as key
+from classes.class_background import Background
+from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock
+from classes.class_player import Player
+import utils.key_handler as key
 import time
 
 # Pygame initialization

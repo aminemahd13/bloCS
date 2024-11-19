@@ -1,7 +1,7 @@
 import pygame
-from class_background import Background
-from class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock
-from class_player import Player
+from game.classes.class_background import Background
+from game.classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock
+from game.classes.class_player import Player
 
 # Pygame initialization
 pygame.init()
@@ -15,7 +15,7 @@ WHITE = (255, 255, 255)
 
 # Create the game screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Terraria-like Game Test")
+pygame.display.set_caption("Terraria")
 
 # Initialize the background
 background = Background(SCREEN_HEIGHT, SCREEN_WIDTH)

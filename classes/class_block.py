@@ -47,7 +47,7 @@ class DirtBlock(Block):
     def __init__(self , x : int , y : int):
         super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 50)
         self.type = "Dirt"
-        self.texture_path = "game/assets/graphics/dirt.png"
+        self.texture_path = "assets/graphics/dirt.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
 
@@ -56,7 +56,7 @@ class StoneBlock(Block):
     def __init__(self , x : int , y : int):
         super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 200)
         self.type = "Stone"
-        self.texture_path = "game/assets/graphics/stone.png"
+        self.texture_path = "assets/graphics/stone.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
 
@@ -64,7 +64,7 @@ class ObsidianBlock(Block):
     def __init__(self , x : int , y : int):
         super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 800)
         self.type = "Obsidian"
-        self.texture_path = "game/assets/graphics/obsidian.png"
+        self.texture_path = "assets/graphics/obsidian.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
 
@@ -73,7 +73,7 @@ class WoodBlock(Block):
     def __init__(self , x : int , y : int):
         super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 100)
         self.type = "Wood"
-        self.texture_path = "game/assets/graphics/dirt.png"
+        self.texture_path = "assets/graphics/dirt.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
 
@@ -83,7 +83,7 @@ class BedrockBlock(Block):
     def __init__(self , x : int , y : int):
         super().__init__(x = x , y = y , is_solid = True , breakable = False , health = 100)
         self.type = "Bedrock"
-        self.texture_path = "game/assets/graphics/bedrock.png"
+        self.texture_path = "assets/graphics/bedrock.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
 
