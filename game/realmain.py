@@ -79,9 +79,9 @@ while running:
             dist_real = 0
 
     if key.right() and not key.left():
-        player.change_skin("right" , False)
+        player.change_skin("right")
     if key.left() and not key.right():
-        player.change_skin("left" , False)
+        player.change_skin("left")
     
     deplacement_down,deplacement_up,deplacement_right,deplacement_left=None,None,None,None
     if player.jump:
