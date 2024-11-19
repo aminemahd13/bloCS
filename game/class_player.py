@@ -22,7 +22,7 @@ class Player:
         
         self.inventory = []
         self.health = 100
-        self.skin_path = os.path.join("game","assets","graphics","standing_right.png")
+        self.skin_path = "game/assets/graphics/standing_right.png"
         self.skin = pygame.image.load(self.skin_path)
         
 
@@ -40,11 +40,11 @@ class Player:
             #Jumping
             if self.jump:
                 if keyboard_direction == "right" or (keyboard_direction is None and self.direction == "right"):
-                    self.skin_path = os.path.join("game" , "assets" , "graphics" , "jumping_right.png")
+                    self.skin_path = "game/assets/graphics/jumping_right.png"
                     self.skin = pygame.image.load(self.skin_path)
                     
                 elif keyboard_direction == "left" or (keyboard_direction is None and self.direction == "left"):
-                    self.skin_path = os.path.join("game" , "assets" , "graphics" , "jumping_left.png")
+                    self.skin_path = "game/assets/graphics/jumping_left.png"
                     self.skin = pygame.image.load(self.skin_path)
             
             #Not jumping
@@ -58,47 +58,63 @@ class Player:
                 #Moving right
                 if keyboard_direction == "right" or (keyboard_direction is None and self.direction == "right"):
                     if self.stade == 1:
-                        self.skin_path = os.path.join("game" , "assets" , "graphics" , "walking_right.png")
+                        self.skin_path = "game/assets/graphics/walking_right.png"
                         self.skin = pygame.image.load(self.skin_path)
                     else :
-                        self.skin_path = os.path.join("game" , "assets" , "graphics" , "standing_right.png")
+                        self.skin_path = "game/assets/graphics/standing_right.png"
                         self.skin = pygame.image.load(self.skin_path)
                 
                 #Moving left  
                 elif keyboard_direction == "left" or (keyboard_direction is None and self.direction == "left"):
                     if self.stade == 1 :
-                        self.skin_path = os.path.join("game" , "assets" , "graphics" , "walking_left.png")
+                        self.skin_path = "game/assets/graphics/walking_left.png"
                         self.skin = pygame.image.load(self.skin_path)
                     else :
-                        self.skin_path = os.path.join("game" , "assets" , "graphics" , "standing_left.png")
+                        self.skin_path = "game/assets/graphics/standing_left.png"
                         self.skin = pygame.image.load(self.skin_path)
             
         
         #Mining
         else:
             if keyboard_direction == "right":
-                self.skin_path = os.path.join("game" , "assets" , "graphics" , "mining_right.png")
+                self.skin_path = "game/assets/graphics/mining_right.png"
                 self.skin = pygame.image.load(self.skin_path)
                 
             elif keyboard_direction == "left":
-                self.skin_path = os.path.join("game" , "assets" , "graphics" , "mining_left.png")
+                self.skin_path = "game/assets/graphics/mining_left.png"
                 self.skin = pygame.image.load(self.skin_path)
                 
             elif self.direction == "left":
-                self.skin_path = os.path.join("game" , "assets" , "graphics" , "mining_left.png")
+                self.skin_path = "game/assets/graphics/mining_left.png"
                 self.skin = pygame.image.load(self.skin_path)
                 
             elif self.direction == "right":
-                self.skin_path = os.path.join("game" , "assets" , "graphics" , "mining_right.png")
+                self.skin_path = "game/assets/graphics/mining_right.png"
                 self.skin = pygame.image.load(self.skin_path)
+        
+        self.skin = pygame.transform.scale(self.skin, (40, 80))
                 
         
+    def add_inventory(self,item) -> None:
+        """Add item to the inventory"""
+        self.inventory.append(item)
+        
+    def remove_inventory(self,item) -> None:
+        """Remove item to the inventory"""
+        self.inventory.remove(item)
+    
+    def render(self , screen):
+        if self.skin:
+            screen_x = self.x
+            screen_y = self.y
+            screen.blit(self.skin, (screen_x, screen_y))
+            
         
         
     
             
         
-
+"""
 
 #####################Exemple d'utilisation#####################
 player=Player(height_screen = 1920 , width_screen = 1080 , name = "Player 1")
@@ -115,19 +131,16 @@ print(player.skin_path)
 #Change skin deuxième fois --> animation
 player.change_skin(keyboard_direction = "right" , mining = False)
 print(player.skin_path)
-
+#Change skin mining 
 player.change_skin(keyboard_direction = "right" , mining = True)
 print(player.skin_path)
 
 
-
-
-
+"""
 
         
         
 
-        
         
         
         
