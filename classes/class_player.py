@@ -28,7 +28,7 @@ class Player:
         
 
     
-    def change_skin(self , keyboard_direction : str) -> None:
+    def change_skin(self , moving : str) -> None:
         
         """Player Movement
         keyboard_jump --> True or False if jump
@@ -40,18 +40,18 @@ class Player:
         if not self.mining:
             #Jumping
             if self.jump:
-                if keyboard_direction == "right" or (keyboard_direction is None and self.direction == "right"):
+                if self.direction == "right":
                     self.skin_path = "assets/graphics/jumping_right.png"
                     self.skin = pygame.image.load(self.skin_path)
                     
-                elif keyboard_direction == "left" or (keyboard_direction is None and self.direction == "left"):
+                elif self.direction == "left":
                     self.skin_path = "assets/graphics/jumping_left.png"
                     self.skin = pygame.image.load(self.skin_path)
             
             #Not jumping
             else:
                 #Changing stade --> moving right or left if he was in opposite direction
-                if keyboard_direction == self.direction:
+                if moving:
                     if self.stade == 20:
                         self.stade = 1
                     else:
@@ -61,7 +61,7 @@ class Player:
 
                 
                 #Moving right
-                if keyboard_direction == "right" or (keyboard_direction is None and self.direction == "right"):
+                if self.direction == "right":
                     if self.stade <= 20//2:
                         self.skin_path = "assets/graphics/walking_right.png"
                         self.skin = pygame.image.load(self.skin_path)
@@ -75,7 +75,7 @@ class Player:
                         
                 
                 #Moving left  
-                elif keyboard_direction == "left" or (keyboard_direction is None and self.direction == "left"):
+                elif self.direction == "left":
                     if self.stade <= 20//2:
                         self.skin_path = "assets/graphics/walking_left.png"
                         self.skin = pygame.image.load(self.skin_path)
@@ -88,20 +88,12 @@ class Player:
         
         #Mining
         else:
-            if keyboard_direction == "right":
+            if self.direction == "right":
                 self.skin_path = "assets/graphics/mining_right.png"
-                self.skin = pygame.image.load(self.skin_path)
-                
-            elif keyboard_direction == "left":
-                self.skin_path = "assets/graphics/mining_left.png"
                 self.skin = pygame.image.load(self.skin_path)
                 
             elif self.direction == "left":
                 self.skin_path = "assets/graphics/mining_left.png"
-                self.skin = pygame.image.load(self.skin_path)
-                
-            elif self.direction == "right":
-                self.skin_path = "assets/graphics/mining_right.png"
                 self.skin = pygame.image.load(self.skin_path)
         
         self.skin = pygame.transform.scale(self.skin, (40, 80))
