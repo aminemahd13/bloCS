@@ -223,7 +223,7 @@ class Background:
             for block in liste:
                 if y_player-self.__taille_block-deplacement+1<=block.y<=y_player-1 and x_player-self.__taille_block+1<=block.x<=x_player+self.__taille_block-1:
                     #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
-                    deplacement=min(deplacement,y_player-self.__taille_block-block.y+1)
+                    deplacement=min(deplacement,y_player-self.__taille_block-block.y-1)
         return deplacement
     
     
@@ -238,6 +238,133 @@ class Background:
                     #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
                     deplacement=min(deplacement,block.y-y_player-2*self.__taille_block+1)
         return deplacement
+    
+    
+    def check_up_right(self , x_player : int , y_player : int , deplacement_up : int , deplacement_right : int) -> tuple:
+        deplacement_up = self.check_up(x_player = x_player , y_player = y_player , deplacement = deplacement_up)
+        deplacement_right = self.check_right(x_player = x_player , y_player = y_player , deplacement = deplacement_right)
+        deplacement_up1 = deplacement_up
+        deplacement_right1 = deplacement_right
+        for liste in self.__dict_block.values():
+            for block in liste:
+                if y_player-self.__taille_block-deplacement_up+1<=block.y<=y_player-1 and x_player+1<=block.x<=x_player+self.__taille_block+deplacement_right+1:
+                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                    deplacement_up1=min(deplacement_up1,y_player-self.__taille_block-block.y-1)
+                    deplacement_right1=min(deplacement_right1,block.x-x_player-self.__taille_block)
+        if deplacement_right1 == deplacement_right or deplacement_up1 == deplacement_up:
+            return deplacement_up , deplacement_right
+        
+        if deplacement_right1 >= deplacement_up1:
+            deplacement_up1 = deplacement_up
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player-self.__taille_block-deplacement_up+1<=block.y<=y_player-1 and x_player+1<=block.x<=x_player+self.__taille_block+deplacement_right1+1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_up1=min(deplacement_up1,y_player-self.__taille_block-block.y-1)
+        else:
+            deplacement_right1 = deplacement_right
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player-self.__taille_block-deplacement_up1+1<=block.y<=y_player-1 and x_player+1<=block.x<=x_player+self.__taille_block+deplacement_right+1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_right1=min(deplacement_right1,block.x-x_player-self.__taille_block)
+        
+        
+        return deplacement_up1,deplacement_right1
+    
+    
+    def check_up_left(self , x_player : int , y_player : int , deplacement_up : int , deplacement_left : int) -> tuple:
+        deplacement_up = self.check_up(x_player = x_player , y_player = y_player , deplacement = deplacement_up)
+        deplacement_left = self.check_left(x_player = x_player , y_player = y_player , deplacement = deplacement_left)
+        deplacement_up1 = deplacement_up
+        deplacement_left1 = deplacement_left
+        for liste in self.__dict_block.values():
+            for block in liste:
+                if y_player-self.__taille_block-deplacement_up+1<=block.y<=y_player-1 and x_player-self.__taille_block-deplacement_left+1<=block.x<=x_player-1:
+                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                    deplacement_up1=min(deplacement_up1,y_player-self.__taille_block-block.y-1)
+                    deplacement_left1=min(deplacement_left1,x_player-block.x-self.__taille_block)
+        
+        if deplacement_left1 == deplacement_left or deplacement_up1 == deplacement_up:
+            return deplacement_up , deplacement_left
+        
+        if deplacement_left1 >= deplacement_up1:
+            deplacement_up1 = deplacement_up
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player-self.__taille_block-deplacement_up+1<=block.y<=y_player-1 and x_player-self.__taille_block-deplacement_left1+1<=block.x<=x_player-1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_up1=min(deplacement_up1,y_player-self.__taille_block-block.y-1)
+        else:
+            deplacement_left1 = deplacement_left
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player-self.__taille_block-deplacement_up1+1<=block.y<=y_player-1 and x_player-self.__taille_block-deplacement_left+1<=block.x<=x_player-1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_left1=min(deplacement_left1,x_player-block.x-self.__taille_block)
+        return deplacement_up1,deplacement_left1
+    
+    
+    def check_down_right(self , x_player : int , y_player : int , deplacement_down : int , deplacement_right : int) -> tuple:
+        deplacement_down = self.check_down(x_player = x_player , y_player = y_player , deplacement = deplacement_down)
+        deplacement_right = self.check_right(x_player = x_player , y_player = y_player , deplacement = deplacement_right)
+        deplacement_right1 = deplacement_right
+        deplacement_down1 = deplacement_down
+        for liste in self.__dict_block.values():
+            for block in liste:
+                if y_player+self.__taille_block+1<=block.y<=y_player+2*self.__taille_block+deplacement_down-1 and x_player+1<=block.x<=x_player+self.__taille_block+deplacement_right+1:
+                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                    deplacement_down1=min(deplacement_down1,block.y-y_player-2*self.__taille_block+1)
+                    deplacement_right1=min(deplacement_right1,block.x-x_player-self.__taille_block)
+        if deplacement_right1 == deplacement_right or deplacement_down1 == deplacement_down:
+            return deplacement_down , deplacement_right
+        
+        if deplacement_down1 >= deplacement_right1:
+            deplacement_right1 = deplacement_right
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player+self.__taille_block+1<=block.y<=y_player+2*self.__taille_block+deplacement_down1-1 and x_player+1<=block.x<=x_player+self.__taille_block+deplacement_right+1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_right1=min(deplacement_right1,block.x-x_player-self.__taille_block)
+        else:
+            deplacement_down1 = deplacement_down
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player+self.__taille_block+1<=block.y<=y_player+2*self.__taille_block+deplacement_down-1 and x_player+1<=block.x<=x_player+self.__taille_block+deplacement_right1+1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_down1=min(deplacement_down1,block.y-y_player-2*self.__taille_block+1)
+        return deplacement_down1,deplacement_right1
+    
+    
+    def check_down_left(self , x_player : int , y_player : int , deplacement_down : int , deplacement_left : int) -> tuple:
+        deplacement_down = self.check_down(x_player = x_player , y_player = y_player , deplacement = deplacement_down)
+        deplacement_left = self.check_left(x_player = x_player , y_player = y_player , deplacement = deplacement_left)
+        deplacement_left1 = deplacement_left
+        deplacement_down1 = deplacement_down
+        for liste in self.__dict_block.values():
+            for block in liste:
+                if y_player+self.__taille_block+1<=block.y<=y_player+2*self.__taille_block+deplacement_down-1 and x_player-self.__taille_block-deplacement_left+1<=block.x<=x_player-1:
+                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                    deplacement_down1=min(deplacement_down1,block.y-y_player-2*self.__taille_block+1)
+                    deplacement_left1=min(deplacement_left1,x_player-block.x-self.__taille_block)
+        
+        if deplacement_left1 == deplacement_left or deplacement_down1 == deplacement_down:
+            return deplacement_down , deplacement_left
+        if deplacement_down1 >= deplacement_left1:
+            deplacement_left1 = deplacement_left
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player+self.__taille_block+1<=block.y<=y_player+2*self.__taille_block+deplacement_down1-1 and x_player-self.__taille_block-deplacement_left+1<=block.x<=x_player-1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_left1=min(deplacement_left1,x_player-block.x-self.__taille_block)
+        else:
+            deplacement_down1 = deplacement_down
+            for liste in self.__dict_block.values():
+                for block in liste:
+                    if y_player+self.__taille_block+1<=block.y<=y_player+2*self.__taille_block+deplacement_down-1 and x_player-self.__taille_block-deplacement_left1+1<=block.x<=x_player-1:
+                        #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                        deplacement_down1=min(deplacement_down1,block.y-y_player-2*self.__taille_block+1)
+        return deplacement_down1,deplacement_left1
     
     
     def render(self, screen) -> None:

@@ -72,11 +72,12 @@ while running:
             compteur_jump = 0
             dist_theo=0
             dist_real=0
-        if background.check_up(x_player = player.x , y_player = player.y , deplacement = 1) == 0:
+        if background.check_up(x_player = player.x , y_player = player.y , deplacement = 2) <= 1:
             v_ini = 0
             compteur_jump = 0
-            dist_theo = 0
-            dist_real = 0
+            dist_theo=0
+            dist_real=0
+            
 
     if key.right() and not key.left():
         player.change_skin("right")
@@ -90,14 +91,29 @@ while running:
         depl = dist_theo - dist_real
         dist_real = dist_theo
         if depl > 0:
-            deplacement_up = background.check_up(x_player = player.x , y_player = player.y , deplacement = depl)
+            if key.right() and not key.left():
+                deplacement_up,deplacement_right=background.check_up_right(x_player=player.x,y_player=player.y,deplacement_up=depl,deplacement_right=dx)
+                if deplacement_up==0:
+                    deplacement_right = background.check_right(x_player = player.x , y_player = player.y , deplacement = dx)
+            elif key.left() and not key.right():
+                deplacement_up,deplacement_left=background.check_up_left(x_player=player.x,y_player=player.y,deplacement_up=depl,deplacement_left=dx)
+                if deplacement_up == 0:
+                    deplacement_left = background.check_left(x_player = player.x , y_player = player.y , deplacement = dx)
+            else:
+                deplacement_up = background.check_up(x_player=player.x,y_player=player.y,deplacement=depl)
         elif depl < 0:
-            deplacement_down = background.check_down(x_player = player.x , y_player = player.y , deplacement = -depl)
+            if key.right() and not key.left():
+                deplacement_down,deplacement_right=background.check_down_right(x_player=player.x,y_player=player.y,deplacement_down=-depl,deplacement_right=dx)
+            elif key.left() and not key.right():
+                deplacement_down,deplacement_left=background.check_down_left(x_player=player.x,y_player=player.y,deplacement_down=-depl,deplacement_left=dx)
+            else:
+                deplacement_down = background.check_down(x_player=player.x,y_player=player.y,deplacement=-depl)
 
-    if key.right() and not key.left():
-        deplacement_right = background.check_right(x_player = player.x , y_player = player.y , deplacement = dx)
-    if key.left() and not key.right():
-        deplacement_left = background.check_left(x_player = player.x , y_player = player.y , deplacement = dx)
+    else:
+        if key.right() and not key.left():
+            deplacement_right = background.check_right(x_player = player.x , y_player = player.y , deplacement = dx)
+        if key.left() and not key.right():
+            deplacement_left = background.check_left(x_player = player.x , y_player = player.y , deplacement = dx)
 
     if deplacement_down is not None:
         background.down(deplacement_down)
