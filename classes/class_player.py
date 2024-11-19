@@ -19,7 +19,7 @@ class Player:
         self.x = height_screen // 2 - self.taille_block // 2
         self.y = width_screen // 2 - self.taille_block
         self.direction = "right"
-        self.stade = 0
+        self.stade = 1
         
         self.inventory = []
         self.health = 100
@@ -28,7 +28,7 @@ class Player:
         
 
     
-    def change_skin(self , moving : str) -> None:
+    def change_skin(self , moving : bool) -> None:
         
         """Player Movement
         keyboard_jump --> True or False if jump
@@ -57,7 +57,7 @@ class Player:
                     else:
                         self.stade += 1
                 else:
-                    self.stade=0
+                    self.stade = 1
 
                 
                 #Moving right
@@ -65,13 +65,9 @@ class Player:
                     if self.stade <= 20//2:
                         self.skin_path = "assets/graphics/walking_right.png"
                         self.skin = pygame.image.load(self.skin_path)
-                        
-                        
                     else :
                         self.skin_path = "assets/graphics/standing_right.png"
                         self.skin = pygame.image.load(self.skin_path)
-                        
-                    self.direction = "right"       
                         
                 
                 #Moving left  
@@ -81,8 +77,7 @@ class Player:
                         self.skin = pygame.image.load(self.skin_path)
                     else :
                         self.skin_path = "assets/graphics/standing_left.png"
-                        self.skin = pygame.image.load(self.skin_path)
-                    self.direction = "left"   
+                        self.skin = pygame.image.load(self.skin_path)  
                         
             
         
