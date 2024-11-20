@@ -1,6 +1,5 @@
 import pygame
 from utils.coord_to_screen import coord_to_screen, coord_to_indice
-from classes.class_player import Player
 
 class Block:
     def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
@@ -40,7 +39,7 @@ class Block:
 
 
 
-    def render(self, screen , player : Player) -> None:
+    def render(self, screen , player) -> None:
         """
         Affiche le bloc sur l'écran du joueur.
         """
