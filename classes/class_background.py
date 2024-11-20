@@ -29,14 +29,14 @@ class Background:
         self.__taille_block = 40
         
         #On ajoute tout les blocs de type Dirt
-        liste_dirt_coord = generation_rect_to_pts(block_lists["Dirt"])
+        liste_dirt_coord = block_lists["Dirt"]
         liste_dirt_block = []
         for coord in liste_dirt_coord:
             liste_dirt_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Dirt"] = liste_dirt_block
 
         #On ajoute tout les blocs de type Stone
-        liste_stone_coord = generation_rect_to_pts(block_lists["Stone"])
+        liste_stone_coord = block_lists["Stone"]
         liste_stone_block = []
         for coord in liste_stone_coord:
             liste_stone_block.append(StoneBlock(x_indice = coord[0] , y_indice = coord[1]))
@@ -74,28 +74,28 @@ class Background:
         
         
         #On ajoute tout les blocs de type Obsidian
-        liste_obsidian_coord = generation_rect_to_pts(block_lists["Obsidian"])
+        liste_obsidian_coord = block_lists["Obsidian"]
         liste_obsidian_block = []
         for coord in liste_obsidian_coord:
             liste_obsidian_block.append(ObsidianBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Obsidian"] = liste_obsidian_block
         
         #On ajoute tout les blocs de type Wood
-        liste_wood_coord = generation_rect_to_pts(block_lists["Wood"])
+        liste_wood_coord = block_lists["Wood"]
         liste_wood_block = []
         for coord in liste_wood_coord:
             liste_wood_block.append(WoodBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Wood"] = liste_wood_block
         
         #On ajoute tout les blocs de type Background
-        liste_background_coord = generation_rect_to_pts(block_lists["Background"])
+        liste_background_coord = block_lists["Background"]
         liste_background_block = []
         for coord in liste_background_coord:
             liste_background_block.append(BackgroundBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Background"] = liste_background_block
 
         #On ajoute tout les blocs de type Bedrock
-        liste_bedrock_coord = generation_rect_to_pts(block_lists["Bedrock"])
+        liste_bedrock_coord = block_lists["Bedrock"]
         liste_bedrock_block = []
         enlever_bedrock=[[27,27],[27,28],[27,29],[45,25],[71,15],[63,22],[64,22],[77,17]]
         for coord in liste_bedrock_coord:
