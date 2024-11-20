@@ -315,6 +315,10 @@ class Background:
                     if player.x_left() - 100 <= block.x_left() and block.x_right() <= player.x_right() + 100:
                         player.block_near.append(block)
                     
+    
+
+
+
 
 """
 

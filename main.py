@@ -67,6 +67,9 @@ block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
 running = True
 clock = pygame.time.Clock()
 
+# Initialize mixer for background music
+pygame.mixer.init()
+
 # Display the menu
 while True:
     choice = display_menu(screen)
@@ -81,9 +84,9 @@ while True:
 # Display the loading screen
 display_loading_screen(screen)
 
-
-
-
+# Play game background music
+pygame.mixer.music.load("assets/audio/game.mp3")
+pygame.mixer.music.play(-1)  # Loop the music
 
 while running:
     #On capture les touches
@@ -324,4 +327,5 @@ while running:
     clock.tick(60)
 
 # Quit Pygame
+pygame.mixer.music.stop()
 pygame.quit()

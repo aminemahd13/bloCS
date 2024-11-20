@@ -3,11 +3,9 @@ import os
 
 def display_menu(screen):
     # Load background music
-
-
-    #pygame.mixer.init()
-    #pygame.mixer.music.load("assets/audio/menu.mp3")
-    #pygame.mixer.music.play(-1)  # Loop the music
+    pygame.mixer.init()
+    pygame.mixer.music.load("assets/audio/menu.mp3")
+    pygame.mixer.music.play(-1)  # Loop the music
 
     # Load background image
     background = pygame.image.load("assets/graphics/loading.png")
@@ -34,7 +32,7 @@ def display_menu(screen):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                #pygame.mixer.music.stop()
+                pygame.mixer.music.stop()
                 return "Quit"
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
@@ -42,7 +40,7 @@ def display_menu(screen):
                 elif event.key == pygame.K_DOWN:
                     selected_option = (selected_option + 1) % len(options)
                 elif event.key == pygame.K_RETURN:
-                    #pygame.mixer.music.stop()
+                    pygame.mixer.music.stop()
                     return options[selected_option]
 
 def display_tips(screen):
