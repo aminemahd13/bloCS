@@ -323,6 +323,16 @@ class Background:
                     if player.x_left() - 100 <= block.x_left() and block.x_right() <= player.x_right() + 100:
                         player.block_near.append(block)
                     
+    
+
+
+    def play_music(self, music_path : str) -> None:
+        """
+        Joue la musique.
+        """
+        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.play(-1)
+
 
 """
 
