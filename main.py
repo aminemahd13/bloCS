@@ -7,7 +7,7 @@ from utils.coord_to_screen import screen_to_coord
 from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
 from utils.lists_blocks import block_lists
-
+from utils.house_list import house_blocks
 
 """
 the player inventory is updated when he breaks a block
@@ -79,6 +79,13 @@ while running:
         elif event.type == player.RESET_MINING_EVENT:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_h:  # Press 'H' to switch backgrounds
+                if background.block_lists == block_lists:
+                    background.block_lists = house_blocks
+                else:
+                    background.block_lists = block_lists
+                background = Background(SCREEN_HEIGHT, SCREEN_WIDTH, background.block_lists)
 
     # Clear the screen
     screen.fill(WHITE)

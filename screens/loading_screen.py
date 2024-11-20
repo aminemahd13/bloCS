@@ -35,4 +35,4 @@ def display_loading_screen(screen):
     pygame.display.flip()
 
     # Simulate loading time
-    time.sleep(3)
+    time.sleep(1)

@@ -25,6 +25,7 @@ class Background:
     def __init__(self , height : int , width : int, block_lists : dict):
         self.__height = height #Hauteur de l'écran
         self.__width = width #Largeur de l'écran
+        self.block_lists = block_lists  # Add this line
         self.dict_block = {} #Dictionnaire contenant tout les blocs
         self.__taille_block = 40
         
@@ -51,8 +52,7 @@ class Background:
         self.dict_block["Wood2"] = liste_wood2_block
         
         #Inside
-        liste_wood1_coord = generation_rect_to_pts([(36,3,41,7)])
-        liste_wood1_coord.append([37,2]); liste_wood1_coord.append([38,2]); liste_wood1_coord.append([39,2]); liste_wood1_coord.append([40,2]); liste_wood1_coord.append([39,1]); liste_wood1_coord.append([38,1])
+        liste_wood1_coord = block_lists["Wood1"]
         liste_wood1_block = []
         for coord in liste_wood1_coord:
             if (coord != [39,7]) and (coord != [38,7]) and (coord != [39,6]) and (coord != [38,6]):
@@ -60,13 +60,13 @@ class Background:
         self.dict_block["Wood1"] = liste_wood1_block
         
         #Door
-        liste_doorup_coord = [[39,6],[38,6]]
+        liste_doorup_coord = block_lists["Doorup"]
         liste_doorup_block = []
         for coord in liste_doorup_coord:
             liste_doorup_block.append(DoorupBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block["Doorup"] = liste_doorup_block
         
-        liste_doordown_coord = [[39,7],[38,7]]
+        liste_doordown_coord = block_lists["Doordown"]
         liste_doordown_block = []
         for coord in liste_doordown_coord:
             liste_doordown_block.append(DoordownBlock(x_indice = coord[0] , y_indice = coord[1]))
