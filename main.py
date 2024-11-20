@@ -61,7 +61,7 @@ RESET_MINING_EVENT = pygame.USEREVENT + 1
 
 
 selected_block = 1
-block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
+block_types = ["Dirt", "Stone", "Obsidian", "Wood1", "Bedrock","Wood2"]
 
 # Game loop
 running = True
