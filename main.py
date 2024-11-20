@@ -80,7 +80,7 @@ while running:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_h:  # Press 'H' to switch backgrounds
+            if event.key == pygame.K_h:
                 if background.block_lists == block_lists:
                     background.block_lists = house_blocks
                 else:

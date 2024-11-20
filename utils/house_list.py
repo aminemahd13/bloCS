@@ -1,16 +1,13 @@
 house_blocks = {
     "Dirt": [],
     "Stone": [],
-    "Wood": [
-        # Adding a big rectangle made out of wood
-
-    ],
+    "Wood": [],
+    "Doordown": [[38,7], [39,7]],      # Top part of doors
+    "Doorup": [[38,6], [39,6]],     # Bottom part of doors
     "Background": [],
     "Wood2": [],
     "Obsidian": [],
     "Bedrock": [],
-    "Doorup": [],
-    "Doordown": [],
     "Wood1": []
 }
 

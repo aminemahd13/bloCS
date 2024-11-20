@@ -3,7 +3,7 @@ from utils.coord_to_screen import screen_to_coord, coord_to_indice
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 import utils.key_handler as key
 
-######### inventory est un dictionnaire avec les items en clé et le nombre d'items en valeur #########
+
 
 
 
