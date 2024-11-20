@@ -26,7 +26,7 @@ class Player:
         self.y = y_spawn * self.taille_block
         self.direction = "right"
         self.stade = 1
-        self.block_in_screen = []
+        self.block_near = []
         
         self.inventory = {
             "Dirt" : 10,
