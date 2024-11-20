@@ -1,8 +1,25 @@
 import pygame
 from classes.class_background import Background
-from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock
+from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 from classes.class_player import Player
 import utils.key_handler as key
+from utils.coord_to_screen import screen_to_coord
+from classes.class_background import draw_inventory
+
+"""
+the player inventory is updated when he breaks a block
+the function damage_block has been changed to add the 'player' argument !!!!
+the player can onlyyy add and destroy blocks around him (i.e 80px around him)
+
+"""
+
+
+
+
+
+
+
+
 
 #Variable qui sauvegarde si l'utilisateur touchait les touces droites ou gauche à la frame d'avant
 hist_touches = {"right" : key.right() , "left" : key.left()}
@@ -36,6 +53,11 @@ background = Background(SCREEN_HEIGHT, SCREEN_WIDTH)
 #Create the player
 player=Player(height_screen = SCREEN_WIDTH , width_screen = SCREEN_HEIGHT , name = "Player 1")
 
+# Define a custom event for resetting the mining state
+RESET_MINING_EVENT = pygame.USEREVENT + 1
+
+
+selected_block = 1
 
 # Game loop
 running = True
@@ -43,6 +65,30 @@ clock = pygame.time.Clock()
 
 
 while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x_screen, y_screen = pygame.mouse.get_pos()
+            x, y = screen_to_coord(x_screen, y_screen, player)
+            if (abs(x - player.x) <= 80 and abs(y - player.y) <= 80) and not (x == player.x and y == player.y):
+                if event.button == 1:  # Left click to place a block
+                    block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
+                    selected_block_type = block_types[selected_block - 1]
+                    if player.inventory[selected_block_type] > 0:
+                        new_block = eval(f"{selected_block_type}Block(x, y)")
+                        if background.add_block(new_block):
+                            player.remove_inventory(selected_block_type)
+                elif event.button == 3:  # Right click to remove a block
+                    background.damage_block(x, y, 100, player) # Remove 100 hp from the block
+                    player.mining = True
+                    pygame.time.set_timer(RESET_MINING_EVENT, 350)  # Set a timer for 1 second
+        elif event.type == RESET_MINING_EVENT:
+            player.mining = False
+            pygame.time.set_timer(RESET_MINING_EVENT, 0)  # Stop the timer
+
+    if key.get_number() != -1:
+        selected_block = int(key.get_number())
     if key.close(): #Si on clique sur échap, le jeu se ferme
         running = False
 
@@ -52,9 +98,9 @@ while running:
     # Render the background and players
     background.render(screen = screen , player = player) #Affiche le background avec les blocs
     player.render(screen) #Affiche le joueur
-    
-    
-    
+
+    # Draw the inventory
+    draw_inventory(screen, player, selected_block)
     
     #On regarde si le joueur est en plein saut
     

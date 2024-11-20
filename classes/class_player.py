@@ -1,6 +1,9 @@
 import os 
 import pygame
 
+######### inventory est un dictionnaire avec les items en clé et le nombre d'items en valeur #########
+
+
 
 class Player:
     def __init__(self , height_screen : int , width_screen : int , x_spawn : int = 33 , y_spawn : int = 6, name : str = "Player 1"):
@@ -26,7 +29,13 @@ class Player:
         self.stade = 1
         self.block_in_screen = []
         
-        self.inventory = []
+        self.inventory = {
+            "Dirt" : 10,
+            "Stone" : 10,
+            "Obsidian" : 10,
+            "Wood" : 10,
+            "Bedrock" : 10,
+        }
         self.health = 100
         self.skin_path = "assets/graphics/standing_right.png"
         self.skin = pygame.image.load(self.skin_path)
@@ -99,11 +108,11 @@ class Player:
         
     def add_inventory(self,item) -> None:
         """Add item to the inventory"""
-        self.inventory.append(item)
+        self.inventory[item] += 1
         
     def remove_inventory(self,item) -> None:
         """Remove item to the inventory"""
-        self.inventory.remove(item)
+        self.inventory[item] -= 1
     
     def render(self , screen):
         if self.skin:

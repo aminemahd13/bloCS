@@ -2,6 +2,19 @@ import keyboard
 
 #Dictionnaire contenant les touches associées à telle ou telle direction
 direction={"up" : ['w','z','up','space'] , "down" : ['s','down'] , "right" : ['d' , 'right'] , "left" : ['q' , 'a' , 'left'] , "close" : ['esc']}
+numbers={ "1":['1'] , "2":['2'] , "3":['3'] , "4":['4'] , "5":['5'] , "6":['6'] , "7":['7'] , "8":['8'] , "9":['9'] , "0":['0']}
+
+
+def get_number() -> str:
+    """
+    Renvoie le chiffre que l'utilisateur a tapé
+    """
+    for i in numbers:
+        if keyboard.is_pressed(numbers[i][0]):
+            return i
+    return -1
+
+
 
 def up() -> bool:
     """
