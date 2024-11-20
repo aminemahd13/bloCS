@@ -5,9 +5,32 @@ import pygame
 
 
 
- ############# add block is now False make it true
+ ############# added draw_inventory function #############
 
 
+def draw_inventory(screen, player, selected_block):
+    font = pygame.font.Font(None, 36)
+    block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
+    block_images = {
+        "Dirt": pygame.image.load("assets/graphics/dirt.png"),
+        "Stone": pygame.image.load("assets/graphics/stone.png"),
+        "Obsidian": pygame.image.load("assets/graphics/obsidian.png"),
+        "Wood": pygame.image.load("assets/graphics/dirt.png"),
+        "Bedrock": pygame.image.load("assets/graphics/bedrock.png")
+    }
+    x_offset = 10
+    y_offset = 10
+    for i, block_type in enumerate(block_types):
+        block_image = pygame.transform.scale(block_images[block_type], (40, 40))
+        if i+1 == selected_block:
+            pygame.draw.rect(screen, (0, 255, 0), (x_offset + i * 90 - 5, y_offset - 5, 50, 50), 3)
+        screen.blit(block_image, (x_offset + i * 90, y_offset))
+        text = font.render(str(player.inventory[block_type]), True, (0, 0, 0))
+        screen.blit(text, (x_offset + i * 90 + 45, y_offset + 10))
+
+
+
+        
 
 def generation_rect_to_pts(liste : list) -> list:
     """
@@ -80,30 +103,30 @@ class Background:
             return None
     
     
-    def add_block(self , block : Block) -> bool:
+    def add_block(self, block: Block) -> bool:
         """
         Ajoute un bloc dans le background.
         Renvoie True si le bloc a été placé, False sinon.
         """
-        block_check = self.check_block(x = block.x , y = block.y)
+        block_check = self.check_block(x=block.x, y=block.y)
         if block_check is None:
             self.__dict_block[block.type].append(block)
             return True
-        else:
-            return False
-    
-    
-    def damage_block(self , x : int , y : int , damage : int) -> bool:
+        return False
+
+    def damage_block(self, x: int, y: int, damage: int, player) -> bool:
         """
         Attaque le bloc se situant en x , y.
         S'il y avait un bloc qui a été détruit, renvoie True.
         Sinon, renvoie False.
         """
-        for liste in self.__dict_block.values():
-            for block in liste:
+        for block_list in self.__dict_block.values():
+            for block in block_list:
                 if block.x == x and block.y == y:
-                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
-                    return block.take_damage(damage = damage)
+                    if block.take_damage(damage):
+                        block_list.remove(block)
+                        player.inventory[block.type] += 1
+                        return True
         return False
     
     
