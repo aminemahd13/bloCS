@@ -6,8 +6,6 @@ import utils.key_handler as key
 from utils.coord_to_screen import screen_to_coord
 from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
-from utils.lists_blocks import block_lists
-from utils.house_list import house_blocks
 
 """
 the player inventory is updated when he breaks a block
@@ -32,7 +30,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Terraria-like Game Test")
 
 # Initialize the background
-background = Background(SCREEN_HEIGHT, SCREEN_WIDTH, block_lists)
+background = Background(SCREEN_HEIGHT, SCREEN_WIDTH)
 #Create the player
 player=Player(height_screen = SCREEN_WIDTH , width_screen = SCREEN_HEIGHT , name = "Player 1")
 
@@ -81,11 +79,7 @@ while running:
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_h:
-                if background.block_lists == block_lists:
-                    background.block_lists = house_blocks
-                else:
-                    background.block_lists = block_lists
-                background = Background(SCREEN_HEIGHT, SCREEN_WIDTH, background.block_lists)
+                background.change_mod()
 
     # Clear the screen
     screen.fill(WHITE)

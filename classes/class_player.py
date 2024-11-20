@@ -320,26 +320,17 @@ class Player:
                     selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
                     if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
                         new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
-                        added = False
-                        for i , block in enumerate(background.dict_block["Background"]):
-                            if block.x_indice == x_indice and block.y_indice == y_indice:
-                                background.dict_block["Background"].pop(i)
-                                background.add_block(new_block)
-                                self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
-                                added = True
-                        if not added:
-                            if background.add_block(new_block): #Si le bloc a été placé
+                        if background.add_block(new_block): #Si le bloc a été placé
                                 self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
             elif event.button == 3:  # Right click to remove a block
                 added = False
                 for key , values in background.dict_block.items():
                     for i , block in enumerate(values):
-                        if block.x_indice == x_indice and block.y_indice == y_indice and not key=="Background":
+                        if block.x_indice == x_indice and block.y_indice == y_indice:
                             if block.take_damage(damage = 100):
-                                
                                 values.pop(i)
                                 self.add_inventory(key)
-                            added = True
+                            added=True
                             #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
                             self.mining = True
                             pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
