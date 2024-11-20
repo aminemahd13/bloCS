@@ -195,33 +195,25 @@ class Background:
     
     
     def check_up_right(self , player : Player , deplacement_up : int , deplacement_right : int) -> tuple:
-        deplacement_up = self.check_up(player = player , deplacement = deplacement_up)
-        deplacement_right = self.check_right(player = player , deplacement = deplacement_right)
-        deplacement_up1 = deplacement_up
-        deplacement_right1 = deplacement_right
-        for block in player.block_near:
-            if player.y-self.__taille_block-deplacement_up+1<=block.y<=player.y-1 and player.x+1<=block.x<=player.x+self.__taille_block+deplacement_right+1:
-                #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
-                deplacement_up1=min(deplacement_up1,player.y-self.__taille_block-block.y-1)
-                deplacement_right1=min(deplacement_right1,block.x-player.x-self.__taille_block)
-        if deplacement_right1 == deplacement_right or deplacement_up1 == deplacement_up:
-            return deplacement_up , deplacement_right
-        
-        if deplacement_right1 > deplacement_up1:
-            deplacement_up1 = deplacement_up
+        deplacement_up1 = self.check_up(player = player , deplacement = deplacement_up)
+        deplacement_right1 = self.check_right(player = player , deplacement = deplacement_right)
+        if deplacement_up1 == deplacement_up and deplacement_right1 == deplacement_right:
             for block in player.block_near:
-                if player.y-self.__taille_block-deplacement_up+1<=block.y<=player.y-1 and player.x+1<=block.x<=player.x+self.__taille_block+deplacement_right1+1:
-                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
-                    deplacement_up1=min(deplacement_up1,player.y-self.__taille_block-block.y-1)
-        else:
-            deplacement_right1 = deplacement_right
-            for block in player.block_near:
-                if player.y-self.__taille_block-deplacement_up1+1<=block.y<=player.y-1 and player.x+1<=block.x<=player.x+self.__taille_block+deplacement_right+1:
-                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
-                    deplacement_right1=min(deplacement_right1,block.x-player.x-self.__taille_block)
+                if block.x_left() <= player.x_right() + deplacement_right and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
+                    if block.y_down() < player.y_up():
+                        deplacement_up1 = min(deplacement_up1 , player.y_up() - block.y_down() - 1)
+                if block.y_down() >= player.y_up() - deplacement_up and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
+                    if block.x_left() > player.x_right(): #Si le bloc est sur la droite
+                        deplacement_right1 = min(deplacement_right1 , block.x_left() - player.x_right() - 1)
+            if deplacement_up1 == deplacement_up and deplacement_right1 == deplacement_right
+                return deplacement_up1 , deplacement_right1
+            elif deplacement_up1 >= deplacement_right1:
+                return deplacement_up1 , deplacement_right
+            else:
+                return deplacement_up , deplacement_right1
         
         
-        return deplacement_up1,deplacement_right1
+                
     
     
     def check_up_left(self , player : Player , deplacement_up : int , deplacement_left : int) -> tuple:
