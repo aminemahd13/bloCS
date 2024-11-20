@@ -9,7 +9,7 @@ import pygame
 
 
 def draw_inventory(screen, player, selected_block):
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font(None, int(36 * screen.get_height() / 1080))
     block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
     block_images = {
         "Dirt": pygame.image.load("assets/graphics/dirt.png"),
@@ -21,13 +21,13 @@ def draw_inventory(screen, player, selected_block):
     x_offset = 10
     y_offset = 10
     for i, block_type in enumerate(block_types):
-        block_image = pygame.transform.scale(block_images[block_type], (40, 40))
+        block_image = pygame.transform.scale(block_images[block_type], (int(40 * screen.get_height() / 1080), int(40 * screen.get_height() / 1080)))
         if i+1 == selected_block:
-            pygame.draw.rect(screen, (0, 255, 0), (x_offset + i * 90 - 5, y_offset - 5, 50, 50), 3)
-        screen.blit(block_image, (x_offset + i * 90, y_offset))
+            pygame.draw.rect(screen, (0, 255, 0), (x_offset + i * int(90 * screen.get_height() / 1080) - 5, y_offset - 5, int(50 * screen.get_height() / 1080), int(50 * screen.get_height() / 1080)), 3)
+        screen.blit(block_image, (x_offset + i * int(90 * screen.get_height() / 1080), y_offset))
         n = player.inventory[block_type]
         text = font.render(str(n), True, (0, 0, 0))
-        screen.blit(text, (x_offset + i * 90 + 45, y_offset + 10))
+        screen.blit(text, (x_offset + i * int(90 * screen.get_height() / 1080) + int(45 * screen.get_height() / 1080), y_offset + int(10 * screen.get_height() / 1080)))
 
 
 
