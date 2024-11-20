@@ -111,7 +111,7 @@ class WoodBlock(Block):
 
 class BedrockBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200)
         self.type = "Bedrock"
         self.texture_path = "assets/graphics/bedrock.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -152,7 +152,14 @@ class DoordownBlock(Block):
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
     
     
-    
+
+class BackgroundBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        self.type = "Background"
+        self.texture_path = "assets/graphics/background.png"
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 
 
