@@ -13,9 +13,9 @@ from PIL import Image
 
 longueur_image = 39
 hauteur_image = 27
-x_min = 3
+x_min = -2
 x_max = 3
-y_min = 2
+y_min = 0
 y_max = 2
 
 # Create a dictionary to store coordinates for each color
@@ -24,7 +24,7 @@ color_coordinates = {}
 for x_map in range(x_min , x_max + 1):
     for y_map in range(y_min , y_max + 1):
         # Load the image
-        image_path = "./crea_map/images/"+ str(x_map) + "_" + str(y_map) + ".png"
+        image_path = "./crea_map/images/images2/"+ str(x_map) + "_" + str(y_map) + ".png"
         print(image_path)
         image = Image.open(image_path)
 
