@@ -4,8 +4,8 @@ def coord_to_screen(x : int , y : int , player) -> tuple:
     return x, y
 
 def screen_to_coord(x_screen: int, y_screen: int, player) -> tuple:
-    x = (x_screen - player.x_screen + player.x) // 40 * 40 ## so the returned value is a multiple of 40 ie is a block :D
-    y = (y_screen - player.y_screen + player.y) // 40 * 40
+    x = x_screen - player.x_screen + player.x
+    y = y_screen - player.y_screen + player.y
     return x, y
 
 def coord_to_indice(x : int , y : int) -> tuple:
