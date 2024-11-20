@@ -18,14 +18,6 @@ the player can onlyyy add and destroy blocks around him (i.e 80px around him)
 
 
 
-
-
-
-
-
-
-
-
 # Pygame initialization
 pygame.init()
 
