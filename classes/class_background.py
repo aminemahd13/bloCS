@@ -171,11 +171,11 @@ class Background:
         """
         for block in player.block_near:
             if block.x_left() <= player.x_right() and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
-                if player.y_up() <= block.down() < player.y_up() + self.__taille_block - 1:
+                if player.y_up() <= block.y_down() < player.y_up() + self.__taille_block - 1:
                     deplacement = 0
                     break
-                elif block.down() < player.y_up():
-                    deplacement = min(deplacement , player.y_up() - block.down() - 1)
+                elif block.y_down() < player.y_up():
+                    deplacement = min(deplacement , player.y_up() - block.y_down() - 1)
         return deplacement
     
     
@@ -186,11 +186,11 @@ class Background:
         """
         for block in player.block_near:
             if block.x_left() <= player.x_right() and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
-                if player.y_up() +self.__taille_block < block.down() <= player.y_down():
+                if player.y_up() +self.__taille_block < block.y_down() <= player.y_down():
                     deplacement = 0
                     break
-                elif block.up() > player.y_down():
-                    deplacement = min(deplacement , block.up() - player.y_down() - 1)
+                elif block.y_up() > player.y_down():
+                    deplacement = min(deplacement , block.y_up() - player.y_down() - 1)
         return deplacement
     
     
