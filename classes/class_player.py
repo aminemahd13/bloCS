@@ -1,5 +1,5 @@
 import pygame
-from utils.coord_to_screen import screen_to_coord
+from utils.coord_to_screen import screen_to_coord, coord_to_indice
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 import utils.key_handler as key
 
@@ -315,10 +315,11 @@ class Player:
         if self.x_left() - 80 <= x <= self.x_right() + 80 and self.y_up() - 80 <= y <= self.y_down() + 80:
             #Si on est dans une fenêtre de 2 blocs sur les côtés
             if event.button == 1 and not (self.x_left()<=x<=self.x_right() and self.y_up()<=y<=self.y_down()):  # Left click to place a block
-                if x//40*40+40-1<self.x_left() or x//40*40>self.x_right() or y//40*40>self.y_down() or y//40*40+40-1<self.y_up():
+                x_indice , y_indice = coord_to_indice(x = x , y = y)
+                if x_indice*40+40-1<self.x_left() or x_indice*40>self.x_right() or y_indice*40>self.y_down() or y_indice*40+40-1<self.y_up():
                     selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
                     if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
-                        new_block = eval(f"{selected_block_type}Block(x = x , y = y)") #Création de l'objet block
+                        new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
                         if background.add_block(new_block): #Si le bloc a été placé
                             self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
             elif event.button == 3:  # Right click to remove a block

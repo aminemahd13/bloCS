@@ -14,13 +14,13 @@ def coord_to_indice(x : int , y : int) -> tuple:
     else:
         x = -x
         x_indice = x // 40
-        x_indice = -x_indice
+        x_indice = -x_indice - 1
     if y >= 0:
         y_indice = y // 40
     else:
         y = -y
         y_indice = y // 40
-        y_indice = -y_indice
+        y_indice = -y_indice - 1
     
     return x_indice , y_indice
 
