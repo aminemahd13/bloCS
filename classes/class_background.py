@@ -326,12 +326,6 @@ class Background:
     
 
 
-    def play_music(self, music_path : str) -> None:
-        """
-        Joue la musique.
-        """
-        pygame.mixer.music.load(music_path)
-        pygame.mixer.music.play(-1)
 
 
 """
