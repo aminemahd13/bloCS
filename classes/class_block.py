@@ -116,6 +116,43 @@ class BedrockBlock(Block):
         self.texture_path = "assets/graphics/bedrock.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
+        
+class Wood1Block(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        self.type = "Wood1"
+        self.texture_path = "assets/graphics/wood1.png"
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
+
+class Wood2Block(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        self.type = "Wood2"
+        self.texture_path = "assets/graphics/wood2.png"
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
+        
+class DoorupBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        self.taille
+        self.type = "Doorup"
+        self.texture_path = "assets/graphics/porteup.png"
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
+        
+class DoordownBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        self.taille
+        self.type = "Doordown"
+        self.texture_path = "assets/graphics/portedown.png"
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
+    
+    
+    
 
 
 

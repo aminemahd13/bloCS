@@ -1,4 +1,4 @@
-from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
+from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock
 from classes.class_player import Player
 from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice
 import pygame
@@ -41,6 +41,37 @@ class Background:
         for coord in liste_stone_coord:
             liste_stone_block.append(StoneBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Stone"] = liste_stone_block
+        
+        #Maison 
+        
+        liste_wood2_coord = [[35,7],[35,6],[35,5],[35,4],[35,3],[42,7],[42,6],[42,5],[42,4],[42,3],[36,2],[37,1],[38,0],[39,0],[40,1],[41,2]]
+        liste_wood2_block = []
+        for coord in liste_wood2_coord:
+                liste_wood2_block.append(Wood2Block(x_indice = coord[0] , y_indice = coord[1]))
+        self.__dict_block["Wood2"] = liste_wood2_block
+        
+        #Inside
+        liste_wood1_coord = generation_rect_to_pts([(36,3,41,7)])
+        liste_wood1_coord.append([37,2]); liste_wood1_coord.append([38,2]); liste_wood1_coord.append([39,2]); liste_wood1_coord.append([40,2]); liste_wood1_coord.append([39,1]); liste_wood1_coord.append([38,1])
+        liste_wood1_block = []
+        for coord in liste_wood1_coord:
+            if (coord != [39,7]) and (coord != [38,7]) and (coord != [39,6]) and (coord != [38,6]):
+                liste_wood1_block.append(Wood1Block(x_indice = coord[0] , y_indice = coord[1]))
+        self.__dict_block["Wood1"] = liste_wood1_block
+        
+        #Door
+        liste_doorup_coord = [[39,6],[38,6]]
+        liste_doorup_block = []
+        for coord in liste_doorup_coord:
+            liste_doorup_block.append(DoorupBlock(x_indice = coord[0] , y_indice = coord[1]))
+        self.__dict_block["Doorup"] = liste_doorup_block
+        
+        liste_doordown_coord = [[39,7],[38,7]]
+        liste_doordown_block = []
+        for coord in liste_doordown_coord:
+            liste_doordown_block.append(DoordownBlock(x_indice = coord[0] , y_indice = coord[1]))
+        self.__dict_block["Doordown"] = liste_doordown_block
+        
         
         #On ajoute tout les blocs de type Obsidian
         liste_obsidian_coord = generation_rect_to_pts([(23,21,28,21),(10,17,10,17), (11,18,11,18), (11,16,12,17), (13,16,13,16), (12,15,21,15), (13,14,19,14), (19,16,26,16), (21,17,26,17), (11,20,11,20), (10,21,13,21), (9,22,15,22), (13,23,23,23), (16,24,22,24), (22,22,27,22), (23,22,28,22), (27,20,28,20), (28,19,28,19), (6,29,11,31), (6,32,18,35), (6,36,9,38), (7,38,10,37), (12,36,23,36), (13,37,16,38), (12,41,17,42), (12,43,21,43), (20,41,27,41), (11,45,14,45), (6,46,17,46), (3,47,15,47), (11,48,13,48), (11,49,22,49), (36,31,37,31), (35,32,45,32), (34,33,48,34), (35,35,48,36) ])
