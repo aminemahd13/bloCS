@@ -2,7 +2,7 @@ import pygame
 from utils.coord_to_screen import coord_to_screen, coord_to_indice
 
 class Block:
-    def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+    def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
         """
         Initialize a block.
         :params x_indice , y_indice : Representing the block's position in the map.
@@ -12,6 +12,7 @@ class Block:
         """
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
+        self.add_background = add_background
         self.taille = 40
         self.x_indice = x_indice
         self.y_indice = y_indice
@@ -74,8 +75,8 @@ class Block:
 
 
 class DirtBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 50)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 50 , add_background = add_background)
         self.type = "Dirt"
         self.texture_path = "assets/graphics/dirt.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -83,16 +84,16 @@ class DirtBlock(Block):
 
 
 class StoneBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200 , add_background = add_background)
         self.type = "Stone"
         self.texture_path = "assets/graphics/stone.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 class ObsidianBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 800)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 800 , add_background = add_background)
         self.type = "Obsidian"
         self.texture_path = "assets/graphics/obsidian.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -100,8 +101,8 @@ class ObsidianBlock(Block):
 
 
 class WoodBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100 , add_background = add_background)
         self.type = "Wood"
         self.texture_path = "assets/graphics/dirt.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -110,32 +111,32 @@ class WoodBlock(Block):
 
 
 class BedrockBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200 , add_background = add_background)
         self.type = "Bedrock"
         self.texture_path = "assets/graphics/bedrock.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
         
 class Wood1Block(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100 , add_background = add_background)
         self.type = "Wood1"
         self.texture_path = "assets/graphics/wood1.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 class Wood2Block(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100 , add_background = add_background)
         self.type = "Wood2"
         self.texture_path = "assets/graphics/wood2.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
         
 class DoorupBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100 , add_background = add_background)
         self.taille
         self.type = "Doorup"
         self.texture_path = "assets/graphics/porteup.png"
@@ -143,8 +144,8 @@ class DoorupBlock(Block):
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
         
 class DoordownBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100 , add_background = add_background)
         self.taille
         self.type = "Doordown"
         self.texture_path = "assets/graphics/portedown.png"
@@ -154,8 +155,8 @@ class DoordownBlock(Block):
     
 
 class BackgroundBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , add_background : bool = True):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100 , add_background = add_background)
         self.type = "Background"
         self.texture_path = "assets/graphics/background.png"
         self.texture = pygame.image.load(self.texture_path)

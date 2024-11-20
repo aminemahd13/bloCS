@@ -1,6 +1,6 @@
 import pygame
 from utils.coord_to_screen import screen_to_coord, coord_to_indice
-from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
+from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock, BackgroundBlock
 import utils.key_handler as key
 
 ######### inventory est un dictionnaire avec les items en clé et le nombre d'items en valeur #########
@@ -312,21 +312,45 @@ class Player:
         x_screen, y_screen = pygame.mouse.get_pos() #Position du click sur l'écran
         #On converti ces coordonnées en coordonnées relatives au background (en px)
         x , y = screen_to_coord(x_screen = x_screen , y_screen = y_screen , player = self)
+        x_indice , y_indice = coord_to_indice(x = x , y = y)
         if self.x_left() - 80 <= x <= self.x_right() + 80 and self.y_up() - 80 <= y <= self.y_down() + 80:
             #Si on est dans une fenêtre de 2 blocs sur les côtés
             if event.button == 1 and not (self.x_left()<=x<=self.x_right() and self.y_up()<=y<=self.y_down()):  # Left click to place a block
-                x_indice , y_indice = coord_to_indice(x = x , y = y)
                 if x_indice*40+40-1<self.x_left() or x_indice*40>self.x_right() or y_indice*40>self.y_down() or y_indice*40+40-1<self.y_up():
                     selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
                     if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
-                        new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
-                        if background.add_block(new_block): #Si le bloc a été placé
-                            self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
+                        new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice , add_background = False)") #Création de l'objet block
+                        added = False
+                        for i , block in enumerate(background.dict_block["Background"]):
+                            if block.x_indice == x_indice and block.y_indice == y_indice:
+                                background.dict_block["Background"].pop(i)
+                                new_block.add_background = True
+                                background.add_block(new_block)
+                                self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
+                                added = True
+                        if not added:
+                            if background.add_block(new_block): #Si le bloc a été placé
+                                self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
             elif event.button == 3:  # Right click to remove a block
-                background.damage_block(x = x, y = y, damage = 100, player = self) # Remove 100 hp from the block
-                #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
-                self.mining = True
-                pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
+                added = False
+                for key , values in background.dict_block.items():
+                    for i , block in enumerate(values):
+                        if block.x_indice == x_indice and block.y_indice == y_indice and not key=="Background":
+                            if block.take_damage(damage = 100):
+                                if block.add_background:
+                                    new_block = BackgroundBlock(x_indice = x_indice , y_indice = y_indice)
+                                    background.dict_block["Background"].append(new_block)
+                                values.pop(i)
+                                self.add_inventory(key)
+                            added = True
+                            #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
+                            self.mining = True
+                            pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
+                            break
+                    if added:
+                        break
+                    
+                    
     
     
     

@@ -25,7 +25,7 @@ class Background:
     def __init__(self , height : int , width : int, block_lists : dict):
         self.__height = height #Hauteur de l'écran
         self.__width = width #Largeur de l'écran
-        self.__dict_block = {} #Dictionnaire contenant tout les blocs
+        self.dict_block = {} #Dictionnaire contenant tout les blocs
         self.__taille_block = 40
         
         #On ajoute tout les blocs de type Dirt
@@ -33,14 +33,14 @@ class Background:
         liste_dirt_block = []
         for coord in liste_dirt_coord:
             liste_dirt_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Dirt"] = liste_dirt_block
+        self.dict_block["Dirt"] = liste_dirt_block
 
         #On ajoute tout les blocs de type Stone
         liste_stone_coord = block_lists["Stone"]
         liste_stone_block = []
         for coord in liste_stone_coord:
             liste_stone_block.append(StoneBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Stone"] = liste_stone_block
+        self.dict_block["Stone"] = liste_stone_block
         
         #Maison 
         
@@ -48,7 +48,7 @@ class Background:
         liste_wood2_block = []
         for coord in liste_wood2_coord:
                 liste_wood2_block.append(Wood2Block(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Wood2"] = liste_wood2_block
+        self.dict_block["Wood2"] = liste_wood2_block
         
         #Inside
         liste_wood1_coord = generation_rect_to_pts([(36,3,41,7)])
@@ -57,20 +57,20 @@ class Background:
         for coord in liste_wood1_coord:
             if (coord != [39,7]) and (coord != [38,7]) and (coord != [39,6]) and (coord != [38,6]):
                 liste_wood1_block.append(Wood1Block(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Wood1"] = liste_wood1_block
+        self.dict_block["Wood1"] = liste_wood1_block
         
         #Door
         liste_doorup_coord = [[39,6],[38,6]]
         liste_doorup_block = []
         for coord in liste_doorup_coord:
             liste_doorup_block.append(DoorupBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Doorup"] = liste_doorup_block
+        self.dict_block["Doorup"] = liste_doorup_block
         
         liste_doordown_coord = [[39,7],[38,7]]
         liste_doordown_block = []
         for coord in liste_doordown_coord:
             liste_doordown_block.append(DoordownBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Doordown"] = liste_doordown_block
+        self.dict_block["Doordown"] = liste_doordown_block
         
         
         #On ajoute tout les blocs de type Obsidian
@@ -78,28 +78,28 @@ class Background:
         liste_obsidian_block = []
         for coord in liste_obsidian_coord:
             liste_obsidian_block.append(ObsidianBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Obsidian"] = liste_obsidian_block
+        self.dict_block["Obsidian"] = liste_obsidian_block
         
         #On ajoute tout les blocs de type Wood
         liste_wood_coord = block_lists["Wood"]
         liste_wood_block = []
         for coord in liste_wood_coord:
             liste_wood_block.append(WoodBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Wood"] = liste_wood_block
+        self.dict_block["Wood"] = liste_wood_block
         
         #On ajoute tout les blocs de type Background
         liste_background_coord = block_lists["Background"]
         liste_background_block = []
         for coord in liste_background_coord:
             liste_background_block.append(BackgroundBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Background"] = liste_background_block
+        self.dict_block["Background"] = liste_background_block
 
         #On ajoute tout les blocs de type Bedrock
         liste_bedrock_coord = block_lists["Bedrock"]
         liste_bedrock_block = []
         for coord in liste_bedrock_coord:
             liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.__dict_block["Bedrock"] = liste_bedrock_block
+        self.dict_block["Bedrock"] = liste_bedrock_block
      
     
     def check_block(self , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> Block:
@@ -108,7 +108,7 @@ class Background:
         """
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
-        for liste in self.__dict_block.values():
+        for liste in self.dict_block.values():
             for block in liste:
                 if block.x_indice == x_indice and block.y_indice == y_indice:
                     return block
@@ -122,7 +122,7 @@ class Background:
         """
         block_check = self.check_block(x_indice = block.x_indice ,  y_indice = block.y_indice)
         if block_check is None:
-            self.__dict_block[block.type].append(block)
+            self.dict_block[block.type].append(block)
             return True
         return False
 
@@ -134,7 +134,7 @@ class Background:
         """
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
-        for block_list in self.__dict_block.values():
+        for block_list in self.dict_block.values():
             for block in block_list:
                 if block.x_indice == x_indice and block.y_indice == y_indice:
                     if block.take_damage(damage):
@@ -302,7 +302,7 @@ class Background:
         Affiche le background.
         """
         player.block_near = []
-        for liste in self.__dict_block.values():
+        for liste in self.dict_block.values():
             for block in liste:
                 x_screen , y_screen = coord_to_screen(x = block.x , y = block.y , player = player)
                 if 1 - self.__taille_block <= x_screen <= self.__width and 1 - self.__taille_block <= y_screen <= self.__height:
