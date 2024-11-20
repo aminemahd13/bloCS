@@ -18,8 +18,8 @@ def draw_inventory(screen, player, selected_block):
         "Wood": pygame.image.load("assets/graphics/dirt.png"),
         "Bedrock": pygame.image.load("assets/graphics/bedrock.png")
     }
-    x_offset = 200
-    y_offset = 116
+    x_offset = 10
+    y_offset = 10
     for i, block_type in enumerate(block_types):
         block_image = pygame.transform.scale(block_images[block_type], (40, 40))
         if i+1 == selected_block:
