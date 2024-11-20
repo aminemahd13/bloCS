@@ -324,7 +324,7 @@ class Player:
                         for i , block in enumerate(background.dict_block["Background"]):
                             if block.x_indice == x_indice and block.y_indice == y_indice:
                                 background.dict_block["Background"].pop(i)
-                                new_block.add_background = True
+                                new_block.add_background = False
                                 background.add_block(new_block)
                                 self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
                                 added = True

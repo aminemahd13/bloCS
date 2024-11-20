@@ -3,11 +3,7 @@ house_blocks = {
     "Stone": [],
     "Wood": [
         # Adding a big rectangle made out of wood
-        (0, 0), (0, 1), (0, 2), (0, 3), (0, 4),
-        (1, 0), (1, 4),
-        (2, 0), (2, 4),
-        (3, 0), (3, 4),
-        (4, 0), (4, 1), (4, 2), (4, 3), (4, 4)
+
     ],
     "Background": [],
     "Wood2": [],
@@ -17,3 +13,9 @@ house_blocks = {
     "Doordown": [],
     "Wood1": []
 }
+
+
+# Add rectangle coordinates
+for x in range(20, 50):  # width of 5
+    for y in range(8,25):  # height of 3
+        house_blocks["Wood"].append((x, y))
