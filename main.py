@@ -3,7 +3,7 @@ from classes.class_background import Background
 from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 from classes.class_player import Player
 import utils.key_handler as key
-from utils.coord_to_screen import screen_to_coord
+from utils.coord_to_screen import screen_to_coord , coord_to_indice
 from classes.class_background import draw_inventory
 
 """
@@ -70,17 +70,17 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             x_screen, y_screen = pygame.mouse.get_pos()
-            x, y = screen_to_coord(x_screen, y_screen, player)
-            if (abs(x - player.x) <= 80 and abs(y - player.y) <= 80) and not (x == player.x and y == player.y):
+            x , y = screen_to_coord(x_screen = x_screen , y_screen = y_screen , player = player)
+            if player.x_left() - 80 <= x <= player.x_right() + 80 and player.y_up() - 80 <= y <= player.y_down() + 80:
                 if event.button == 1:  # Left click to place a block
                     block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
                     selected_block_type = block_types[selected_block - 1]
                     if player.inventory[selected_block_type] > 0:
-                        new_block = eval(f"{selected_block_type}Block(x, y)")
+                        new_block = eval(f"{selected_block_type}Block(x = x , y = y)")
                         if background.add_block(new_block):
                             player.remove_inventory(selected_block_type)
                 elif event.button == 3:  # Right click to remove a block
-                    background.damage_block(x, y, 100, player) # Remove 100 hp from the block
+                    background.damage_block(x = x, y = y, damage = 100, player = player) # Remove 100 hp from the block
                     player.mining = True
                     pygame.time.set_timer(RESET_MINING_EVENT, 350)  # Set a timer for 1 second
         elif event.type == RESET_MINING_EVENT:

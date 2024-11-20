@@ -1,20 +1,23 @@
 import pygame
-from utils.coord_to_screen import coord_to_screen
+from utils.coord_to_screen import coord_to_screen, coord_to_indice
 from classes.class_player import Player
 
-BLOCK_SIZE = 40
 class Block:
-    def __init__(self, x : int , y : int, is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None):
+    def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         """
         Initialize a block.
-        :params x,y : Representing the block's position.
+        :params x_indice , y_indice : Representing the block's position in the map.
         :param is_solid: Whether the block can be passed through.
         :param breakable: Whether the block can be broken.
         :param health: The starting health of the block.
         """
-        self.x = x
-        self.y = y
+        if x_indice is None:
+            x_indice , y_indice = coord_to_indice(x = x , y = y)
         self.taille = 40
+        self.x_indice = x_indice
+        self.y_indice = y_indice
+        self.x = x_indice * self.taille #Coordonnées en px
+        self.y = y_indice * self.taille #Coordonnées en px
         self.type = None
         self.is_solid = is_solid
         self.breakable = breakable
@@ -37,57 +40,83 @@ class Block:
 
 
 
-    def render(self, screen , player : Player):
+    def render(self, screen , player : Player) -> None:
+        """
+        Affiche le bloc sur l'écran du joueur.
+        """
         if self.texture:  # Ensure texture is loaded
-            x , y = coord_to_screen(block = self , player = player)
-            screen.blit(self.texture, (x, y))
-
-
+            x_screen , y_screen = coord_to_screen(x = self.x , y = self.y , player = player)
+            screen.blit(self.texture, (x_screen , y_screen))
+    
+    
+    def y_up(self):
+        """
+        Coordonnée y en haut.
+        """
+        return self.y
+    
+    def y_down(self):
+        """
+        Coordonnée y en bas.
+        """
+        return self.y + self.taille - 1
+    
+    def x_left(self):
+        """
+        Coordonnée x à gauche.
+        """
+        return self.x
+    
+    def x_right(self):
+        """
+        Coordonnée x à droite.
+        """
+        return self.x + self.taille - 1
 
 
 class DirtBlock(Block):
-    def __init__(self , x : int , y : int):
-        super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 50)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 50)
         self.type = "Dirt"
         self.texture_path = "assets/graphics/dirt.png"
         self.texture = pygame.image.load(self.texture_path)
-        self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
+        self.texture = pygame.transform.scale(self.texture, (self.taille , self.taille))
 
 
 class StoneBlock(Block):
-    def __init__(self , x : int , y : int):
-        super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 200)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200)
         self.type = "Stone"
         self.texture_path = "assets/graphics/stone.png"
         self.texture = pygame.image.load(self.texture_path)
-        self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 class ObsidianBlock(Block):
-    def __init__(self , x : int , y : int):
-        super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 800)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 800)
         self.type = "Obsidian"
         self.texture_path = "assets/graphics/obsidian.png"
         self.texture = pygame.image.load(self.texture_path)
-        self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 
 class WoodBlock(Block):
-    def __init__(self , x : int , y : int):
-        super().__init__(x = x , y = y , is_solid = True , breakable = True , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
         self.type = "Wood"
         self.texture_path = "assets/graphics/dirt.png"
         self.texture = pygame.image.load(self.texture_path)
-        self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 
 
 class BedrockBlock(Block):
-    def __init__(self , x : int , y : int):
-        super().__init__(x = x , y = y , is_solid = True , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
         self.type = "Bedrock"
         self.texture_path = "assets/graphics/bedrock.png"
         self.texture = pygame.image.load(self.texture_path)
-        self.texture = pygame.transform.scale(self.texture, (BLOCK_SIZE, BLOCK_SIZE))
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 
 

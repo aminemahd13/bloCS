@@ -1,6 +1,6 @@
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 from classes.class_player import Player
-from utils.coord_to_screen import coord_to_screen, screen_to_coord
+from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice
 import pygame
 
 
@@ -18,14 +18,15 @@ def draw_inventory(screen, player, selected_block):
         "Wood": pygame.image.load("assets/graphics/dirt.png"),
         "Bedrock": pygame.image.load("assets/graphics/bedrock.png")
     }
-    x_offset = 10
-    y_offset = 10
+    x_offset = 200
+    y_offset = 116
     for i, block_type in enumerate(block_types):
         block_image = pygame.transform.scale(block_images[block_type], (40, 40))
         if i+1 == selected_block:
             pygame.draw.rect(screen, (0, 255, 0), (x_offset + i * 90 - 5, y_offset - 5, 50, 50), 3)
         screen.blit(block_image, (x_offset + i * 90, y_offset))
-        text = font.render(str(player.inventory[block_type]), True, (0, 0, 0))
+        n = player.inventory[block_type]
+        text = font.render(str(n), True, (0, 0, 0))
         screen.blit(text, (x_offset + i * 90 + 45, y_offset + 10))
 
 
@@ -57,28 +58,28 @@ class Background:
         liste_dirt_coord = generation_rect_to_pts([(45,15,48,15),(46,16,47,16),(14,11,22,11), (18,7,18,7), (27,13,27,13), (32,13,32,13), (40,18,40,18), (40,15,41,17), (42,15,42,16), (43,15,43,15), (42,13,43,14), (44,12,49,14), (49,11,50,11), (50,12,53,13), (53,14,53,14), (56,11,56,11)])
         liste_dirt_block = []
         for coord in liste_dirt_coord:
-            liste_dirt_block.append(DirtBlock(x = coord[0] * self.__taille_block , y = coord[1] * self.__taille_block))
+            liste_dirt_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Dirt"] = liste_dirt_block
 
         #On ajoute tout les blocs de type Stone
         liste_stone_coord = generation_rect_to_pts([(45,25,45,25),(71,15,71,15),(63,22,64,22),(45,20,45,20), (46,24,47,25), (48,25,49,25), (49,22,52,22), (50,23,54,23), (51,24,59,24), (55,25,60,25), (58,22,58,22), (59,18,63,18), (63,21,66,21), (65,22,70,22), (68,23,72,24), (73,24,73,24), (65,16,67,16), (71,16,71,16), (72,15,73,16), (73,18,74,18), (73,20,73,21)])
         liste_stone_block = []
         for coord in liste_stone_coord:
-            liste_stone_block.append(StoneBlock(x = coord[0] * self.__taille_block , y = coord[1] * self.__taille_block))
+            liste_stone_block.append(StoneBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Stone"] = liste_stone_block
         
         #On ajoute tout les blocs de type Obsidian
         liste_obsidian_coord = generation_rect_to_pts([(23,21,28,21),(10,17,10,17), (11,18,11,18), (11,16,12,17), (13,16,13,16), (12,15,21,15), (13,14,19,14), (19,16,26,16), (21,17,26,17), (11,20,11,20), (10,21,13,21), (9,22,15,22), (13,23,23,23), (16,24,22,24), (22,22,27,22), (23,22,28,22), (27,20,28,20), (28,19,28,19), (6,29,11,31), (6,32,18,35), (6,36,9,38), (7,38,10,37), (12,36,23,36), (13,37,16,38), (12,41,17,42), (12,43,21,43), (20,41,27,41), (11,45,14,45), (6,46,17,46), (3,47,15,47), (11,48,13,48), (11,49,22,49), (36,31,37,31), (35,32,45,32), (34,33,48,34), (35,35,48,36) ])
         liste_obsidian_block = []
         for coord in liste_obsidian_coord:
-            liste_obsidian_block.append(ObsidianBlock(x = coord[0] * self.__taille_block , y = coord[1] * self.__taille_block))
+            liste_obsidian_block.append(ObsidianBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Obsidian"] = liste_obsidian_block
         
         #On ajoute tout les blocs de type Wood
         liste_wood_coord = generation_rect_to_pts([])
         liste_wood_block = []
         for coord in liste_wood_coord:
-            liste_wood_block.append(WoodBlock(x = coord[0] * self.__taille_block , y = coord[1] * self.__taille_block))
+            liste_wood_block.append(WoodBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Wood"] = liste_wood_block
 
         #On ajoute tout les blocs de type Bedrock
@@ -87,18 +88,19 @@ class Background:
         enlever_bedrock=[[27,27],[27,28],[27,29],[45,25],[71,15],[63,22],[64,22],[77,17]]
         for coord in liste_bedrock_coord:
             if coord not in enlever_bedrock:
-                liste_bedrock_block.append(BedrockBlock(x = coord[0] * self.__taille_block , y = coord[1] * self.__taille_block))
+                liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Bedrock"] = liste_bedrock_block
      
     
-    def check_block(self , x : int , y : int) -> Block:
+    def check_block(self , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> Block:
         """
         Renvoie le bloc en x , y.
         """
+        if x_indice is None:
+            x_indice , y_indice = coord_to_indice(x = x , y = y)
         for liste in self.__dict_block.values():
             for block in liste:
-                if block.x == x and block.y == y:
-                    #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
+                if block.x_indice == x_indice and block.y_indice == y_indice:
                     return block
             return None
     
@@ -108,21 +110,23 @@ class Background:
         Ajoute un bloc dans le background.
         Renvoie True si le bloc a été placé, False sinon.
         """
-        block_check = self.check_block(x=block.x, y=block.y)
+        block_check = self.check_block(x_indice = block.x_indice ,  y_indice = block.y_indice)
         if block_check is None:
             self.__dict_block[block.type].append(block)
             return True
         return False
 
-    def damage_block(self, x: int, y: int, damage: int, player) -> bool:
+    def damage_block(self , damage : int, player , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> bool:
         """
         Attaque le bloc se situant en x , y.
         S'il y avait un bloc qui a été détruit, renvoie True.
         Sinon, renvoie False.
         """
+        if x_indice is None:
+            x_indice , y_indice = coord_to_indice(x = x , y = y)
         for block_list in self.__dict_block.values():
             for block in block_list:
-                if block.x == x and block.y == y:
+                if block.x_indice == x_indice and block.y_indice == y_indice:
                     if block.take_damage(damage):
                         block_list.remove(block)
                         player.inventory[block.type] += 1
@@ -301,10 +305,10 @@ class Background:
         player.block_in_screen = []
         for liste in self.__dict_block.values():
             for block in liste:
-                x , y = coord_to_screen(block = block , player = player)
-                if 1 - self.__taille_block <= x <= self.__width and 1 - self.__taille_block <= y <= self.__height:
+                x_screen , y_screen = coord_to_screen(x = block.x , y = block.y , player = player)
+                if 1 - self.__taille_block <= x_screen <= self.__width and 1 - self.__taille_block <= y_screen <= self.__height:
                     #On affiche uniquement les blocs qui se situent dans la map
-                    block.render(screen , player = player)
+                    block.render(screen = screen , player = player)
                     player.block_in_screen.append(block)
                     
 

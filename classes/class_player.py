@@ -1,4 +1,3 @@
-import os 
 import pygame
 
 ######### inventory est un dictionnaire avec les items en clé et le nombre d'items en valeur #########
@@ -109,16 +108,41 @@ class Player:
     def add_inventory(self,item) -> None:
         """Add item to the inventory"""
         self.inventory[item] += 1
+       
         
     def remove_inventory(self,item) -> None:
         """Remove item to the inventory"""
         self.inventory[item] -= 1
     
+    
     def render(self , screen):
         if self.skin:
             screen.blit(self.skin, (self.x_screen, self.y_screen))
             
-        
+    
+    def y_up(self):
+        """
+        Coordonnée y en haut.
+        """
+        return self.y
+    
+    def y_down(self):
+        """
+        Coordonnée y en bas.
+        """
+        return self.y + 2 * self.taille_block - 1
+    
+    def x_left(self):
+        """
+        Coordonnée x à gauche.
+        """
+        return self.x
+    
+    def x_right(self):
+        """
+        Coordonnée x à droite.
+        """
+        return self.x + self.taille_block - 1
             
         
 """
