@@ -5,6 +5,9 @@ from classes.class_player import Player
 import utils.key_handler as key
 from utils.coord_to_screen import screen_to_coord
 from classes.class_background import draw_inventory
+from screens.menu import display_menu, display_tips
+from screens.loading_screen import display_loading_screen
+
 
 """
 the player inventory is updated when he breaks a block
@@ -63,6 +66,23 @@ block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
 # Game loop
 running = True
 clock = pygame.time.Clock()
+
+# Display the menu
+while True:
+    choice = display_menu(screen)
+    if choice == "Start Game":
+        break
+    elif choice == "Tips":
+        display_tips(screen)
+    elif choice == "Quit":
+        pygame.quit()
+        exit()
+
+# Display the loading screen
+display_loading_screen(screen)
+
+
+
 
 
 while running:

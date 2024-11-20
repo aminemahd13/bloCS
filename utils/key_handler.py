@@ -1,67 +1,75 @@
-import keyboard
+import pygame
 
-#Dictionnaire contenant les touches associées à telle ou telle direction
-direction={"up" : ['w','z','up','space'] , "down" : ['s','down'] , "right" : ['d' , 'right'] , "left" : ['q' , 'a' , 'left'] , "close" : ['esc']}
-numbers={ "1":['1'] , "2":['2'] , "3":['3'] , "4":['4'] , "5":['5'] , "6":['6'] , "7":['7'] , "8":['8'] , "9":['9'] , "0":['0']}
+# Initialize pygame
+pygame.init()
 
+# Dictionnaire contenant les touches associées à telle ou telle direction
+direction = {
+    "up": [pygame.K_w, pygame.K_z, pygame.K_UP, pygame.K_SPACE],
+    "down": [pygame.K_s, pygame.K_DOWN],
+    "right": [pygame.K_d, pygame.K_RIGHT],
+    "left": [pygame.K_q, pygame.K_a, pygame.K_LEFT],
+    "close": [pygame.K_ESCAPE]
+}
+numbers = {
+    "1": [pygame.K_1],
+    "2": [pygame.K_2],
+    "3": [pygame.K_3],
+    "4": [pygame.K_4],
+    "5": [pygame.K_5],
+    "6": [pygame.K_6],
+    "7": [pygame.K_7],
+    "8": [pygame.K_8],
+    "9": [pygame.K_9],
+    "0": [pygame.K_0]
+}
 
 def get_number() -> str:
     """
     Renvoie le chiffre que l'utilisateur a tapé
     """
-    for i in numbers:
-        if keyboard.is_pressed(numbers[i][0]):
-            return i
+    keys = pygame.key.get_pressed()
+    for num, key_list in numbers.items():
+        if any(keys[key] for key in key_list):
+            return num
     return -1
-
-
 
 def up() -> bool:
     """
     Renvoie True si l'utilisateur appuie sur une touche
     pour faire tasser la grille en haut, False sinon.
     """
-    test = False
-    for i in direction["up"]:
-        test = test or keyboard.is_pressed(i)
-    return test
+    keys = pygame.key.get_pressed()
+    return any(keys[key] for key in direction["up"])
 
 def down() -> bool:
     """
     Renvoie True si l'utilisateur appuie sur une touche
     pour faire tasser la grille en bas, False sinon.
     """
-    test = False
-    for i in direction["down"]:
-        test = test or keyboard.is_pressed(i)
-    return test
+    keys = pygame.key.get_pressed()
+    return any(keys[key] for key in direction["down"])
 
 def right() -> bool:
     """
     Renvoie True si l'utilisateur appuie sur une touche
     pour faire tasser la grille à droite, False sinon.
     """
-    test = False
-    for i in direction["right"]:
-        test = test or keyboard.is_pressed(i)
-    return test
+    keys = pygame.key.get_pressed()
+    return any(keys[key] for key in direction["right"])
 
 def left() -> bool:
     """
     Renvoie True si l'utilisateur appuie sur une touche
     pour faire tasser la grille à gauche, False sinon.
     """
-    test = False
-    for i in direction["left"]:
-        test = test or keyboard.is_pressed(i)
-    return test
+    keys = pygame.key.get_pressed()
+    return any(keys[key] for key in direction["left"])
 
 def close() -> bool:
     """
     Renvoie True si l'utilisateur appuie sur une touche
     pour faire stopper le jeu, False sinon.
     """
-    test = False
-    for i in direction["close"]:
-        test = test or keyboard.is_pressed(i)
-    return test
+    keys = pygame.key.get_pressed()
+    return any(keys[key] for key in direction["close"])
