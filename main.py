@@ -6,6 +6,7 @@ import utils.key_handler as key
 from utils.coord_to_screen import screen_to_coord
 from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
+from utils.lists_blocks import block_lists
 
 
 """
@@ -40,8 +41,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Terraria-like Game Test")
 
 # Initialize the background
-background = Background(SCREEN_HEIGHT, SCREEN_WIDTH)
-
+background = Background(SCREEN_HEIGHT, SCREEN_WIDTH, block_lists)
 #Create the player
 player=Player(height_screen = SCREEN_WIDTH , width_screen = SCREEN_HEIGHT , name = "Player 1")
 

@@ -1,7 +1,6 @@
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock
 from classes.class_player import Player
 from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice
-from utils.lists_blocks import block_lists
 import pygame
 
 
@@ -23,7 +22,7 @@ def generation_rect_to_pts(liste : list) -> list:
 
 
 class Background:
-    def __init__(self , height : int , width : int):
+    def __init__(self , height : int , width : int, block_lists : dict):
         self.__height = height #Hauteur de l'écran
         self.__width = width #Largeur de l'écran
         self.__dict_block = {} #Dictionnaire contenant tout les blocs
@@ -45,7 +44,7 @@ class Background:
         
         #Maison 
         
-        liste_wood2_coord = [[35,7],[35,6],[35,5],[35,4],[35,3],[42,7],[42,6],[42,5],[42,4],[42,3],[36,2],[37,1],[38,0],[39,0],[40,1],[41,2]]
+        liste_wood2_coord = block_lists["Wood2"]
         liste_wood2_block = []
         for coord in liste_wood2_coord:
                 liste_wood2_block.append(Wood2Block(x_indice = coord[0] , y_indice = coord[1]))
