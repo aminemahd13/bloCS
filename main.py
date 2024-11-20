@@ -88,7 +88,7 @@ while running:
             x , y = screen_to_coord(x_screen = x_screen , y_screen = y_screen , player = player)
             if player.x_left() - 80 <= x <= player.x_right() + 80 and player.y_up() - 80 <= y <= player.y_down() + 80:
                 #Si on est dans une fenêtre de 2 blocs sur les côtés
-                if event.button == 1:  # Left click to place a block
+                if event.button == 1 and not (player.x_left()<=x<=player.x_right() and player.y_up()<=y<=player.y_down()):  # Left click to place a block
                     selected_block_type = block_types[selected_block - 1] #Type de bloc sélectionné
                     if player.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
                         new_block = eval(f"{selected_block_type}Block(x = x , y = y)") #Création de l'objet block

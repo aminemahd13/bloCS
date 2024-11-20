@@ -139,15 +139,14 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la droite,
         inférieur à déplacement.
         """
-        deplacement_min = deplacement
         for block in player.block_near:
-            if block.y_down()>=player.y_up() and block.y_up()<=player.y_down(): #Si le bloc est sur la hauteur du joueur
-                if player.x_left()<block.x_left()<=player.x_right(): #Si le bloc est dans le joueur
-                    deplacement_min = 0
+            if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
+                if player.x_left() < block.x_left() <= player.x_right(): #Si le bloc est dans le joueur
+                    deplacement = 0
                     break
-                elif block.x_left()>player.x_right(): #Si le bloc est sur la droite
-                    deplacement_min = min(deplacement_min , block.x_left() - player.x_right() - 1)
-        return deplacement_min
+                elif block.x_left() > player.x_right(): #Si le bloc est sur la droite
+                    deplacement = min(deplacement , block.x_left() - player.x_right() - 1)
+        return deplacement
     
     
     def check_left(self , player : Player , deplacement : int) -> int:
@@ -155,15 +154,14 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la gauche,
         inférieur à déplacement.
         """
-        deplacement_min = deplacement
         for block in player.block_near:
-            if block.y_down()>=player.y_up() and block.y_up()<=player.y_down(): #Si le bloc est sur la hauteur du joueur
-                if player.x_left()<=block.x_right()<player.x_right(): #Si le bloc est dans le joueur
-                    deplacement_min = 0
+            if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
+                if player.x_left() <= block.x_right() < player.x_right(): #Si le bloc est dans le joueur
+                    deplacement = 0
                     break
-                elif block.x_right()<player.x_left(): #Si le bloc est sur la gauche
-                    deplacement_min = min(deplacement_min , player.x_left() - block.x_right() - 1)
-        return deplacement_min
+                elif block.x_right() < player.x_left(): #Si le bloc est sur la gauche
+                    deplacement = min(deplacement , player.x_left() - block.x_right() - 1)
+        return deplacement
     
     
     def check_up(self , player : Player , deplacement : int) -> int:
@@ -172,9 +170,12 @@ class Background:
         inférieur à déplacement.
         """
         for block in player.block_near:
-            if player.y-self.__taille_block-deplacement+1<=block.y<=player.y-1 and player.x-self.__taille_block+1<=block.x<=player.x+self.__taille_block-1:
-                #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
-                deplacement = min(deplacement , player.y-self.__taille_block-block.y - 1)
+            if block.x_left() <= player.x_right() and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
+                if player.y_up() <= block.y_down() < player.y_up() + self.__taille_block - 1:
+                    deplacement = 0
+                    break
+                elif block.y_down() < player.y_up():
+                    deplacement = min(deplacement , player.y_up() - block.y_down() - 1)
         return deplacement
     
     
@@ -184,9 +185,12 @@ class Background:
         inférieur à déplacement.
         """
         for block in player.block_near:
-            if player.y+self.__taille_block+1<=block.y<=player.y+2*self.__taille_block+deplacement-1 and player.x-self.__taille_block+1<=block.x<=player.x+self.__taille_block-1:
-                #On regarde si x,y est compris dans les coordonnées du bloc avec sa taille
-                deplacement=min(deplacement,block.y-player.y-2*self.__taille_block)
+            if block.x_left() <= player.x_right() and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
+                if player.y_up() +self.__taille_block < block.y_down() <= player.y_down():
+                    deplacement = 0
+                    break
+                elif block.y_up() > player.y_down():
+                    deplacement = min(deplacement , block.y_up() - player.y_down() - 1)
         return deplacement
     
     
