@@ -97,10 +97,8 @@ class Background:
         #On ajoute tout les blocs de type Bedrock
         liste_bedrock_coord = block_lists["Bedrock"]
         liste_bedrock_block = []
-        enlever_bedrock=[[27,27],[27,28],[27,29],[45,25],[71,15],[63,22],[64,22],[77,17]]
         for coord in liste_bedrock_coord:
-            if coord not in enlever_bedrock:
-                liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
+            liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.__dict_block["Bedrock"] = liste_bedrock_block
      
     
@@ -310,7 +308,7 @@ class Background:
                 if 1 - self.__taille_block <= x_screen <= self.__width and 1 - self.__taille_block <= y_screen <= self.__height:
                     #On affiche uniquement les blocs qui se situent dans la map
                     block.render(screen = screen , player = player)
-                    if player.x_left() - 50 <= block.x_right() and block.x_left() <= player.x_right() + 50:
+                    if player.x_left() - 50 <= block.x_right() and block.x_left() <= player.x_right() + 50 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:
                         player.block_near.append(block)
                     
     
