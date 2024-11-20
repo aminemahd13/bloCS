@@ -1,6 +1,6 @@
 import pygame
 from utils.coord_to_screen import screen_to_coord, coord_to_indice
-from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock, BackgroundBlock
+from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 import utils.key_handler as key
 
 ######### inventory est un dictionnaire avec les items en clé et le nombre d'items en valeur #########
@@ -319,12 +319,11 @@ class Player:
                 if x_indice*40+40-1<self.x_left() or x_indice*40>self.x_right() or y_indice*40>self.y_down() or y_indice*40+40-1<self.y_up():
                     selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
                     if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
-                        new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice , add_background = False)") #Création de l'objet block
+                        new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
                         added = False
                         for i , block in enumerate(background.dict_block["Background"]):
                             if block.x_indice == x_indice and block.y_indice == y_indice:
                                 background.dict_block["Background"].pop(i)
-                                new_block.add_background = False
                                 background.add_block(new_block)
                                 self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
                                 added = True
@@ -337,9 +336,7 @@ class Player:
                     for i , block in enumerate(values):
                         if block.x_indice == x_indice and block.y_indice == y_indice and not key=="Background":
                             if block.take_damage(damage = 100):
-                                if block.add_background:
-                                    new_block = BackgroundBlock(x_indice = x_indice , y_indice = y_indice)
-                                    background.dict_block["Background"].append(new_block)
+                                
                                 values.pop(i)
                                 self.add_inventory(key)
                             added = True
@@ -441,11 +438,10 @@ print(player.skin_path)
 
 """
 
-        
-        
 
-        
-        
-        
-        
-        
+
+
+
+
+
+
