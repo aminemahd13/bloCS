@@ -381,9 +381,9 @@ class Player:
                         break
                     
                     
-    def play_2048(self , key_closegame):
+    def play_2048(self):
         if self.playgame:
-            self.playgame = jeu(self.grille, self.inventory_tuiles , key_closegame)
+            self.playgame = jeu(self.grille, self.inventory_tuiles)
             if not self.playgame:
                 self.grille.fermer_fenetre()
     

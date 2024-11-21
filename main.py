@@ -78,7 +78,7 @@ while running:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
 
-    player.play_2048(key.closegame())
+    player.play_2048()
     
     # Clear the screen
     screen.fill(WHITE)
