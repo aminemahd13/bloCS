@@ -1,4 +1,3 @@
-keyboard
 setuptools
 pygame-ce
-PIL
+pyinstaller

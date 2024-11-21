@@ -35,12 +35,12 @@ class Player:
         self.direction = "right"
         self.stade = 1
         self.v_ini=0
-        self.V0 = 551 #Vitesse initiale lors d'un saut
+        self.V0 = 460 #Vitesse initiale lors d'un saut
         self.g = round(self.V0**2 / (2 * 2.3 * 40)) #Gravité, pour sauter d'une hauteur max de 2.3 blocs
         self.compteur_jump = 0
         self.dist_real = 0
         self.dist_theo = 0
-        self.dx = 12
+        self.dx = 10
         self.moving = False
         self.key_right = key.right()
         self.key_left = key.left()
