@@ -9,7 +9,8 @@ house_blocks = {
     "Obsidian": [],
     "Bedrock": [],
     "Wood1": [],
-    "Game": [[40, 10]]  # Example coordinates for the GameBlock
+    "Game": [[40, 10]],  # Example coordinates for the GameBlock
+    "T2048" : []
 }
 
 

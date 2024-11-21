@@ -2,6 +2,7 @@ import pygame
 from utils.coord_to_screen import screen_to_coord, coord_to_indice
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock, GameBlock
 import utils.key_handler as key
+from game.classes.classegrille import Grille
 
 
 
@@ -17,6 +18,9 @@ class Player:
         inventory --> list of items in the inventory
         health --> life points of the player
         """
+        self.changed = False
+        self.grille = Grille()
+        self.grille.fermer_fenetre()
         self.jump = False
         self.name = name
         self.mining = False
@@ -328,14 +332,18 @@ class Player:
                 for key , values in background.dict_block.items():
                     for i , block in enumerate(values):
                         if block.x_indice == x_indice and block.y_indice == y_indice:
-                            if block.take_damage(damage = 100):
-                                values.pop(i)
-                                self.add_inventory(key)
-                            added=True
-                            #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
-                            self.mining = True
-                            pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
-                            break
+                            if block.type != "Game":
+                                if block.take_damage(damage = 100):
+                                    values.pop(i)
+                                    self.add_inventory(key)
+                                added=True
+                                #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
+                                self.mining = True
+                                pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
+                                break
+                            else:
+                                block.on_click(self.grille)
+                                
                     if added:
                         break
         if event.button == 1:

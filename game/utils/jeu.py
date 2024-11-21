@@ -4,10 +4,8 @@ from game.classes.classegrille import Grille
 
 touche={"haut" : False, "bas" : False, "droite" : False, "gauche" : False}
 
-def jeu():
-    # Initialise la grille
-    grille = Grille()
-    
+def jeu(grille : Grille):
+    grille.ouvrir_fenetre()
     grille.affiche() #Affiche la grille
 
     try:
@@ -58,4 +56,4 @@ def jeu():
     except KeyboardInterrupt:
         pass  # Handle exit gracefully if interrupted
     
-    grille.fin_du_jeu()
+    grille.fermer_fenetre()
