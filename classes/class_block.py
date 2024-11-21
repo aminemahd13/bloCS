@@ -166,8 +166,7 @@ class TuileBlock(Block):
         elif value in [128,256,512]:
             self.tuile_required = 256
         self.type = "Tuile"
-        #self.texture_path = "assets/graphics/2048/" + str(value) + ".png"
-        self.texture_path = "assets/graphics/2048/2.png"
+        self.texture_path = "assets/graphics/tuile_" + str(value) + ".png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
@@ -177,7 +176,7 @@ class GameBlock(Block):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
         self.type = "Game"
         #self.texture_path = "assets/graphics/2048/" + str(value) + ".png"
-        self.texture_path = "assets/graphics/2048/2.png"
+        self.texture_path = "assets/graphics/game_block.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 

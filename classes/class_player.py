@@ -74,7 +74,7 @@ class Player:
             "2048" : 0
         }
         self.health = 100
-        self.skin_path = "assets/graphics/standing_right.png"
+        self.skin_path = "assets/graphics/skins/standing_right.png"
         self.skin = pygame.image.load(self.skin_path)
     
     
@@ -136,11 +136,11 @@ class Player:
             #Jumping
             if self.jump:
                 if self.direction == "right":
-                    self.skin_path = "assets/graphics/jumping_right.png"
+                    self.skin_path = "assets/graphics/skins/jumping_right.png"
                     self.skin = pygame.image.load(self.skin_path)
                     
                 elif self.direction == "left":
-                    self.skin_path = "assets/graphics/jumping_left.png"
+                    self.skin_path = "assets/graphics/skins/jumping_left.png"
                     self.skin = pygame.image.load(self.skin_path)
             
             #Not jumping
@@ -156,20 +156,20 @@ class Player:
                 #Moving right
                 if self.direction == "right":
                     if self.stade <= 20//2:
-                        self.skin_path = "assets/graphics/walking_right.png"
+                        self.skin_path = "assets/graphics/skins/walking_right.png"
                         self.skin = pygame.image.load(self.skin_path)
                     else :
-                        self.skin_path = "assets/graphics/standing_right.png"
+                        self.skin_path = "assets/graphics/skins/standing_right.png"
                         self.skin = pygame.image.load(self.skin_path)
                         
                 
                 #Moving left  
                 elif self.direction == "left":
                     if self.stade <= 20//2:
-                        self.skin_path = "assets/graphics/walking_left.png"
+                        self.skin_path = "assets/graphics/skins/walking_left.png"
                         self.skin = pygame.image.load(self.skin_path)
                     else :
-                        self.skin_path = "assets/graphics/standing_left.png"
+                        self.skin_path = "assets/graphics/skins/standing_left.png"
                         self.skin = pygame.image.load(self.skin_path)  
                         
             
@@ -177,11 +177,11 @@ class Player:
         #Mining
         else:
             if self.direction == "right":
-                self.skin_path = "assets/graphics/mining_right.png"
+                self.skin_path = "assets/graphics/skins/mining_right.png"
                 self.skin = pygame.image.load(self.skin_path)
                 
             elif self.direction == "left":
-                self.skin_path = "assets/graphics/mining_left.png"
+                self.skin_path = "assets/graphics/skins/mining_left.png"
                 self.skin = pygame.image.load(self.skin_path)
         
         self.skin = pygame.transform.scale(self.skin, (40, 80))
@@ -399,8 +399,7 @@ class Player:
             "Stone": pygame.image.load("assets/graphics/stone.png"),
             "Obsidian": pygame.image.load("assets/graphics/obsidian.png"),
             "Wood": pygame.image.load("assets/graphics/dirt.png"),
-            "Bedrock": pygame.image.load("assets/graphics/bedrock.png"),
-            "2048": pygame.image.load("assets/graphics/2048/2.png")
+            "Bedrock": pygame.image.load("assets/graphics/bedrock.png")
         }
         x_offset = 10
         y_offset = 10
