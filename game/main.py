@@ -129,9 +129,21 @@ def is_game_over(grid):
                 return False
     return True
 
+def draw_quit_button(screen):
+    button_color = (255, 69, 58)
+    button_rect = pygame.Rect(50, 50, 200, 60)  # Rectangle du bouton
+    pygame.draw.rect(screen, button_color, button_rect, border_radius=10)
+
+    text = FONT.render("Quitter", True, (255, 255, 255))
+    text_rect = text.get_rect(center=button_rect.center)
+    screen.blit(text, text_rect)
+
+    return button_rect
+
 
 # Main game loop
-def jeu(grid , screen , hist_touches):
+def jeu(grid, screen, hist_touches):
+        # Gérer les entrées clavier
     if key_handler.close() and not hist_touches["close"]:
         return False
     elif key_handler.up():
@@ -151,7 +163,10 @@ def jeu(grid , screen , hist_touches):
             if is_game_over(grid):
                 return False
 
-    draw_grid(grid , screen)
+    draw_grid(grid, screen)
+    # Dessiner le bouton Quitter
+    quit_button_rect = draw_quit_button(screen)
     return True
+
 
 

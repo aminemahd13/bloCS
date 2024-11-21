@@ -66,12 +66,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            player.mining_or_breaking(background = background , event = event)
+            if player.playgame:
+                x_screen, y_screen = pygame.mouse.get_pos()
+                if 50 <= x_screen <= 250 and 50 <= y_screen <= 110:  # Clic sur le bouton Quitter
+                    player.playgame = False
+            else:
+                player.mining_or_breaking(background = background , event = event)
         elif event.type == player.RESET_MINING_EVENT:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
 
     player.play_2048(screen)
+            
+    
+    
     # On capture les touches
     key_close = key.close()
     player.act_touches()
