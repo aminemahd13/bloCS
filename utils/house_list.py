@@ -8,7 +8,8 @@ house_blocks = {
     "Wood2": [],
     "Obsidian": [],
     "Bedrock": [],
-    "Wood1": []
+    "Wood1": [],
+    "Game": [[40, 10]]  # Example coordinates for the GameBlock
 }
 
 

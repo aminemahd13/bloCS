@@ -1,4 +1,4 @@
-from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock
+from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock, GameBlock
 from classes.class_player import Player
 from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice, indice_to_screen
 import pygame
@@ -113,6 +113,11 @@ class Background:
             liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_house["Bedrock"] = liste_bedrock_block
         
+        liste_game_block_coord = house_blocks["Game"]
+        liste_game_block = []
+        for coord in liste_game_block_coord:
+            liste_game_block.append(GameBlock(x_indice=coord[0], y_indice=coord[1]))
+        self.dict_block_house["Game"] = liste_game_block
         
         #On ajoute tout les blocs de type Dirt
         liste_dirt_coord = block_lists["Dirt"]
@@ -527,5 +532,4 @@ Renvoie None s'il n'y a pas de block.
 
 background.render() -> None
 Affiche le background.
-
 """

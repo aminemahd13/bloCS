@@ -165,6 +165,17 @@ class Block2048(Block):
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
+class GameBlock(Block):
+    def __init__(self, x_indice: int = None, y_indice: int = None, x: int = None, y: int = None):
+        super().__init__(x_indice=x_indice, y_indice=y_indice, x=x, y=y, is_solid=False, breakable=False, health=100)
+        self.type = "Game"
+        self.texture_path = "assets/graphics/game_block.png"
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
+
+    def on_click(self):
+        from game.utils.jeu import jeu
+        jeu()
 
 
 

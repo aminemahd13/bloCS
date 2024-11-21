@@ -1,6 +1,6 @@
 import pygame
 from utils.coord_to_screen import screen_to_coord, coord_to_indice
-from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
+from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock, GameBlock
 import utils.key_handler as key
 
 
@@ -338,8 +338,22 @@ class Player:
                             break
                     if added:
                         break
-                    
-                    
+        if event.button == 1:
+            for key, values in background.dict_block.items():
+                for block in values:
+                    if block.x_left() <= x <= block.x_right() and block.y_up() <= y <= block.y_down():
+                        if isinstance(block, GameBlock):
+                            block.on_click()
+                        else:
+                            # ...existing code...
+                            if block.take_damage(damage=100):
+                                values.remove(block)
+                                self.add_inventory(block.type)
+                            self.mining = True
+                            pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
+                            break
+                if self.mining:
+                    break
     
     
     
@@ -430,10 +444,6 @@ print(player.skin_path)
 
 
 """
-
-
-
-
 
 
 
