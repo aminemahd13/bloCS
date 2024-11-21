@@ -1,5 +1,4 @@
 import pygame
-import keyboard
 
 # Initialize pygame
 pygame.init()
@@ -82,7 +81,8 @@ def closegame() -> bool:
     Renvoie True si l'utilisateur appuie sur une touche
     pour faire stopper le jeu, False sinon.
     """
-    return keyboard.is_pressed('m')
+    keys = pygame.key.get_pressed()
+    return any(keys[key] for key in direction["closegame"])
 
 def changemod() -> bool:
     """
