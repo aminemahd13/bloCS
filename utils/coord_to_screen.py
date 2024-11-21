@@ -1,3 +1,5 @@
+from random import randint
+
 def coord_to_screen(x : int , y : int , player) -> tuple:
     x = x - player.x + player.x_screen
     y = y - player.y + player.y_screen
@@ -36,3 +38,11 @@ def indice_to_screen(x_indice : int , y_indice : int , player) -> tuple:
 def screen_to_indice(x_screen : int , y_screen : int , player) -> tuple:
     x , y = screen_to_coord(x_screen = x_screen , y_screen = y_screen , player = player)
     return coord_to_indice(x = x , y = y)
+
+def indices_randoms(liste , n):
+    L = []
+    while len(L)<n:
+        r = randint(0, len(liste) - 1)
+        if r not in L:
+            L.append(r)
+    return L

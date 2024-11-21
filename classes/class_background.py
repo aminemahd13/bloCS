@@ -1,6 +1,6 @@
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock, TuileBlock , GameBlock
 from classes.class_player import Player
-from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice, indice_to_screen
+from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice, indice_to_screen, indices_randoms
 import pygame
 from utils.lists_blocks import block_lists
 from utils.house_list import house_blocks
@@ -50,14 +50,6 @@ class Background:
         for coord in liste_dirt_coord:
             liste_dirt_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_house["Dirt"] = liste_dirt_block
-
-
-        #on ajoute les blocs de 2048
-        liste_tuile_coord = block_lists["Tuile"]
-        liste_tuile_block = []
-        for coord in liste_tuile_coord:
-            liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 2))
-        self.dict_block_background["Tuile"] = liste_tuile_block
 
 
 
@@ -120,19 +112,48 @@ class Background:
             liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_house["Bedrock"] = liste_bedrock_block
         
+        liste_tuile_block = []
+        
+        liste_air_coord = block_lists["Air"]
+        indices_r = indices_randoms(liste_air_coord , 6)
+        indices_r_2 = indices_r[0 : 4]
+        indices_r_4 = indices_r[4 : 6]
+        for i , coord in enumerate(liste_air_coord):
+            if i in indices_r_2:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 2))
+            elif i in indices_r_4:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 4))
+        
         
         #On ajoute tout les blocs de type Dirt
         liste_dirt_coord = block_lists["Dirt"]
+        indices_r = indices_randoms(liste_dirt_coord , 18)
+        indices_r_8 = indices_r[0 : 12]
+        indices_r_16 = indices_r[12 : 18]
         liste_dirt_block = []
-        for coord in liste_dirt_coord:
-            liste_dirt_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
+        for i , coord in enumerate(liste_dirt_coord):
+            if i in indices_r_8:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 8))
+            elif i in indices_r_16:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 16))
+            else:
+                liste_dirt_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_background["Dirt"] = liste_dirt_block
+
 
         #On ajoute tout les blocs de type Stone
         liste_stone_coord = block_lists["Stone"]
+        indices_r = indices_randoms(liste_stone_coord , 6)
+        indices_r_32 = indices_r[0 : 12]
+        indices_r_64 = indices_r[12 : 18]
         liste_stone_block = []
-        for coord in liste_stone_coord:
-            liste_stone_block.append(StoneBlock(x_indice = coord[0] , y_indice = coord[1]))
+        for i , coord in enumerate(liste_stone_coord):
+            if i in indices_r_32:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 32))
+            elif i in indices_r_64:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 64))
+            else:
+                liste_stone_block.append(StoneBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_background["Stone"] = liste_stone_block
         
         #Maison 
@@ -167,9 +188,17 @@ class Background:
         
         #On ajoute tout les blocs de type Obsidian
         liste_obsidian_coord = block_lists["Obsidian"]
+        indices_r = indices_randoms(liste_obsidian_coord , 6)
+        indices_r_128 = indices_r[0 : 12]
+        indices_r_256 = indices_r[12 : 18]
         liste_obsidian_block = []
-        for coord in liste_obsidian_coord:
-            liste_obsidian_block.append(ObsidianBlock(x_indice = coord[0] , y_indice = coord[1]))
+        for i , coord in enumerate(liste_obsidian_coord):
+            if i in indices_r_128:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 128))
+            elif i in indices_r_256:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 256))
+            else:
+                liste_obsidian_block.append(ObsidianBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_background["Obsidian"] = liste_obsidian_block
         
         #On ajoute tout les blocs de type Wood
@@ -187,6 +216,7 @@ class Background:
             liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_background["Bedrock"] = liste_bedrock_block
         
+        self.dict_block_background["Tuile"] = liste_tuile_block
         
         self.dict_block = self.dict_block_background
      

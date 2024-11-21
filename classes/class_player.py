@@ -55,10 +55,10 @@ class Player:
         
         self.inventory = {
             "Dirt" : 10,
-            "Stone" : 10,
-            "Obsidian" : 10,
-            "Wood" : 10,
-            "Bedrock" : 10
+            "Stone" : 0,
+            "Obsidian" : 0,
+            "Wood" : 0,
+            "Bedrock" : 0
         }
         self.inventory_tuiles = {
             "2" : 0,
