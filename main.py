@@ -7,7 +7,6 @@ from utils.coord_to_screen import screen_to_coord
 from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
 
-
 """
 the player inventory is updated when he breaks a block
 the function damage_block has been changed to add the 'player' argument !!!!
@@ -78,6 +77,8 @@ while running:
         elif event.type == player.RESET_MINING_EVENT:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
+        elif 38 * 40 <= player.x <= 39 * 40 and 6 * 40 <= player.y <= 7 * 40:
+            background.change_mod()
 
     # Clear the screen
     screen.fill(WHITE)
@@ -102,15 +103,7 @@ while running:
     player.act_hist_touches()
 
     # Check if mod change is allowed
-    if pygame.K_h:
-        if background.check_mod_change_allowed(player = player):
-            if not player.changed:
-                background.change_mod()
-                player.changed = True
-        else:
-            player.changed = False
-    else:
-        player.changed = False
+    background.check_mod_change_allowed(player)
 
     # Update the screen
     pygame.display.flip()

@@ -1,4 +1,4 @@
-from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock, T2048Block , GameBlock
+from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock
 from classes.class_player import Player
 from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice, indice_to_screen
 import pygame
@@ -35,6 +35,7 @@ class Background:
         self.back_texture_path = "crea_map/map/background.png"
         self.back_texture = pygame.image.load(self.back_texture_path)
         self.back_texture = pygame.transform.scale(self.back_texture, (9360 , 3240))
+        self.mod_change_allowed = True
         
         #On ajoute tout les blocs de type Dirt
         liste_dirt_coord = house_blocks["Dirt"]
@@ -45,11 +46,11 @@ class Background:
 
 
         #on ajoute les blocs de 2048
-        liste_2048_coord = block_lists["T2048"]
+        liste_2048_coord = block_lists["2048"]
         liste_2048_block = []
         for coord in liste_2048_coord:
-            liste_2048_block.append(T2048Block(x_indice = coord[0] , y_indice = coord[1] , value = coord[2]))
-        self.dict_block_background["T2048"] = liste_2048_block
+            liste_2048_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
+        self.dict_block_background["2048"] = liste_2048_block
 
 
 
@@ -111,13 +112,6 @@ class Background:
         for coord in liste_bedrock_coord:
             liste_bedrock_block.append(BedrockBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_house["Bedrock"] = liste_bedrock_block
-        
-        #On ajoute tout les blocs de type Game
-        liste_game_coord = house_blocks["Game"]
-        liste_game_block = []
-        for coord in liste_game_coord:
-            liste_game_block.append(GameBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.dict_block_house["Game"] = liste_game_block
         
         
         #On ajoute tout les blocs de type Dirt
@@ -191,19 +185,20 @@ class Background:
      
     
     def change_mod(self):
-        if self.mode == 1:
-            self.mode = 2
-            self.dict_block_background = self.dict_block
-            self.dict_block = self.dict_block_house
-        else:
-            self.mode = 1
-            self.dict_block_house = self.dict_block
-            self.dict_block = self.dict_block_background
+        if self.mod_change_allowed:
+            if self.mode == 1:
+                self.mode = 2
+                self.dict_block_background = self.dict_block
+                self.dict_block = self.dict_block_house
+            else:
+                self.mode = 1
+                self.dict_block_house = self.dict_block
+                self.dict_block = self.dict_block_background
+            self.mod_change_allowed = False
     
-    def check_mod_change_allowed(self, player: Player) -> bool:
+    def check_mod_change_allowed(self, player: Player):
         if not (38 * 40 <= player.x <= 39 * 40 and 6 * 40 <= player.y <= 7 * 40):
-            return False
-        return True
+            self.mod_change_allowed = True
     
     
     def check_block(self , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> Block:
