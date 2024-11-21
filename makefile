@@ -11,14 +11,17 @@ init:
 # Build the project into a binary using PyInstaller
 .PHONY: build
 build:
-	pyinstaller --onefile --name bloCS main.py
+	pyinstaller --onefile --name bloCS \
+		--add-data 'assets:assets' \
+		--add-data 'assets/graphics/background/background.png:assets/graphics/background' \
+		main.py
 
 # Clean up generated files
 .PHONY: clean
 clean:
-	rm -rf build dist __pycache__ *.spec
+	rm -rf build dist *.spec
 
-# Run the project locally
-.PHONY: run
-run:
-	python main.py
+.PHONY: rebuild
+rebuild:
+	make clean
+	make build
