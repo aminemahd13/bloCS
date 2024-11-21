@@ -78,33 +78,33 @@ while running:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
 
-    #player.play_2048()
-    
-    # Clear the screen
-    screen.fill(WHITE)
-
-    # Render the background and players
-    background.render(screen = screen , player = player) # Affiche le background avec les blocs
-    player.render(screen) # Affiche le joueur
-
-    # Draw the inventory
-    player.draw_inventory(screen)
+    player.play_2048(screen)
     
     if not player.playgame:
+        # Clear the screen
+        screen.fill(WHITE)
+
+        # Render the background and players
+        background.render(screen = screen , player = player) # Affiche le background avec les blocs
+        player.render(screen) # Affiche le joueur
+
+        # Draw the inventory
+        player.draw_inventory(screen)
+        
         # On regarde si le joueur est en plein saut et on actualise sa data
         player.check_if_jumping(background = background)
-            
+                
         # Changement du skin
         player.change_skin()
-        
+            
         # Déplacement du perso
         player.deplacer_perso(background = background)
+        
+        # Check if mod change is allowed
+        player.change_map(background)
     
     # On garde en mémoire l'état des touches
     player.act_hist_touches()
-
-    # Check if mod change is allowed
-    player.change_map(background)
 
     # Update the screen
     pygame.display.flip()

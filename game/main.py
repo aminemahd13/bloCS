@@ -7,9 +7,9 @@ from utils import key_handler
 pygame.init()
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 500, 500
+SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
 GRID_SIZE = 4
-TILE_SIZE = SCREEN_WIDTH // GRID_SIZE
+TILE_SIZE = 500 // GRID_SIZE
 FONT_SIZE = TILE_SIZE // 2
 PADDING = 10
 BACKGROUND_COLOR = (187, 173, 160)
@@ -32,18 +32,15 @@ TEXT_COLOR = (119, 110, 101)
 # Fonts
 FONT = pygame.font.Font(None, FONT_SIZE)
 
-# Initialize the screen
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("2048")
 
 # Helper Functions
-def draw_grid(grid, animation_offsets=None):
+def draw_grid(grid, screen , animation_offsets=None):
     screen.fill(BACKGROUND_COLOR)
     for row in range(GRID_SIZE):
         for col in range(GRID_SIZE):
             value = grid[row][col]
-            rect_x = col * TILE_SIZE + PADDING
-            rect_y = row * TILE_SIZE + PADDING
+            rect_x = (col-2) * TILE_SIZE + SCREEN_WIDTH // 2
+            rect_y = (row-2) * TILE_SIZE + SCREEN_HEIGHT // 2
             tile_color = TILE_COLORS.get(value, (60, 58, 50))
 
             # Apply animation offsets
@@ -65,11 +62,13 @@ def draw_grid(grid, animation_offsets=None):
                 screen.blit(text, text_rect)
 
 
-def spawn_new_tile(grid):
+def spawn_new_tile(grid , value):
     empty_tiles = [(row, col) for row in range(GRID_SIZE) for col in range(GRID_SIZE) if grid[row][col] == 0]
     if empty_tiles:
         row, col = random.choice(empty_tiles)
-        grid[row][col] = random.choice([2, 4])
+        grid[row][col] = value
+        return True
+    return False
 
 
 def move(grid, direction):
@@ -132,42 +131,32 @@ def is_game_over(grid):
 
 
 # Main game loop
-def main():
-    clock = pygame.time.Clock()
-    grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
-    spawn_new_tile(grid)
-    spawn_new_tile(grid)
+def jeu(grid , screen):
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+    if key_handler.closegame():
+        return False
+    elif key_handler.up():
+        direction = "UP"
+    elif key_handler.down():
+        direction = "DOWN"
+    elif key_handler.left():
+        direction = "LEFT"
+    elif key_handler.right():
+        direction = "RIGHT"
+    else:
+        direction = None
 
-        if key_handler.up():
-            direction = "UP"
-        elif key_handler.down():
-            direction = "DOWN"
-        elif key_handler.left():
-            direction = "LEFT"
-        elif key_handler.right():
-            direction = "RIGHT"
-        else:
-            direction = None
+    if direction:
+        moved, _ = move(grid, direction)
+        if moved:
+            if is_game_over(grid):
+                return False
 
-        if direction:
-            moved, _ = move(grid, direction)
-            if moved:
-                spawn_new_tile(grid)
-                if is_game_over(grid):
-                    print("Game Over!")
-                    pygame.quit()
-                    sys.exit()
-
-        draw_grid(grid)
-        pygame.display.flip()
-        clock.tick(60)
+    draw_grid(grid , screen)
+    return True
 
 
-if __name__ == "__main__":
-    main()

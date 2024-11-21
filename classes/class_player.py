@@ -2,8 +2,8 @@ import pygame
 from utils.coord_to_screen import screen_to_coord, coord_to_indice
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 import utils.key_handler as key
-from game.classes.classegrille import Grille
-from game.utils.jeu import jeu
+from game.main import jeu , spawn_new_tile
+from random import randint
 
 
 
@@ -21,8 +21,7 @@ class Player:
         """
         self.playgame = False
         self.changed = False
-        self.grille = Grille()
-        self.grille.fermer_fenetre()
+        self.grille = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
         self.jump = False
         self.name = name
         self.mining = False
@@ -80,9 +79,9 @@ class Player:
     
     def tuile_max(self):
         m = 0
-        for ligne in self.grille.grille:
+        for ligne in self.grille:
             for tuile in ligne:
-                m = max(m , tuile.valeur)
+                m = max(m , tuile)
         return m
     
     def change_map(self , background):
@@ -375,21 +374,33 @@ class Player:
                                 self.mining = True
                                 pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
                                 break
-#                            else:
-#                                if not self.playgame:
-#                                    self.grille.ouvrir_fenetre()
-#                                self.playgame = True
-#                                added=True
-#                                break
+                            else:
+                                self.playgame = True
+                                added=True
+                                break
                     if added:
                         break
                     
                     
-    def play_2048(self):
+    def play_2048(self , screen):
+        keys = []
+        for key in self.inventory_tuiles.keys():
+            if self.inventory_tuiles[key]>0:
+                keys.append([key,self.inventory_tuiles[key]])
+        
+        add = True
+        while add and len(keys)>0:
+            r = randint(0, len(keys) - 1)
+            value = keys[r][0]
+            add = spawn_new_tile(grid = self.grille , value = value)
+            if add:
+                keys[r][1] -= 1
+                if keys[r][1] == 0:
+                    keys.pop(r)     
+        
+        
         if self.playgame:
-            self.playgame = jeu(self.grille, self.inventory_tuiles)
-            if not self.playgame:
-                self.grille.fermer_fenetre()
+            self.playgame = jeu(self.grille , screen)
     
     
     def draw_inventory(self , screen):

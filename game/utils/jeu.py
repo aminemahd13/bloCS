@@ -1,4 +1,3 @@
-import time
 import utils.key_handler as key
 from game.classes.classegrille import Grille
 
