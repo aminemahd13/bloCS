@@ -175,12 +175,27 @@ class Player:
         
         #Mining
         else:
+            tuile_max = self.tuile_max()
             if self.direction == "right":
-                self.skin_path = "assets/graphics/skins/mining_right.png"
+                if tuile_max in [0 , 2 , 4 , 8]:
+                    self.skin_path = "assets/graphics/skins/mining_right.png"
+                elif tuile_max in [16 , 32]:
+                    self.skin_path = "assets/graphics/skins/mining_right_grey.png"
+                elif tuile_max in [64 , 128]:
+                    self.skin_path = "assets/graphics/skins/mining_right_gold.png"
+                else:
+                    self.skin_path = "assets/graphics/skins/mining_right_purple.png"
                 self.skin = pygame.image.load(self.skin_path)
                 
             elif self.direction == "left":
-                self.skin_path = "assets/graphics/skins/mining_left.png"
+                if tuile_max in [0 , 2 , 4 , 8]:
+                    self.skin_path = "assets/graphics/skins/mining_left.png"
+                elif tuile_max in [16 , 32]:
+                    self.skin_path = "assets/graphics/skins/mining_left_grey.png"
+                elif tuile_max in [64 , 128]:
+                    self.skin_path = "assets/graphics/skins/mining_left_gold.png"
+                else:
+                    self.skin_path = "assets/graphics/skins/mining_left_purple.png"
                 self.skin = pygame.image.load(self.skin_path)
         
         self.skin = pygame.transform.scale(self.skin, (40, 80))
@@ -383,23 +398,21 @@ class Player:
                     
                     
     def play_2048(self , screen):
-        keys = []
-        for key in self.inventory_tuiles.keys():
-            if self.inventory_tuiles[key]>0:
-                keys.append([int(key),self.inventory_tuiles[key]])
-        add = True
-        while add and len(keys)>0:
-            r = randint(0, len(keys) - 1)
-            value = keys[r][0]
-            add = spawn_new_tile(grid = self.grille , value = value)
-            if add:
-                keys[r][1] -= 1
-                self.inventory_tuiles[str(keys[r][0])] -= 1
-                if keys[r][1] == 0:
-                    keys.pop(r)
-        
-        
         if self.playgame:
+            keys = []
+            for key in self.inventory_tuiles.keys():
+                if self.inventory_tuiles[key]>0:
+                    keys.append([int(key),self.inventory_tuiles[key]])
+            add = True
+            while add and len(keys)>0:
+                r = randint(0, len(keys) - 1)
+                value = keys[r][0]
+                add = spawn_new_tile(grid = self.grille , value = value)
+                if add:
+                    keys[r][1] -= 1
+                    self.inventory_tuiles[str(keys[r][0])] -= 1
+                    if keys[r][1] == 0:
+                        keys.pop(r)
             self.playgame = jeu(self.grille , screen)
     
     
