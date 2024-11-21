@@ -176,7 +176,7 @@ class GameBlock(Block):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
         self.type = "Game"
         #self.texture_path = "assets/graphics/2048/" + str(value) + ".png"
-        self.texture_path = "assets/graphics/game_block.png"
+        self.texture_path = "assets/graphics/bloc_2048.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 

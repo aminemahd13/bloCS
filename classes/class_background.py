@@ -44,6 +44,13 @@ class Background:
             liste_game_block.append(GameBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_house["Game"] = liste_game_block
         
+        #On ajoute tout les blocs de type Stone
+        self.dict_block_house["Stone"] = []
+        self.dict_block_house["Dirt"] = []
+        self.dict_block_house["Obsidian"] = []
+        self.dict_block_house["Bedrock"] = []
+        self.dict_block_house["Wood"] = []
+        
         #Maison 
         
         liste_wood2_coord = house_blocks["Wood2"]
