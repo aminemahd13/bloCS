@@ -185,20 +185,15 @@ class Background:
      
     
     def change_mod(self):
-        if self.mod_change_allowed:
-            if self.mode == 1:
-                self.mode = 2
-                self.dict_block_background = self.dict_block
-                self.dict_block = self.dict_block_house
-            else:
-                self.mode = 1
-                self.dict_block_house = self.dict_block
-                self.dict_block = self.dict_block_background
-            self.mod_change_allowed = False
-    
-    def check_mod_change_allowed(self, player: Player):
-        if not (38 * 40 <= player.x <= 39 * 40 and 6 * 40 <= player.y <= 7 * 40):
-            self.mod_change_allowed = True
+        if self.mode == 1:
+            self.mode = 2
+            self.dict_block_background = self.dict_block
+            self.dict_block = self.dict_block_house
+        else:
+            self.mode = 1
+            self.dict_block_house = self.dict_block
+            self.dict_block = self.dict_block_background
+        
     
     
     def check_block(self , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> Block:

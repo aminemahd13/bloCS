@@ -2,6 +2,7 @@ import pygame
 from utils.coord_to_screen import screen_to_coord, coord_to_indice
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 import utils.key_handler as key
+from game.classes.classegrille import Grille
 
 
 
@@ -17,6 +18,9 @@ class Player:
         inventory --> list of items in the inventory
         health --> life points of the player
         """
+        self.changed = False
+        self.grille = Grille()
+        self.grille.fermer_fenetre()
         self.jump = False
         self.name = name
         self.mining = False
@@ -58,6 +62,19 @@ class Player:
         self.health = 100
         self.skin_path = "assets/graphics/standing_right.png"
         self.skin = pygame.image.load(self.skin_path)
+    
+    
+    def change_map(self , background):
+        if 38 * 40 <= self.x_left() and self.x_right() <= 40 * 40 and 6 * 40 == self.y_up():
+            if key.changemod():
+                if not self.changed:
+                    background.change_mod()
+                    self.changed = True
+            else:
+                self.changed = False
+        else:
+            self.changed = False
+                
     
     
     def act_hist_touches(self):

@@ -77,8 +77,6 @@ while running:
         elif event.type == player.RESET_MINING_EVENT:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
-        elif 38 * 40 <= player.x <= 39 * 40 and 6 * 40 <= player.y <= 7 * 40:
-            background.change_mod()
 
     # Clear the screen
     screen.fill(WHITE)
@@ -103,7 +101,7 @@ while running:
     player.act_hist_touches()
 
     # Check if mod change is allowed
-    background.check_mod_change_allowed(player)
+    player.change_map(background)
 
     # Update the screen
     pygame.display.flip()
