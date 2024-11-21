@@ -7,6 +7,7 @@ from utils.coord_to_screen import screen_to_coord
 from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
 
+
 """
 the player inventory is updated when he breaks a block
 the function damage_block has been changed to add the 'player' argument !!!!

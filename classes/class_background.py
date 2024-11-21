@@ -24,7 +24,7 @@ def generation_rect_to_pts(liste : list) -> list:
 
 
 class Background:
-    def __init__(self , height : int , width : int, block_lists):
+    def __init__(self , height : int , width : int):
         self.__height = height #Hauteur de l'écran
         self.__width = width #Largeur de l'écran
         self.mode = 1
