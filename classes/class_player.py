@@ -386,14 +386,14 @@ class Player:
         keys = []
         for key in self.inventory_tuiles.keys():
             if self.inventory_tuiles[key]>0:
-                keys.append([key,self.inventory_tuiles[key]])
-        
+                keys.append([int(key),self.inventory_tuiles[key]])
         add = True
         while add and len(keys)>0:
             r = randint(0, len(keys) - 1)
             value = keys[r][0]
             add = spawn_new_tile(grid = self.grille , value = value)
             if add:
+                print("test")
                 keys[r][1] -= 1
                 if keys[r][1] == 0:
                     keys.pop(r)     

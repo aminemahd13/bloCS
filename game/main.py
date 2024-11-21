@@ -66,7 +66,7 @@ def spawn_new_tile(grid , value):
     empty_tiles = [(row, col) for row in range(GRID_SIZE) for col in range(GRID_SIZE) if grid[row][col] == 0]
     if empty_tiles:
         row, col = random.choice(empty_tiles)
-        grid[row][col] = value
+        grid[row][col] = int(value)
         return True
     return False
 
