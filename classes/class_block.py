@@ -105,7 +105,7 @@ class WoodBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
         self.type = "Wood"
-        self.texture_path = "assets/graphics/dirt.png"
+        self.texture_path = "assets/graphics/woodhouse.png"
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
