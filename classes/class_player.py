@@ -87,12 +87,9 @@ class Player:
     
     def change_map(self , background):
         if 38 * 40 <= self.x_left() and self.x_right() <= 40 * 40 and 6 * 40 == self.y_up():
-            if key.changemod():
-                if not self.changed:
+            if not self.changed:
                     background.change_mod()
                     self.changed = True
-            else:
-                self.changed = False
         else:
             self.changed = False
                 
