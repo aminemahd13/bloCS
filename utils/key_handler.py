@@ -10,7 +10,7 @@ direction = {
     "right": [pygame.K_d, pygame.K_RIGHT],
     "left": [pygame.K_q, pygame.K_a, pygame.K_LEFT],
     "close": [pygame.K_ESCAPE],
-    "closegame" : [pygame.K_m],
+    "closegame" : [pygame.K_h],
     "h" : [pygame.K_h]
 }
 numbers = {

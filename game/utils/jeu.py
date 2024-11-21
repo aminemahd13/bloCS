@@ -4,7 +4,7 @@ from game.classes.classegrille import Grille
 
 touche={"haut" : False, "bas" : False, "droite" : False, "gauche" : False}
 
-def jeu(grille : Grille , inventory : dict):
+def jeu(grille : Grille , inventory : dict , key_closegame : bool):
     grille.affiche(inventory) #Affiche la grille
 
     moved = False
@@ -37,7 +37,7 @@ def jeu(grille : Grille , inventory : dict):
     else:
         touche["droite"]=False
             
-    if key.closegame():
+    if key_closegame:
         return False
             
     if moved: # Ignore invalid or unsuccessful moves
