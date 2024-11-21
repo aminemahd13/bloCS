@@ -11,7 +11,7 @@ init:
 # Build the project into a binary using PyInstaller
 .PHONY: build
 build:
-	pyinstaller --onefile --name cw2048 main.py
+	pyinstaller --onefile --name bloCS main.py
 
 # Clean up generated files
 .PHONY: clean
