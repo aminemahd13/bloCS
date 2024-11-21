@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: cw2048
+Version: 0.1
+License-File: LICENSE
+Requires-Dist: pygame-ce

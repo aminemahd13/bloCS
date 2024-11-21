@@ -1,4 +1,4 @@
-from input_handlers.key_handler import up, down, right, left, close
+from utils.key_handler import up, down, right, left, close
 
 def creation_hist_touches() -> dict:
     """

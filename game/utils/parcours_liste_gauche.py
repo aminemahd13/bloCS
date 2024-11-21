@@ -1,4 +1,4 @@
-from utils.copie import copie_ligne_int
+from game.utils.copie import copie_ligne_int
 
 def parcours_liste(liste : list):
     """

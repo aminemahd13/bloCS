@@ -1,4 +1,4 @@
-from utils.copie import copie_ligne
+from game.utils.copie import copie_ligne
 
 def gauche_ligne(ligne: list) -> bool:
     """

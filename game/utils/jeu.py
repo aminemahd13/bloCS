@@ -1,6 +1,6 @@
 import time
-import input_handlers.key_handler as key
-from classes.classegrille import Grille
+import utils.key_handler as key
+from game.classes.classegrille import Grille
 
 touche={"haut" : False, "bas" : False, "droite" : False, "gauche" : False}
 

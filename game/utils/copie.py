@@ -1,4 +1,4 @@
-from classes.classetuile import Tuile
+from game.classes.classetuile import Tuile
 
 def copie_tuile(tuile : Tuile) -> Tuile:
     """

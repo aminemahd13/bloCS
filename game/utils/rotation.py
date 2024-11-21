@@ -1,4 +1,4 @@
-from utils.copie import copie_grille, copie_matrice
+from game.utils.copie import copie_grille, copie_matrice
 
 def rotation_horaire_grille(grille : list) -> list:
         """

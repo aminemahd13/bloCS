@@ -1,11 +1,11 @@
-from utils.ajout_aleatoire import add_random_tuile
-from utils.gauche import gauche_ligne, gauche_grille
-from utils.parcours_liste_gauche import parcours_liste
-from utils.parcours import parcours
-from utils.copie import copie_tuile, copie_ligne, copie_grille, copie_matrice
-from utils.rotation import rotation_horaire_grille, rotation_horaire_matrice, rotation_antihoraire_grille, rotation_antihoraire_matrice, rotation_double_grille, rotation_double_matrice
-from utils.cancel_transition import cancel_transition, creation_hist_touches
-from classes.classetuile import Tuile
+from game.utils.ajout_aleatoire import add_random_tuile
+from game.utils.gauche import gauche_ligne, gauche_grille
+from game.utils.parcours_liste_gauche import parcours_liste
+from game.utils.parcours import parcours
+from game.utils.copie import copie_tuile, copie_ligne, copie_grille, copie_matrice
+from game.utils.rotation import rotation_horaire_grille, rotation_horaire_matrice, rotation_antihoraire_grille, rotation_antihoraire_matrice, rotation_double_grille, rotation_double_matrice
+from game.utils.cancel_transition import cancel_transition, creation_hist_touches
+from game.classes.classetuile import Tuile
 import tkinter as tk
 import time
 
