@@ -90,14 +90,15 @@ while running:
     # Draw the inventory
     player.draw_inventory(screen)
     
-    # On regarde si le joueur est en plein saut et on actualise sa data
-    player.check_if_jumping(background = background)
+    if not player.playgame:
+        # On regarde si le joueur est en plein saut et on actualise sa data
+        player.check_if_jumping(background = background)
             
-    # Changement du skin
-    player.change_skin()
-    
-    # Déplacement du perso
-    player.deplacer_perso(background = background)
+        # Changement du skin
+        player.change_skin()
+        
+        # Déplacement du perso
+        player.deplacer_perso(background = background)
     
     # On garde en mémoire l'état des touches
     player.act_hist_touches()
