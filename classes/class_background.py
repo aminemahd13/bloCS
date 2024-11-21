@@ -222,11 +222,12 @@ class Background:
         Ajoute un bloc dans le background.
         Renvoie True si le bloc a été placé, False sinon.
         """
-        block_check = self.check_block(x_indice = block.x_indice ,  y_indice = block.y_indice)
-        if block_check is None:
-            self.dict_block[block.type].append(block)
-            return True
-        return False
+        for liste in self.dict_block.values():
+            for block_check in liste:
+                if block_check.x_indice == block.x_indice and block_check.y_indice == block.y_indice:
+                    return False
+        self.dict_block[block.type].append(block)
+        return True
 
     def damage_block(self , damage : int, player : Player , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> bool:
         """
