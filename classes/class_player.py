@@ -393,10 +393,10 @@ class Player:
             value = keys[r][0]
             add = spawn_new_tile(grid = self.grille , value = value)
             if add:
-                print("test")
                 keys[r][1] -= 1
+                self.inventory_tuiles[str(keys[r][0])] -= 1
                 if keys[r][1] == 0:
-                    keys.pop(r)     
+                    keys.pop(r)
         
         
         if self.playgame:
