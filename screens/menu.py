@@ -1,5 +1,5 @@
 import pygame
-import os 
+import utils.key_handler as key
 
 def display_menu(screen):
     # Load background music
@@ -30,6 +30,10 @@ def display_menu(screen):
 
         pygame.display.flip()
 
+        if key.close():
+            pygame.mixer.music.stop()
+            return "Quit"
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.mixer.music.stop()

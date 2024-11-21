@@ -50,7 +50,7 @@ while True:
         break
     elif choice == "Tips":
         display_tips(screen)
-    elif choice == "Quit":
+    elif choice == "Quit" or key.close():
         pygame.quit()
         exit()
 

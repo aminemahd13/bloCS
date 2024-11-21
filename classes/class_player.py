@@ -35,7 +35,7 @@ class Player:
         self.direction = "right"
         self.stade = 1
         self.v_ini=0
-        self.V0 = 460 #Vitesse initiale lors d'un saut
+        self.V0 = 468 #Vitesse initiale lors d'un saut
         self.g = round(self.V0**2 / (2 * 2.3 * 40)) #Gravité, pour sauter d'une hauteur max de 2.3 blocs
         self.compteur_jump = 0
         self.dist_real = 0
@@ -49,7 +49,7 @@ class Player:
         self.hist_touches = {"right" : key.right() , "left" : key.left() , "echap" : key.close()}
         self.block_near = []
         self.selected_block = 1
-        self.block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
+        self.block_types = ["Dirt", "Stone", "Obsidian", "Bedrock"]
         # Define a custom event for resetting the mining state
         self.RESET_MINING_EVENT = pygame.USEREVENT + 1
         
@@ -57,7 +57,6 @@ class Player:
             "Dirt" : 10,
             "Stone" : 0,
             "Obsidian" : 0,
-            "Wood" : 0,
             "Bedrock" : 0
         }
         self.inventory_tuiles = {
@@ -425,7 +424,6 @@ class Player:
             "Dirt": pygame.image.load("assets/graphics/dirt.png"),
             "Stone": pygame.image.load("assets/graphics/stone.png"),
             "Obsidian": pygame.image.load("assets/graphics/obsidian.png"),
-            "Wood": pygame.image.load("assets/graphics/dirt.png"),
             "Bedrock": pygame.image.load("assets/graphics/bedrock.png")
         }
         x_offset = 10
