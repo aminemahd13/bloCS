@@ -128,8 +128,8 @@ class Wood1Block(Block):
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 class Wood2Block(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , is_solid = False):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = is_solid , breakable = False , health = 100)
         self.type = "Wood2"
         self.texture_path = "assets/graphics/wood2.png"
         self.texture = pygame.image.load(self.texture_path)
