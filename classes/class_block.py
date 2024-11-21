@@ -1,9 +1,8 @@
 import pygame
 from utils.coord_to_screen import coord_to_screen, coord_to_indice
-from game.utils.jeu import jeu
 
 class Block:
-    def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+    def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , tuile_required : int = 0):
         """
         Initialize a block.
         :params x_indice , y_indice : Representing the block's position in the map.
@@ -26,13 +25,14 @@ class Block:
         self.drop_item = drop_item
         self.texture = None
         self.texture_path = None
+        self.tuile_required = tuile_required
 
-    def take_damage(self , damage : int) -> bool:
+    def take_damage(self , damage : int , tuile_max : int) -> bool:
         """
         Réduit la vie du bloc.
         Renvoie True si le bloc est cassé, False sinon.
         """
-        if self.breakable:
+        if self.breakable and tuile_max >= self.tuile_required:
             self.health -= damage
             if self.health <= 0:
                 return True
@@ -77,7 +77,7 @@ class Block:
 
 class DirtBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 50)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 50 , tuile_required = 16)
         self.type = "Dirt"
         self.texture_path = "assets/graphics/dirt.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -86,7 +86,7 @@ class DirtBlock(Block):
 
 class StoneBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 400 , tuile_required = 64)
         self.type = "Stone"
         self.texture_path = "assets/graphics/stone.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -94,7 +94,7 @@ class StoneBlock(Block):
 
 class ObsidianBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 800)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 1200 , tuile_required = 256)
         self.type = "Obsidian"
         self.texture_path = "assets/graphics/obsidian.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -113,7 +113,7 @@ class WoodBlock(Block):
 
 class BedrockBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 200 , tuile_required = 64)
         self.type = "Bedrock"
         self.texture_path = "assets/graphics/bedrock.png"
         self.texture = pygame.image.load(self.texture_path)
@@ -159,6 +159,12 @@ class TuileBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None, value : int = 2):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
         self.value = value
+        if value in [8,16]:
+            self.tuile_required = 16
+        elif value in [32,64]:
+            self.tuile_required = 64
+        elif value in [128,256,512]:
+            self.tuile_required = 256
         self.type = "Tuile"
         #self.texture_path = "assets/graphics/2048/" + str(value) + ".png"
         self.texture_path = "assets/graphics/2048/2.png"

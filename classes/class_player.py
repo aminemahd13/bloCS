@@ -78,6 +78,13 @@ class Player:
         self.skin = pygame.image.load(self.skin_path)
     
     
+    def tuile_max(self):
+        m = 0
+        for ligne in self.grille.grille:
+            for tuile in ligne:
+                m = max(m , tuile.valeur)
+        return m
+    
     def change_map(self , background):
         if 38 * 40 <= self.x_left() and self.x_right() <= 40 * 40 and 6 * 40 == self.y_up():
             if key.changemod():
@@ -360,7 +367,7 @@ class Player:
                     for i , block in enumerate(values):
                         if block.x_indice == x_indice and block.y_indice == y_indice:
                             if block.type != "Game":
-                                if block.take_damage(damage = 100):
+                                if block.take_damage(damage = 100 , tuile_max = self.tuile_max()):
                                     values.pop(i)
                                     if block.type == "Tuile":
                                         self.inventory_tuiles[str(block.value)] += 1
@@ -371,12 +378,12 @@ class Player:
                                 self.mining = True
                                 pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
                                 break
-                            else:
-                                if not self.playgame:
-                                    self.grille.ouvrir_fenetre()
-                                self.playgame = True
-                                added=True
-                                break
+#                            else:
+#                                if not self.playgame:
+#                                    self.grille.ouvrir_fenetre()
+#                                self.playgame = True
+#                                added=True
+#                                break
                     if added:
                         break
                     

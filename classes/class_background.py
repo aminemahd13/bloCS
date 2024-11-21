@@ -239,7 +239,7 @@ class Background:
         for block_list in self.dict_block.values():
             for block in block_list:
                 if block.x_indice == x_indice and block.y_indice == y_indice:
-                    if block.take_damage(damage):
+                    if block.take_damage(damage , player.tuile_max()):
                         block_list.remove(block)
                         player.inventory[block.type] += 1
                         return True
