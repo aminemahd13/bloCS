@@ -33,7 +33,7 @@ pygame.display.set_caption("Terraria-like Game Test")
 background = Background(SCREEN_HEIGHT, SCREEN_WIDTH)
 #Create the player
 player=Player(height_screen = SCREEN_WIDTH , width_screen = SCREEN_HEIGHT , name = "Player 1")
-
+in_game = True
 
 
 # Game loop
@@ -61,14 +61,7 @@ display_loading_screen(screen)
 pygame.mixer.music.load("assets/audio/game.mp3")
 pygame.mixer.music.play(-1)  # Loop the music
 
-while running:
-    # On capture les touches
-    key_close = key.close()
-    player.act_touches()
-    
-    if key_close: # Si on clique sur échap, le jeu se ferme
-        running = False
-        
+while running:     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -79,6 +72,19 @@ while running:
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
 
     player.play_2048(screen)
+    # On capture les touches
+    key_close = key.close()
+    player.act_touches()
+    
+    if player.playgame:
+        in_game = True
+    elif in_game:
+        if not key_close:
+            in_game = False
+        
+    
+    if not in_game and key_close and not player.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
+        running = False
     
     if not player.playgame:
         # Clear the screen

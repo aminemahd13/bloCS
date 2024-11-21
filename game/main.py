@@ -131,13 +131,8 @@ def is_game_over(grid):
 
 
 # Main game loop
-def jeu(grid , screen):
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    if key_handler.closegame():
+def jeu(grid , screen , hist_touches):
+    if key_handler.close() and not hist_touches["close"]:
         return False
     elif key_handler.up():
         direction = "UP"

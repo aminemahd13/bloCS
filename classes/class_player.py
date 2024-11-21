@@ -45,7 +45,8 @@ class Player:
         self.key_right = key.right()
         self.key_left = key.left()
         self.key_up = key.up()
-        self.hist_touches = {"right" : key.right() , "left" : key.left()}
+        self.key_close = key.close()
+        self.hist_touches = {"right" : key.right() , "left" : key.left() , "echap" : key.close()}
         self.block_near = []
         self.selected_block = 1
         self.block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
@@ -97,10 +98,12 @@ class Player:
     def act_hist_touches(self):
         self.hist_touches["right"] = self.key_right
         self.hist_touches["left"] = self.key_left
+        self.hist_touches["close"] = self.key_close
     
     def act_touches(self):
         self.key_right = key.right()
         self.key_left = key.left()
+        self.key_close = key.close()
         self.key_up = key.up()
         key_get_number = key.get_number()
         if key_get_number != -1: #Si on clique sur un chiffre correct pour sélectionner un bloc
@@ -413,7 +416,7 @@ class Player:
                     self.inventory_tuiles[str(keys[r][0])] -= 1
                     if keys[r][1] == 0:
                         keys.pop(r)
-            self.playgame = jeu(self.grille , screen)
+            self.playgame = jeu(self.grille , screen , self.hist_touches)
     
     
     def draw_inventory(self , screen):

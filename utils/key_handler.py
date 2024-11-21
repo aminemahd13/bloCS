@@ -9,9 +9,7 @@ direction = {
     "down": [pygame.K_s, pygame.K_DOWN],
     "right": [pygame.K_d, pygame.K_RIGHT],
     "left": [pygame.K_q, pygame.K_a, pygame.K_LEFT],
-    "close": [pygame.K_ESCAPE],
-    "closegame" : [pygame.K_h],
-    "h" : [pygame.K_h]
+    "close": [pygame.K_ESCAPE]
 }
 numbers = {
     "1": [pygame.K_1],
@@ -75,19 +73,3 @@ def close() -> bool:
     """
     keys = pygame.key.get_pressed()
     return any(keys[key] for key in direction["close"])
-
-def closegame() -> bool:
-    """
-    Renvoie True si l'utilisateur appuie sur une touche
-    pour faire stopper le jeu, False sinon.
-    """
-    keys = pygame.key.get_pressed()
-    return any(keys[key] for key in direction["closegame"])
-
-def changemod() -> bool:
-    """
-    Renvoie True si l'utilisateur appuie sur une touche
-    pour faire chnger le fond, False sinon.
-    """
-    keys = pygame.key.get_pressed()
-    return any(keys[key] for key in direction["h"])
