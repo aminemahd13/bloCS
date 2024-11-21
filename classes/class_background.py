@@ -115,9 +115,9 @@ class Background:
         liste_tuile_block = []
         
         liste_air_coord = block_lists["Air"]
-        indices_r = indices_randoms(liste_air_coord , 6)
-        indices_r_2 = indices_r[0 : 4]
-        indices_r_4 = indices_r[4 : 6]
+        indices_r = indices_randoms(liste_air_coord , 18)
+        indices_r_2 = indices_r[0 : 12]
+        indices_r_4 = indices_r[12 : 18]
         for i , coord in enumerate(liste_air_coord):
             if i in indices_r_2:
                 liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 2))
