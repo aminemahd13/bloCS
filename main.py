@@ -62,11 +62,11 @@ pygame.mixer.music.load("assets/audio/game.mp3")
 pygame.mixer.music.play(-1)  # Loop the music
 
 while running:
-    #On capture les touches
+    # On capture les touches
     key_close = key.close()
     player.act_touches()
     
-    if key_close: #Si on clique sur échap, le jeu se ferme
+    if key_close: # Si on clique sur échap, le jeu se ferme
         running = False
         
     for event in pygame.event.get():
@@ -77,38 +77,36 @@ while running:
         elif event.type == player.RESET_MINING_EVENT:
             player.mining = False
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_h:
-                background.change_mod()
+        elif 38 * 40 <= player.x <= 39 * 40 and 6 * 40 <= player.y <= 7 * 40:
+            background.change_mod()
 
     # Clear the screen
     screen.fill(WHITE)
 
     # Render the background and players
-    background.render(screen = screen , player = player) #Affiche le background avec les blocs
-    player.render(screen) #Affiche le joueur
+    background.render(screen = screen , player = player) # Affiche le background avec les blocs
+    player.render(screen) # Affiche le joueur
 
     # Draw the inventory
     player.draw_inventory(screen)
     
-    #On regarde si le joueur est en plein saut et on actualise sa data
+    # On regarde si le joueur est en plein saut et on actualise sa data
     player.check_if_jumping(background = background)
             
-
-    #Changement du skin
+    # Changement du skin
     player.change_skin()
     
-    
-    #Déplacement du perso
+    # Déplacement du perso
     player.deplacer_perso(background = background)
     
-    
-    #On garde en mémoire l'état des touches
+    # On garde en mémoire l'état des touches
     player.act_hist_touches()
+
+    # Check if mod change is allowed
+    background.check_mod_change_allowed(player)
 
     # Update the screen
     pygame.display.flip()
-
 
     # Cap the frame rate
     clock.tick(60)

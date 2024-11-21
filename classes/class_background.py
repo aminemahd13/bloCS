@@ -35,6 +35,7 @@ class Background:
         self.back_texture_path = "crea_map/map/background.png"
         self.back_texture = pygame.image.load(self.back_texture_path)
         self.back_texture = pygame.transform.scale(self.back_texture, (9360 , 3240))
+        self.mod_change_allowed = True
         
         #On ajoute tout les blocs de type Dirt
         liste_dirt_coord = house_blocks["Dirt"]
@@ -42,6 +43,16 @@ class Background:
         for coord in liste_dirt_coord:
             liste_dirt_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_house["Dirt"] = liste_dirt_block
+
+
+        #on ajoute les blocs de 2048
+        liste_2048_coord = block_lists["2048"]
+        liste_2048_block = []
+        for coord in liste_2048_coord:
+            liste_2048_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
+        self.dict_block_background["2048"] = liste_2048_block
+
+
 
         #On ajoute tout les blocs de type Stone
         liste_stone_coord = house_blocks["Stone"]
@@ -174,14 +185,20 @@ class Background:
      
     
     def change_mod(self):
-        if self.mode == 1:
-            self.mode = 2
-            self.dict_block_background = self.dict_block
-            self.dict_block = self.dict_block_house
-        else:
-            self.mode = 1
-            self.dict_block_house = self.dict_block
-            self.dict_block = self.dict_block_background
+        if self.mod_change_allowed:
+            if self.mode == 1:
+                self.mode = 2
+                self.dict_block_background = self.dict_block
+                self.dict_block = self.dict_block_house
+            else:
+                self.mode = 1
+                self.dict_block_house = self.dict_block
+                self.dict_block = self.dict_block_background
+            self.mod_change_allowed = False
+    
+    def check_mod_change_allowed(self, player: Player):
+        if not (38 * 40 <= player.x <= 39 * 40 and 6 * 40 <= player.y <= 7 * 40):
+            self.mod_change_allowed = True
     
     
     def check_block(self , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> Block:
@@ -510,6 +527,5 @@ Renvoie None s'il n'y a pas de block.
 
 background.render() -> None
 Affiche le background.
-
 
 """

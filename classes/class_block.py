@@ -154,11 +154,16 @@ class DoordownBlock(Block):
     
     
 
-
-
-
-
-
+class Block2048(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None, value : int = 2):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        self.taille
+        self.value = value
+        self.type = "2048"
+        #self.texture_path = "assets/graphics/2048/" + str(value) + ".png"
+        self.texture_path = "assets/graphics/2048/2.png"
+        self.texture = pygame.image.load(self.texture_path)
+        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 
 

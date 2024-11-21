@@ -43,7 +43,7 @@ class Player:
         self.hist_touches = {"right" : key.right() , "left" : key.left()}
         self.block_near = []
         self.selected_block = 1
-        self.block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
+        self.block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock", "2048"]
         # Define a custom event for resetting the mining state
         self.RESET_MINING_EVENT = pygame.USEREVENT + 1
         
@@ -53,6 +53,7 @@ class Player:
             "Obsidian" : 10,
             "Wood" : 10,
             "Bedrock" : 10,
+            "2048" : 0
         }
         self.health = 100
         self.skin_path = "assets/graphics/standing_right.png"
@@ -349,7 +350,8 @@ class Player:
             "Stone": pygame.image.load("assets/graphics/stone.png"),
             "Obsidian": pygame.image.load("assets/graphics/obsidian.png"),
             "Wood": pygame.image.load("assets/graphics/dirt.png"),
-            "Bedrock": pygame.image.load("assets/graphics/bedrock.png")
+            "Bedrock": pygame.image.load("assets/graphics/bedrock.png"),
+            "2048": pygame.image.load("assets/graphics/2048/2.png")
         }
         x_offset = 10
         y_offset = 10
