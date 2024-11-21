@@ -157,10 +157,10 @@ class Background:
         
         #On ajoute tout les blocs de type Obsidian
         liste_obsidian_coord = block_lists["Obsidian"]
-        indices_r = indices_randoms(liste_obsidian_coord , 27)
+        indices_r = indices_randoms(liste_obsidian_coord , 25)
         indices_r_128 = indices_r[0 : 12]
         indices_r_256 = indices_r[12 : 24]
-        indices_r_512 = indices_r[24 : 27]
+        indices_r_512 = indices_r[24]
         liste_obsidian_block = []
         for i , coord in enumerate(liste_obsidian_coord):
             if i in indices_r_128:
