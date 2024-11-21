@@ -4,7 +4,7 @@ from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_ind
 import pygame
 from utils.lists_blocks import block_lists
 from utils.house_list import house_blocks
-
+from resources import resources
 
 
         
@@ -32,7 +32,7 @@ class Background:
         self.dict_block_background = {}
         self.dict_block_house = {}
         self.__taille_block = 40
-        self.back_texture_path = "assets/graphics/background/background.png"
+        self.back_texture_path = resources("assets/graphics/background/background.png")
         self.back_texture = pygame.image.load(self.back_texture_path)
         self.back_texture = pygame.transform.scale(self.back_texture, (9360 , 3240))
         self.mod_change_allowed = True

@@ -4,7 +4,7 @@ from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, Bedrock
 import utils.key_handler as key
 from game.main import jeu , spawn_new_tile
 from random import randint
-
+from resources import resources
 
 
 
@@ -73,7 +73,7 @@ class Player:
             "2048" : 0
         }
         self.health = 100
-        self.skin_path = "assets/graphics/skins/standing_right.png"
+        self.skin_path = resources("assets/graphics/skins/standing_right.png")
         self.skin = pygame.image.load(self.skin_path)
     
     
@@ -137,11 +137,11 @@ class Player:
             #Jumping
             if self.jump:
                 if self.direction == "right":
-                    self.skin_path = "assets/graphics/skins/jumping_right.png"
+                    self.skin_path = resources("assets/graphics/skins/jumping_right.png")
                     self.skin = pygame.image.load(self.skin_path)
                     
                 elif self.direction == "left":
-                    self.skin_path = "assets/graphics/skins/jumping_left.png"
+                    self.skin_path = resources("assets/graphics/skins/jumping_left.png")
                     self.skin = pygame.image.load(self.skin_path)
             
             #Not jumping
@@ -157,20 +157,20 @@ class Player:
                 #Moving right
                 if self.direction == "right":
                     if self.stade <= 20//2:
-                        self.skin_path = "assets/graphics/skins/walking_right.png"
+                        self.skin_path = resources("assets/graphics/skins/walking_right.png")
                         self.skin = pygame.image.load(self.skin_path)
                     else :
-                        self.skin_path = "assets/graphics/skins/standing_right.png"
+                        self.skin_path = resources("assets/graphics/skins/standing_right.png")
                         self.skin = pygame.image.load(self.skin_path)
                         
                 
                 #Moving left  
                 elif self.direction == "left":
                     if self.stade <= 20//2:
-                        self.skin_path = "assets/graphics/skins/walking_left.png"
+                        self.skin_path = resources("assets/graphics/skins/walking_left.png")
                         self.skin = pygame.image.load(self.skin_path)
                     else :
-                        self.skin_path = "assets/graphics/skins/standing_left.png"
+                        self.skin_path = resources("assets/graphics/skins/standing_left.png")
                         self.skin = pygame.image.load(self.skin_path)  
                         
             
@@ -180,24 +180,24 @@ class Player:
             tuile_max = self.tuile_max()
             if self.direction == "right":
                 if tuile_max in [0 , 2 , 4 , 8]:
-                    self.skin_path = "assets/graphics/skins/mining_right.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_right.png")
                 elif tuile_max in [16 , 32]:
-                    self.skin_path = "assets/graphics/skins/mining_right_grey.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_right_grey.png")
                 elif tuile_max in [64 , 128]:
-                    self.skin_path = "assets/graphics/skins/mining_right_gold.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_right_gold.png")
                 else:
-                    self.skin_path = "assets/graphics/skins/mining_right_purple.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_right_purple.png")
                 self.skin = pygame.image.load(self.skin_path)
                 
             elif self.direction == "left":
                 if tuile_max in [0 , 2 , 4 , 8]:
-                    self.skin_path = "assets/graphics/skins/mining_left.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_left.png")
                 elif tuile_max in [16 , 32]:
-                    self.skin_path = "assets/graphics/skins/mining_left_grey.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_left_grey.png")
                 elif tuile_max in [64 , 128]:
-                    self.skin_path = "assets/graphics/skins/mining_left_gold.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_left_gold.png")
                 else:
-                    self.skin_path = "assets/graphics/skins/mining_left_purple.png"
+                    self.skin_path = resources("assets/graphics/skins/mining_left_purple.png")
                 self.skin = pygame.image.load(self.skin_path)
         
         self.skin = pygame.transform.scale(self.skin, (40, 80))
@@ -421,10 +421,10 @@ class Player:
     def draw_inventory(self , screen):
         font = pygame.font.Font(None, int(36 * screen.get_height() / 1080))
         block_images = {
-            "Dirt": pygame.image.load("assets/graphics/dirt.png"),
-            "Stone": pygame.image.load("assets/graphics/stone.png"),
-            "Obsidian": pygame.image.load("assets/graphics/obsidian.png"),
-            "Bedrock": pygame.image.load("assets/graphics/bedrock.png")
+            "Dirt": pygame.image.load(resources("assets/graphics/dirt.png")),
+            "Stone": pygame.image.load(resources("assets/graphics/stone.png")),
+            "Obsidian": pygame.image.load(resources("assets/graphics/obsidian.png")),
+            "Bedrock": pygame.image.load(resources("assets/graphics/bedrock.png"))
         }
         x_offset = 10
         y_offset = 10
