@@ -112,7 +112,7 @@ class Background:
 
         #On ajoute tout les blocs de type Stone
         liste_stone_coord = block_lists["Stone"]
-        indices_r = indices_randoms(liste_stone_coord , 6)
+        indices_r = indices_randoms(liste_stone_coord , 18)
         indices_r_32 = indices_r[0 : 12]
         indices_r_64 = indices_r[12 : 18]
         liste_stone_block = []
@@ -157,15 +157,18 @@ class Background:
         
         #On ajoute tout les blocs de type Obsidian
         liste_obsidian_coord = block_lists["Obsidian"]
-        indices_r = indices_randoms(liste_obsidian_coord , 6)
+        indices_r = indices_randoms(liste_obsidian_coord , 27)
         indices_r_128 = indices_r[0 : 12]
-        indices_r_256 = indices_r[12 : 18]
+        indices_r_256 = indices_r[12 : 24]
+        indices_r_512 = indices_r[24 : 27]
         liste_obsidian_block = []
         for i , coord in enumerate(liste_obsidian_coord):
             if i in indices_r_128:
                 liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 128))
             elif i in indices_r_256:
                 liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 256))
+            elif i in indices_r_512:
+                liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 512))
             else:
                 liste_obsidian_block.append(ObsidianBlock(x_indice = coord[0] , y_indice = coord[1]))
         self.dict_block_background["Obsidian"] = liste_obsidian_block
