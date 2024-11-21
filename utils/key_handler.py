@@ -1,4 +1,5 @@
 import pygame
+import keyboard
 
 # Initialize pygame
 pygame.init()
@@ -10,6 +11,7 @@ direction = {
     "right": [pygame.K_d, pygame.K_RIGHT],
     "left": [pygame.K_q, pygame.K_a, pygame.K_LEFT],
     "close": [pygame.K_ESCAPE],
+    "closegame" : [pygame.K_m],
     "h" : [pygame.K_h]
 }
 numbers = {
@@ -74,6 +76,13 @@ def close() -> bool:
     """
     keys = pygame.key.get_pressed()
     return any(keys[key] for key in direction["close"])
+
+def closegame() -> bool:
+    """
+    Renvoie True si l'utilisateur appuie sur une touche
+    pour faire stopper le jeu, False sinon.
+    """
+    return keyboard.is_pressed('m')
 
 def changemod() -> bool:
     """

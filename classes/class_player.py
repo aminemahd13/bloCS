@@ -3,6 +3,7 @@ from utils.coord_to_screen import screen_to_coord, coord_to_indice
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 import utils.key_handler as key
 from game.classes.classegrille import Grille
+from game.utils.jeu import jeu
 
 
 
@@ -18,6 +19,7 @@ class Player:
         inventory --> list of items in the inventory
         health --> life points of the player
         """
+        self.playgame = False
         self.changed = False
         self.grille = Grille()
         self.grille.fermer_fenetre()
@@ -47,7 +49,7 @@ class Player:
         self.hist_touches = {"right" : key.right() , "left" : key.left()}
         self.block_near = []
         self.selected_block = 1
-        self.block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock", "2048"]
+        self.block_types = ["Dirt", "Stone", "Obsidian", "Wood", "Bedrock"]
         # Define a custom event for resetting the mining state
         self.RESET_MINING_EVENT = pygame.USEREVENT + 1
         
@@ -56,7 +58,19 @@ class Player:
             "Stone" : 10,
             "Obsidian" : 10,
             "Wood" : 10,
-            "Bedrock" : 10,
+            "Bedrock" : 10
+        }
+        self.inventory_tuiles = {
+            "2" : 0,
+            "4" : 0,
+            "8" : 0,
+            "16" : 0,
+            "32" : 0,
+            "64" : 0,
+            "128" : 0,
+            "256" : 0,
+            "512" : 0,
+            "1024" : 0,
             "2048" : 0
         }
         self.health = 100
@@ -345,19 +359,33 @@ class Player:
                 for key , values in background.dict_block.items():
                     for i , block in enumerate(values):
                         if block.x_indice == x_indice and block.y_indice == y_indice:
-                            if block.take_damage(damage = 100):
-                                values.pop(i)
-                                self.add_inventory(key)
-                            added=True
-                            #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
-                            self.mining = True
-                            pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
-                            break
+                            if block.type != "Game":
+                                if block.take_damage(damage = 100):
+                                    values.pop(i)
+                                    if block.type == "Tuile":
+                                        self.inventory_tuiles[str(block.value)] += 1
+                                    else:
+                                        self.add_inventory(key)
+                                added=True
+                                #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
+                                self.mining = True
+                                pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
+                                break
+                            else:
+                                if not self.playgame:
+                                    self.grille.ouvrir_fenetre()
+                                self.playgame = True
+                                added=True
+                                break
                     if added:
                         break
                     
                     
-    
+    def play_2048(self):
+        if self.playgame:
+            self.playgame = jeu(self.grille, self.inventory_tuiles)
+            if not self.playgame:
+                self.grille.fermer_fenetre()
     
     
     def draw_inventory(self , screen):

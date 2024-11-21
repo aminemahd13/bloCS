@@ -8,7 +8,8 @@ house_blocks = {
     "Wood2": [],
     "Obsidian": [],
     "Bedrock": [],
-    "Wood1": []
+    "Wood1": [],
+    "Game" : [[36 , 7]]
 }
 
 

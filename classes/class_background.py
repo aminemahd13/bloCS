@@ -1,4 +1,4 @@
-from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock
+from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock, TuileBlock , GameBlock
 from classes.class_player import Player
 from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice, indice_to_screen
 import pygame
@@ -37,6 +37,13 @@ class Background:
         self.back_texture = pygame.transform.scale(self.back_texture, (9360 , 3240))
         self.mod_change_allowed = True
         
+        #On ajoute tout les blocs de type Game
+        liste_game_coord = house_blocks["Game"]
+        liste_game_block = []
+        for coord in liste_game_coord:
+            liste_game_block.append(GameBlock(x_indice = coord[0] , y_indice = coord[1]))
+        self.dict_block_house["Game"] = liste_game_block
+        
         #On ajoute tout les blocs de type Dirt
         liste_dirt_coord = house_blocks["Dirt"]
         liste_dirt_block = []
@@ -46,11 +53,11 @@ class Background:
 
 
         #on ajoute les blocs de 2048
-        liste_2048_coord = block_lists["2048"]
-        liste_2048_block = []
-        for coord in liste_2048_coord:
-            liste_2048_block.append(DirtBlock(x_indice = coord[0] , y_indice = coord[1]))
-        self.dict_block_background["2048"] = liste_2048_block
+        liste_tuile_coord = block_lists["Tuile"]
+        liste_tuile_block = []
+        for coord in liste_tuile_coord:
+            liste_tuile_block.append(TuileBlock(x_indice = coord[0] , y_indice = coord[1] , value = 2))
+        self.dict_block_background["Tuile"] = liste_tuile_block
 
 
 
@@ -182,6 +189,7 @@ class Background:
         
         
         self.dict_block = self.dict_block_background
+     
      
     
     def change_mod(self):

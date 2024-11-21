@@ -36,7 +36,7 @@ class Grille:
         self.grille = copie_grille(self.__grille_zero) #On copie pour éviter tout bug (svp)
         self.score = 0 #On initialise le score
         
-    def affiche(self) -> None:
+    def affiche(self , inventory : dict) -> None:
         """
         Affiche l'entièreté de la grille
         dans son état actuel avec le score.
@@ -49,9 +49,9 @@ class Grille:
         text_score = "Score : "+str(self.score)
         self.__canvas.create_text(
             self.__taille_grille//2, #Coordonnée x
-            self.__taille_grille + 50, #Coordonnée y
+            self.__taille_grille + 20, #Coordonnée y
             text = text_score,
-            font = ("Helvetica", 24, "bold"),
+            font = ("Helvetica", 18, "bold"),
             fill = "black"
             )
         self.__root.update() #On actualise la fenêtre graphique
@@ -364,7 +364,6 @@ class Grille:
         # Crée un canvas pour dessiner la grille
         self.__canvas = tk.Canvas(self.__root, width=self.__taille_grille, height=self.__taille_grille+100, bg="#BBADA0")
         self.__canvas.pack()
-        self.affiche()
         
     def fin_du_jeu(self) -> None:
         """
@@ -374,3 +373,4 @@ class Grille:
         self.__canvas.create_text(self.__taille_grille//2,self.__taille_grille+30, text="Game over !", font=("Helvetica", 24, "bold"), fill="black")
         self.__canvas.create_text(self.__taille_grille//2,self.__taille_grille+60, text=f"Score final : {self.score}", font=("Helvetica", 24, "bold"), fill="black")
         self.__root.mainloop() #On laisse la fenêtre ouverte
+
