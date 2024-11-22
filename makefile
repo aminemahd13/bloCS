@@ -11,7 +11,7 @@ init:
 # Build the project into a binary using PyInstaller
 .PHONY: build
 build:
-	pyinstaller --onefile --add-data "assets:assets" --name bloCS main.py
+	pyinstaller --onefile --add-data "assets:assets" --name bloCS --icon=assets/graphics/bloc_2048.png main.py
 # Clean up generated files
 .PHONY: clean
 clean:
