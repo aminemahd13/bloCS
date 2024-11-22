@@ -70,6 +70,15 @@ texture = pygame.transform.scale(texture, (40 , 40))
 texture = texture.convert()
 textures_dict["Doordown"] = texture
 
+textures_dict["Tuile"] = {}
+for value in [2,4,8,16,32,64,128,256,512]:
+    texture_path = resources("assets/graphics/tuile_" + str(value) + ".png")
+    texture = pygame.image.load(texture_path)
+    texture = pygame.transform.scale(texture, (40 , 40))
+    texture = texture.convert()
+    textures_dict["Tuile"][value] = texture
+
+
 del texture_path
 del texture
 del screen
@@ -92,6 +101,7 @@ class Block:
         self.x = x_indice * self.taille #Coordonnées en px
         self.y = y_indice * self.taille #Coordonnées en px
         self.type = None
+        self.value = None
         self.is_solid = is_solid
         self.breakable = breakable
         self.health = health
@@ -118,10 +128,10 @@ class Block:
         Affiche le bloc sur l'écran du joueur.
         """
         x_screen , y_screen = coord_to_screen(x = self.x , y = self.y , player = player)
-        if self.texture is not None:  # Ensure texture is loaded
-            screen.blit(self.texture, (x_screen , y_screen))
-        else:
+        if self.type != "Tuile":
             screen.blit(textures_dict[self.type] , (x_screen , y_screen))
+        else:
+            screen.blit(textures_dict[self.type][self.value] , (x_screen , y_screen))
     
     
     def y_up(self):
@@ -210,9 +220,6 @@ class TuileBlock(Block):
         elif value in [128,256,512]:
             self.tuile_required = 256
         self.type = "Tuile"
-        texture_path = resources("assets/graphics/tuile_" + str(value) + ".png")
-        self.texture = pygame.image.load(texture_path)
-        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 
 class GameBlock(Block):

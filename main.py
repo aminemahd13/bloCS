@@ -123,7 +123,7 @@ while running:
     pygame.display.flip()
 
     # Cap the frame rate
-    clock.tick(30)
+    clock.tick(60)
 
 # Quit Pygame
 pygame.mixer.music.stop()
