@@ -1,13 +1,11 @@
 Metadata-Version: 2.1
 Name: bloCS
-Version: 0.1.0
+Version: 2.0
 Summary: A 2048 game implementation
-Author-email: Your Name <your.email@example.com>
-License: MIT
+License: BSD
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: numpy
 Requires-Dist: pygame
 
 # 2048 Game

@@ -1,5 +1,6 @@
 import pygame
 from utils.coord_to_screen import coord_to_screen, coord_to_indice
+from resources import resources
 
 class Block:
     def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , tuile_required : int = 0):
@@ -79,7 +80,7 @@ class DirtBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 50 , tuile_required = 16)
         self.type = "Dirt"
-        self.texture_path = "assets/graphics/dirt.png"
+        self.texture_path = resources("assets/graphics/dirt.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille , self.taille))
 
@@ -88,7 +89,7 @@ class StoneBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 400 , tuile_required = 64)
         self.type = "Stone"
-        self.texture_path = "assets/graphics/stone.png"
+        self.texture_path = resources("assets/graphics/stone.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
@@ -96,7 +97,7 @@ class ObsidianBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 1200 , tuile_required = 256)
         self.type = "Obsidian"
-        self.texture_path = "assets/graphics/obsidian.png"
+        self.texture_path = resources("assets/graphics/obsidian.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
@@ -105,7 +106,7 @@ class WoodBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
         self.type = "Wood"
-        self.texture_path = "assets/graphics/dirt.png"
+        self.texture_path = resources("assets/graphics/dirt.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
@@ -115,7 +116,7 @@ class BedrockBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 300 , tuile_required = 0)
         self.type = "Bedrock"
-        self.texture_path = "assets/graphics/bedrock.png"
+        self.texture_path = resources("assets/graphics/bedrock.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
         
@@ -123,7 +124,7 @@ class Wood1Block(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
         self.type = "Wood1"
-        self.texture_path = "assets/graphics/wood1.png"
+        self.texture_path = resources("assets/graphics/wood1.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
@@ -131,7 +132,7 @@ class Wood2Block(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , is_solid = False):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = is_solid , breakable = False , health = 100)
         self.type = "Wood2"
-        self.texture_path = "assets/graphics/wood2.png"
+        self.texture_path = resources("assets/graphics/wood2.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
         
@@ -140,7 +141,7 @@ class DoorupBlock(Block):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
         self.taille
         self.type = "Doorup"
-        self.texture_path = "assets/graphics/porteup.png"
+        self.texture_path = resources("assets/graphics/porteup.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
         
@@ -149,7 +150,7 @@ class DoordownBlock(Block):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
         self.taille
         self.type = "Doordown"
-        self.texture_path = "assets/graphics/portedown.png"
+        self.texture_path = resources("assets/graphics/portedown.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
     
@@ -166,7 +167,7 @@ class TuileBlock(Block):
         elif value in [128,256,512]:
             self.tuile_required = 256
         self.type = "Tuile"
-        self.texture_path = "assets/graphics/tuile_" + str(value) + ".png"
+        self.texture_path = resources("assets/graphics/tuile_" + str(value) + ".png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
@@ -176,7 +177,7 @@ class GameBlock(Block):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
         self.type = "Game"
         #self.texture_path = "assets/graphics/2048/" + str(value) + ".png"
-        self.texture_path = "assets/graphics/bloc_2048.png"
+        self.texture_path = resources("assets/graphics/bloc_2048.png")
         self.texture = pygame.image.load(self.texture_path)
         self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 

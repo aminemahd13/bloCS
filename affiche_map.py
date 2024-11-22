@@ -7,7 +7,7 @@ from utils.coord_to_screen import screen_to_coord
 from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
 from utils.lists_blocks import block_lists
-
+from resources import resources
 
 """
 the player inventory is updated when he breaks a block
@@ -46,7 +46,7 @@ clock = pygame.time.Clock()
 pygame.mixer.init()
 
 # Play game background music
-pygame.mixer.music.load("assets/audio/game.mp3")
+pygame.mixer.music.load(resources("assets/audio/game.mp3"))
 pygame.mixer.music.play(-1)  # Loop the music
 
 while running:

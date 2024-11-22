@@ -1,14 +1,15 @@
 import pygame
 import utils.key_handler as key
+from resources import resources
 
 def display_menu(screen):
     # Load background music
     pygame.mixer.init()
-    pygame.mixer.music.load("assets/audio/menu.mp3")
+    pygame.mixer.music.load(resources("assets/audio/menu.mp3"))
     pygame.mixer.music.play(-1)  # Loop the music
 
     # Load background image
-    background = pygame.image.load("assets/graphics/loading.png")
+    background = pygame.image.load(resources("assets/graphics/loading.png"))
     background = pygame.transform.scale(background, (screen.get_width(), screen.get_height()))
 
     # Font settings
@@ -49,7 +50,7 @@ def display_menu(screen):
 
 def display_tips(screen):
     # Load background image
-    background = pygame.image.load("assets/graphics/loading.png")
+    background = pygame.image.load(resources("assets/graphics/loading.png"))
     background = pygame.transform.scale(background, (screen.get_width(), screen.get_height()))
 
     # Tips

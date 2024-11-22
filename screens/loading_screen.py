@@ -1,10 +1,11 @@
 
 import pygame
 import time
+from resources import resources
 
 def display_loading_screen(screen):
     # Load background image
-    background = pygame.image.load("assets/graphics/loading.png")
+    background = pygame.image.load(resources("assets/graphics/loading.png"))
     background = pygame.transform.scale(background, (screen.get_width(), screen.get_height()))
 
     # Loading tips
