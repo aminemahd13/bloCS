@@ -30,10 +30,6 @@ def display_menu(screen):
             screen.blit(text, (screen.get_width() // 2 - text.get_width() // 2, screen.get_height() // 2 + i * 60))
 
         pygame.display.flip()
-
-        if key.close():
-            pygame.mixer.music.stop()
-            return "Quit"
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

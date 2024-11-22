@@ -7,6 +7,12 @@ from random import randint
 from resources import resources
 
 
+block_images = {
+            "Dirt": pygame.image.load(resources("assets/graphics/dirt.png")),
+            "Stone": pygame.image.load(resources("assets/graphics/stone.png")),
+            "Obsidian": pygame.image.load(resources("assets/graphics/obsidian.png")),
+            "Bedrock": pygame.image.load(resources("assets/graphics/bedrock.png"))
+        }
 
 
 class Player:
@@ -156,7 +162,7 @@ class Player:
                 
                 #Moving right
                 if self.direction == "right":
-                    if self.stade <= 20//2:
+                    if self.stade <= 10:
                         self.skin_path = resources("assets/graphics/skins/walking_right.png")
                         self.skin = pygame.image.load(self.skin_path)
                     else :
@@ -166,7 +172,7 @@ class Player:
                 
                 #Moving left  
                 elif self.direction == "left":
-                    if self.stade <= 20//2:
+                    if self.stade <= 10:
                         self.skin_path = resources("assets/graphics/skins/walking_left.png")
                         self.skin = pygame.image.load(self.skin_path)
                     else :
@@ -420,12 +426,6 @@ class Player:
     
     def draw_inventory(self , screen):
         font = pygame.font.Font(None, int(36 * screen.get_height() / 1080))
-        block_images = {
-            "Dirt": pygame.image.load(resources("assets/graphics/dirt.png")),
-            "Stone": pygame.image.load(resources("assets/graphics/stone.png")),
-            "Obsidian": pygame.image.load(resources("assets/graphics/obsidian.png")),
-            "Bedrock": pygame.image.load(resources("assets/graphics/bedrock.png"))
-        }
         x_offset = 10
         y_offset = 10
         for i, block_type in enumerate(self.block_types):

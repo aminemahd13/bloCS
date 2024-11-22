@@ -50,7 +50,7 @@ while True:
         break
     elif choice == "Tips":
         display_tips(screen)
-    elif choice == "Quit" or key.close():
+    elif choice == "Quit":
         pygame.quit()
         exit()
 
@@ -77,7 +77,6 @@ while running:
             pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
 
     player.play_2048(screen)
-            
     
     
     # On capture les touches

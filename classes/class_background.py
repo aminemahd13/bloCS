@@ -7,21 +7,6 @@ from utils.house_list import house_blocks
 from resources import resources
 
 
-        
-
-def generation_rect_to_pts(liste : list) -> list:
-    """
-    Renvoie une liste de points en fct des rectangles.
-    """
-    liste_result = []
-    for rect in liste:
-        for x in range(rect[0] , rect[2] + 1):
-            for y in range(rect[1] , rect[3] + 1):
-                if [x,y] not in liste_result:
-                    liste_result.append([x , y])
-    return liste_result
-
-
 
 class Background:
     def __init__(self , height : int , width : int):
@@ -254,15 +239,18 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la droite,
         inférieur à déplacement.
         """
-        for block in player.block_near:
-            if block.is_solid:
-                if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                    if player.x_left() < block.x_left() <= player.x_right(): #Si le bloc est dans le joueur
-                        deplacement = 0
-                        break
-                    elif block.x_left() > player.x_right(): #Si le bloc est sur la droite
-                        deplacement = min(deplacement , block.x_left() - player.x_right() - 1)
-        return deplacement
+        if player.x % 40 != 0:
+            return deplacement
+        else:
+            for block in player.block_near:
+                if block.is_solid:
+                    if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
+                        if player.x_left() < block.x_left() <= player.x_right(): #Si le bloc est dans le joueur
+                            deplacement = 0
+                            break
+                        elif block.x_left() > player.x_right(): #Si le bloc est sur la droite
+                            deplacement = min(deplacement , block.x_left() - player.x_right() - 1)
+            return deplacement
     
     
     def check_left(self , player : Player , deplacement : int) -> int:
@@ -270,15 +258,18 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la gauche,
         inférieur à déplacement.
         """
-        for block in player.block_near:
-            if block.is_solid:
-                if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                    if player.x_left() <= block.x_right() < player.x_right(): #Si le bloc est dans le joueur
-                        deplacement = 0
-                        break
-                    elif block.x_right() < player.x_left(): #Si le bloc est sur la gauche
-                        deplacement = min(deplacement , player.x_left() - block.x_right() - 1)
-        return deplacement
+        if player.x % 40 != 0:
+            return deplacement
+        else:
+            for block in player.block_near:
+                if block.is_solid:
+                    if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
+                        if player.x_left() <= block.x_right() < player.x_right(): #Si le bloc est dans le joueur
+                            deplacement = 0
+                            break
+                        elif block.x_right() < player.x_left(): #Si le bloc est sur la gauche
+                            deplacement = min(deplacement , player.x_left() - block.x_right() - 1)
+            return deplacement
     
     
     def check_up(self , player : Player , deplacement : int) -> int:
@@ -416,7 +407,7 @@ class Background:
                 if 1 - self.__taille_block <= x_screen <= self.__width and 1 - self.__taille_block <= y_screen <= self.__height:
                     #On affiche uniquement les blocs qui se situent dans la map
                     block.render(screen = screen , player = player)
-                    if player.x_left() - 50 <= block.x_right() and block.x_left() <= player.x_right() + 50 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:
+                    if block.x_right() >= player.x_left() - 20 and block.x_left() <= player.x_right() + 20 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:
                         player.block_near.append(block)
                     
     
