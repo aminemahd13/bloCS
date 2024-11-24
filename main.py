@@ -66,10 +66,10 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if player.playgame:
+            if player.is_playing_2048:
                 x_screen, y_screen = pygame.mouse.get_pos()
                 if 50 <= x_screen <= 250 and 50 <= y_screen <= 110:  # Clic sur le bouton Quitter
-                    player.playgame = False
+                    player.is_playing_2048 = False
             else:
                 player.mining_or_breaking(background = background , event = event)
         elif event.type == player.RESET_MINING_EVENT:
@@ -78,22 +78,17 @@ while running:
 
     player.play_2048(screen)
     
-    
-    # On capture les touches
-    key_close = key.close()
-    player.act_touches()
-    
-    if player.playgame:
+    if player.is_playing_2048:
         in_game = True
     elif in_game:
-        if not key_close:
+        if not key.close():
             in_game = False
         
     
-    if not in_game and key_close and not player.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
+    if not in_game and key.close() and not player.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
         running = False
     
-    if not player.playgame:
+    if not player.is_playing_2048:
         # Clear the screen
         screen.fill(WHITE)
 
@@ -104,14 +99,7 @@ while running:
         # Draw the inventory
         player.draw_inventory(screen)
         
-        # On regarde si le joueur est en plein saut et on actualise sa data
-        player.check_if_jumping(background = background)
-                
-        # Changement du skin
-        player.change_skin()
-            
-        # Déplacement du perso
-        player.deplacer_perso(background = background)
+        player.move()
         
         # Check if mod change is allowed
         player.change_map(background)

@@ -4,7 +4,7 @@ from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_ind
 import pygame
 from utils.lists_blocks import block_lists
 from utils.house_list import house_blocks
-from resources import resources
+from utils.textures import texture_background
 
 
 
@@ -17,9 +17,7 @@ class Background:
         self.dict_block_background = {}
         self.dict_block_house = {}
         self.__taille_block = 40
-        self.back_texture_path = resources("assets/graphics/background/background.png")
-        self.back_texture = pygame.image.load(self.back_texture_path)
-        self.back_texture = pygame.transform.scale(self.back_texture, (9360 , 3240))
+        self.back_texture = texture_background
         self.mod_change_allowed = True
         
         #On ajoute tout les blocs de type Game
@@ -239,18 +237,15 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la droite,
         inférieur à déplacement.
         """
-        if player.x % 40 != 0:
-            return deplacement
-        else:
-            for block in player.block_near:
-                if block.is_solid:
-                    if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                        if player.x_left() < block.x_left() <= player.x_right(): #Si le bloc est dans le joueur
-                            deplacement = 0
-                            break
-                        elif block.x_left() > player.x_right(): #Si le bloc est sur la droite
-                            deplacement = min(deplacement , block.x_left() - player.x_right() - 1)
-            return deplacement
+        for block in player.block_near:
+            if block.is_solid:
+                if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
+                    if player.x_left() < block.x_left() <= player.x_right(): #Si le bloc est dans le joueur
+                        deplacement = 0
+                        break
+                    elif block.x_left() > player.x_right(): #Si le bloc est sur la droite
+                        deplacement = min(deplacement , block.x_left() - player.x_right() - 1)
+        return deplacement
     
     
     def check_left(self , player : Player , deplacement : int) -> int:
@@ -258,18 +253,15 @@ class Background:
         Renvoie le déplacement maximal pouvant être effectué sur la gauche,
         inférieur à déplacement.
         """
-        if player.x % 40 != 0:
-            return deplacement
-        else:
-            for block in player.block_near:
-                if block.is_solid:
-                    if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                        if player.x_left() <= block.x_right() < player.x_right(): #Si le bloc est dans le joueur
-                            deplacement = 0
-                            break
-                        elif block.x_right() < player.x_left(): #Si le bloc est sur la gauche
-                            deplacement = min(deplacement , player.x_left() - block.x_right() - 1)
-            return deplacement
+        for block in player.block_near:
+            if block.is_solid:
+                if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
+                    if player.x_left() <= block.x_right() < player.x_right(): #Si le bloc est dans le joueur
+                        deplacement = 0
+                        break
+                    elif block.x_right() < player.x_left(): #Si le bloc est sur la gauche
+                        deplacement = min(deplacement , player.x_left() - block.x_right() - 1)
+        return deplacement
     
     
     def check_up(self , player : Player , deplacement : int) -> int:

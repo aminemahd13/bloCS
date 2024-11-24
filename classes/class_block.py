@@ -1,87 +1,8 @@
 import pygame
 from utils.coord_to_screen import coord_to_screen, coord_to_indice
 from resources import resources
+from utils.textures import textures_dict
 
-pygame.init()
-
-# Create the game screen
-screen = pygame.display.set_mode((1920, 1080))
-
-
-textures_dict = {}
-
-texture_path = resources("assets/graphics/dirt.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Dirt"] = texture
-
-texture_path = resources("assets/graphics/stone.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Stone"] = texture
-
-texture_path = resources("assets/graphics/obsidian.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Obsidian"] = texture
-
-texture_path = resources("assets/graphics/dirt.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Wood"] = texture
-
-texture_path = resources("assets/graphics/bedrock.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Bedrock"] = texture
-
-texture_path = resources("assets/graphics/wood1.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Wood1"] = texture
-
-texture_path = resources("assets/graphics/wood2.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Wood2"] = texture
-
-texture_path = resources("assets/graphics/porteup.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Doorup"] = texture
-
-texture_path = resources("assets/graphics/portedown.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Doordown"] = texture
-
-texture_path = resources("assets/graphics/portedown.png")
-texture = pygame.image.load(texture_path)
-texture = pygame.transform.scale(texture, (40 , 40))
-texture = texture.convert()
-textures_dict["Doordown"] = texture
-
-textures_dict["Tuile"] = {}
-for value in [2,4,8,16,32,64,128,256,512]:
-    texture_path = resources("assets/graphics/tuile_" + str(value) + ".png")
-    texture = pygame.image.load(texture_path)
-    texture = pygame.transform.scale(texture, (40 , 40))
-    texture = texture.convert()
-    textures_dict["Tuile"][value] = texture
-
-
-del texture_path
-del texture
-del screen
 
 
 class Block:
@@ -226,9 +147,6 @@ class GameBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
         self.type = "Game"
-        texture_path = resources("assets/graphics/bloc_2048.png")
-        self.texture = pygame.image.load(texture_path)
-        self.texture = pygame.transform.scale(self.texture, (self.taille, self.taille))
 
 
 
