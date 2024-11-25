@@ -147,6 +147,18 @@ class Player(Vivant):
                 else:
                     self.skin = self.dict_skins["Mining Left Purple"]
                 
+    def move(self):
+        #Change la diection du joueur
+        self.act_direction()
+        
+        # On regarde si le joueur est en plein saut et on actualise sa data
+        self.check_if_jumping()
+                
+        # Changement du skin
+        self.change_skin()
+            
+        # Déplacement du perso
+        self.deplacer_perso()
     
     def mining_or_breaking(self , background , event):
         x_screen, y_screen = pygame.mouse.get_pos() #Position du click sur l'écran

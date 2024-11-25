@@ -1,5 +1,5 @@
 from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
-from utils.textures import PlayerSkin
+from utils.textures import PlayerSkin, ZombieSkin
 
 class Vivant:
     def __init__(self , type : str , x_spawn : int , y_spawn : int , health : int , dx : int):
@@ -381,7 +381,7 @@ class Vivant:
         Affiche le mob sur l'écran.
         """
         x_screen = self.x - player.x_left() + player.get_x_screen()
-        y_screen = self.y - player.y_left() + player.get_y_screen()
+        y_screen = self.y - player.y_up() + player.get_y_screen()
         screen.blit(self.skin, (x_screen, y_screen))
 
     

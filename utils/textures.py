@@ -27,6 +27,15 @@ PlayerSkin = {
     "Mining Left Purple" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/skins/mining_left_purple.png")), (40, 80)).convert_alpha()
 }
 
+ZombieSkin = {
+    "Standing Right" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/skins/standing_right.png")), (40, 80)).convert_alpha(),
+    "Walking Right" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/skins/walking_right.png")), (40, 80)).convert_alpha(),
+    "Standing Left" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/skins/standing_left.png")), (40, 80)).convert_alpha(),
+    "Walking Left" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/skins/walking_left.png")), (40, 80)).convert_alpha(),
+    "Jumping Right" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/skins/jumping_right.png")), (40, 80)).convert_alpha(),
+    "Jumping Left" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/skins/jumping_left.png")), (40, 80)).convert_alpha()
+}
+
 textures_dict = {
     "Dirt" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/dirt.png")), (40 , 40)).convert(),
     "Stone" : pygame.transform.scale(pygame.image.load(resources("assets/graphics/stone.png")), (40 , 40)).convert(),

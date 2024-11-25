@@ -230,7 +230,7 @@ class Background:
         return False
     
     
-    def render(self, player : Player, screen) -> None:
+    def render(self, player : Player , zombie, screen) -> None:
         """
         Affiche le background.
         """
@@ -238,6 +238,7 @@ class Background:
             x_screen , y_screen = indice_to_screen(x_indice = -2 * 39 , y_indice = 0 , player = player)
             screen.blit(self.back_texture, (x_screen , y_screen))
         player.block_near = []
+        zombie.block_near = []
         for liste in self.dict_block.values():
             for block in liste:
                 x_screen , y_screen = coord_to_screen(x = block.x , y = block.y , player = player)
@@ -246,6 +247,9 @@ class Background:
                     block.render(screen = screen , player = player)
                     if block.x_right() >= player.x_left() - 20 and block.x_left() <= player.x_right() + 20 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:
                         player.block_near.append(block)
+                    
+                if block.x_right() >= zombie.x_left() - 20 and block.x_left() <= zombie.x_right() + 20 and zombie.y_up() - 50 <= block.y_down() and block.y_up()<= zombie.y_down() + 50:
+                    zombie.block_near.append(block)
                     
     
 

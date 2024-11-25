@@ -2,6 +2,7 @@ import pygame
 from classes.class_background import Background
 from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 from classes.class_player import Player
+from classes.class_mob import Zombie
 import utils.key_handler as key
 from utils.coord_to_screen import screen_to_coord
 from screens.menu import display_menu, display_tips
@@ -32,7 +33,8 @@ pygame.display.set_caption("Terraria-like Game Test")
 # Initialize the background
 background = Background()
 #Create the player
-player=Player(height_screen = SCREEN_HEIGHT , width_screen = SCREEN_WIDTH , name = "Player 1")
+player = Player(height_screen = SCREEN_HEIGHT , width_screen = SCREEN_WIDTH , name = "Player 1")
+zombie = Zombie(x_spawn = 40 , y_spawn = 0)
 in_game =  False
 
 
@@ -75,13 +77,15 @@ while running:
         screen.fill(WHITE)
 
         # Render the background and players
-        background.render(screen = screen , player = player) # Affiche le background avec les blocs
+        background.render(screen = screen , player = player , zombie = zombie) # Affiche le background avec les blocs
         player.render(screen) # Affiche le joueur
+        zombie.render(screen , player)
 
         # Draw the inventory
         player.draw_inventory(screen)
         
         player.move()
+        zombie.move(player)
         
         # Check if mod change is allowed
         player.change_map(background)
