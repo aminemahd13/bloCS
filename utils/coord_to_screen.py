@@ -1,13 +1,13 @@
 from random import randint
 
 def coord_to_screen(x : int , y : int , player) -> tuple:
-    x = x - player.x + player.x_screen
-    y = y - player.y + player.y_screen
+    x = x - player.x_left() + player.get_x_screen()
+    y = y - player.y_up() + player.get_y_screen()
     return x, y
 
 def screen_to_coord(x_screen: int, y_screen: int, player) -> tuple:
-    x = x_screen - player.x_screen + player.x
-    y = y_screen - player.y_screen + player.y
+    x = x_screen - player.get_x_screen() + player.x_left()
+    y = y_screen - player.get_y_screen() + player.y_up()
     return x, y
 
 def coord_to_indice(x : int , y : int) -> tuple:

@@ -9,9 +9,7 @@ from utils.textures import texture_background
 
 
 class Background:
-    def __init__(self , height : int , width : int):
-        self.__height = height #Hauteur de l'écran
-        self.__width = width #Largeur de l'écran
+    def __init__(self):
         self.mode = 1
         self.dict_block = {} #Dictionnaire contenant tout les blocs
         self.dict_block_background = {}
@@ -232,159 +230,6 @@ class Background:
         return False
     
     
-    def check_right(self , player : Player , deplacement : int) -> int:
-        """
-        Renvoie le déplacement maximal pouvant être effectué sur la droite,
-        inférieur à déplacement.
-        """
-        for block in player.block_near:
-            if block.is_solid:
-                if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                    if player.x_left() < block.x_left() <= player.x_right(): #Si le bloc est dans le joueur
-                        deplacement = 0
-                        break
-                    elif block.x_left() > player.x_right(): #Si le bloc est sur la droite
-                        deplacement = min(deplacement , block.x_left() - player.x_right() - 1)
-        return deplacement
-    
-    
-    def check_left(self , player : Player , deplacement : int) -> int:
-        """
-        Renvoie le déplacement maximal pouvant être effectué sur la gauche,
-        inférieur à déplacement.
-        """
-        for block in player.block_near:
-            if block.is_solid:
-                if block.y_down() >= player.y_up() and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                    if player.x_left() <= block.x_right() < player.x_right(): #Si le bloc est dans le joueur
-                        deplacement = 0
-                        break
-                    elif block.x_right() < player.x_left(): #Si le bloc est sur la gauche
-                        deplacement = min(deplacement , player.x_left() - block.x_right() - 1)
-        return deplacement
-    
-    
-    def check_up(self , player : Player , deplacement : int) -> int:
-        """
-        Renvoie le déplacement maximal pouvant être effectué vers le haut,
-        inférieur à déplacement.
-        """
-        for block in player.block_near:
-            if block.is_solid:
-                if block.x_left() <= player.x_right() and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
-                    if player.y_up() <= block.y_down() < player.y_up() + self.__taille_block - 1:
-                        deplacement = 0
-                        break
-                    elif block.y_down() < player.y_up():
-                        deplacement = min(deplacement , player.y_up() - block.y_down() - 1)
-        return deplacement
-    
-    
-    def check_down(self , player : Player , deplacement : int) -> int:
-        """
-        Renvoie le déplacement maximal pouvant être effectué vers le bas,
-        inférieur à déplacement.
-        """
-        for block in player.block_near:
-            if block.is_solid:
-                if block.x_left() <= player.x_right() and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
-                    if player.y_up() +self.__taille_block < block.y_down() <= player.y_down():
-                        deplacement = 0
-                        break
-                    elif block.y_up() > player.y_down():
-                        deplacement = min(deplacement , block.y_up() - player.y_down() - 1)
-        return deplacement
-    
-    
-    def check_up_right(self , player : Player , deplacement_up : int , deplacement_right : int) -> tuple:
-        deplacement_up1 = self.check_up(player = player , deplacement = deplacement_up)
-        deplacement_right1 = self.check_right(player = player , deplacement = deplacement_right)
-        if deplacement_up1 == deplacement_up and deplacement_right1 == deplacement_right:
-            for block in player.block_near:
-                if block.is_solid:
-                    if block.x_left() <= player.x_right() + deplacement_right and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
-                        if block.y_down() < player.y_up():
-                            deplacement_up1 = min(deplacement_up1 , player.y_up() - block.y_down() - 1)
-                    if block.y_down() >= player.y_up() - deplacement_up and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                        if block.x_left() > player.x_right(): #Si le bloc est sur la droite
-                            deplacement_right1 = min(deplacement_right1 , block.x_left() - player.x_right() - 1)
-            if deplacement_up1 == deplacement_up and deplacement_right1 == deplacement_right:
-                return deplacement_up1 , deplacement_right1
-            elif deplacement_up1 >= deplacement_right1:
-                return deplacement_up1 , deplacement_right
-            else:
-                return deplacement_up , deplacement_right1
-        else:
-            return deplacement_up1 , deplacement_right1
-        
-                
-    
-    def check_up_left(self , player : Player , deplacement_up : int , deplacement_left : int) -> tuple:
-        deplacement_up1 = self.check_up(player = player , deplacement = deplacement_up)
-        deplacement_left1 = self.check_left(player = player , deplacement = deplacement_left)
-        if deplacement_up1 == deplacement_up and deplacement_left1 == deplacement_left:
-            for block in player.block_near:
-                if block.is_solid:
-                    if block.x_left() <= player.x_right() and block.x_right() >= player.x_left() - deplacement_left: #Si on est aligné verticalement au joueur
-                        if block.y_down() < player.y_up():
-                            deplacement_up1 = min(deplacement_up1 , player.y_up() - block.y_down() - 1)
-                    if block.y_down() >= player.y_up() - deplacement_up and block.y_up() <= player.y_down(): #Si le bloc est sur la hauteur du joueur
-                        if block.x_right() < player.x_left(): #Si le bloc est sur la droite
-                            deplacement_left1 = min(deplacement_left1 , player.x_left() - block.x_right() - 1)
-            if deplacement_up1 == deplacement_up and deplacement_left1 == deplacement_left:
-                return deplacement_up1 , deplacement_left1
-            elif deplacement_up1 >= deplacement_left1:
-                return deplacement_up1 , deplacement_left
-            else:
-                return deplacement_up , deplacement_left1
-        else:
-            return deplacement_up1 , deplacement_left1
-    
-    
-    def check_down_right(self , player : Player , deplacement_down : int , deplacement_right : int) -> tuple:
-        deplacement_down1 = self.check_down(player = player , deplacement = deplacement_down)
-        deplacement_right1 = self.check_right(player = player , deplacement = deplacement_right)
-        if deplacement_down1 == deplacement_down and deplacement_right1 == deplacement_right:
-            for block in player.block_near:
-                if block.is_solid:
-                    if block.x_left() <= player.x_right() + deplacement_right and block.x_right() >= player.x_left(): #Si on est aligné verticalement au joueur
-                        if block.y_up() > player.y_down():
-                            deplacement_down1 = min(deplacement_down1 , block.y_up() - player.y_down() - 1)
-                    if block.y_down() >= player.y_up() and block.y_up() <= player.y_down() + deplacement_down: #Si le bloc est sur la hauteur du joueur
-                        if block.x_left() > player.x_right(): #Si le bloc est sur la droite
-                            deplacement_right1 = min(deplacement_right1 , block.x_left() - player.x_right() - 1)
-            if deplacement_down1 == deplacement_down and deplacement_right1 == deplacement_right:
-                return deplacement_down1 , deplacement_right1
-            elif deplacement_down1 >= deplacement_right1:
-                return deplacement_down1 , deplacement_right
-            else:
-                return deplacement_down , deplacement_right1
-        else:
-            return deplacement_down1 , deplacement_right1
-    
-    
-    def check_down_left(self , player : Player , deplacement_down : int , deplacement_left : int) -> tuple:
-        deplacement_down1 = self.check_down(player = player , deplacement = deplacement_down)
-        deplacement_left1 = self.check_left(player = player , deplacement = deplacement_left)
-        if deplacement_down1 == deplacement_down and deplacement_left1 == deplacement_left:
-            for block in player.block_near:
-                if block.is_solid:
-                    if block.x_left() <= player.x_right() and block.x_right() >= player.x_left() - deplacement_left: #Si on est aligné verticalement au joueur
-                        if block.y_up() > player.y_down():
-                            deplacement_down1 = min(deplacement_down1 , block.y_up() - player.y_down() - 1)
-                    if block.y_down() >= player.y_up() and block.y_up() <= player.y_down() + deplacement_down: #Si le bloc est sur la hauteur du joueur
-                        if block.x_right() < player.x_left(): #Si le bloc est sur la droite
-                            deplacement_left1 = min(deplacement_left1 , player.x_left() - block.x_right() - 1)
-            if deplacement_down1 == deplacement_down and deplacement_left1 == deplacement_left:
-                return deplacement_down1 , deplacement_left1
-            elif deplacement_down1 >= deplacement_left1:
-                return deplacement_down1 , deplacement_left
-            else:
-                return deplacement_down , deplacement_left1
-        else:
-            return deplacement_down1 , deplacement_left1
-    
-    
     def render(self, player : Player, screen) -> None:
         """
         Affiche le background.
@@ -396,7 +241,7 @@ class Background:
         for liste in self.dict_block.values():
             for block in liste:
                 x_screen , y_screen = coord_to_screen(x = block.x , y = block.y , player = player)
-                if 1 - self.__taille_block <= x_screen <= self.__width and 1 - self.__taille_block <= y_screen <= self.__height:
+                if 1 - self.__taille_block <= x_screen <= player.width_screen and 1 - self.__taille_block <= y_screen <= player.height_screen:
                     #On affiche uniquement les blocs qui se situent dans la map
                     block.render(screen = screen , player = player)
                     if block.x_right() >= player.x_left() - 20 and block.x_left() <= player.x_right() + 20 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:

@@ -30,10 +30,10 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Terraria-like Game Test")
 
 # Initialize the background
-background = Background(SCREEN_HEIGHT, SCREEN_WIDTH)
+background = Background()
 #Create the player
-player=Player(height_screen = SCREEN_WIDTH , width_screen = SCREEN_HEIGHT , name = "Player 1")
-in_game = True
+player=Player(height_screen = SCREEN_HEIGHT , width_screen = SCREEN_WIDTH , name = "Player 1")
+in_game =  False
 
 
 # Game loop
@@ -62,29 +62,11 @@ pygame.mixer.music.load(resources("assets/audio/game.mp3"))
 pygame.mixer.music.play(-1)  # Loop the music
 
 while running:     
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if player.is_playing_2048:
-                x_screen, y_screen = pygame.mouse.get_pos()
-                if 50 <= x_screen <= 250 and 50 <= y_screen <= 110:  # Clic sur le bouton Quitter
-                    player.is_playing_2048 = False
-            else:
-                player.mining_or_breaking(background = background , event = event)
-        elif event.type == player.RESET_MINING_EVENT:
-            player.mining = False
-            pygame.time.set_timer(player.RESET_MINING_EVENT, 0)  # Stop the timer
-
-    player.play_2048(screen)
     
-    if player.is_playing_2048:
-        in_game = True
-    elif in_game:
-        if not key.close():
-            in_game = False
+    running = player.do_events(background = background)
+    
+    in_game = player.play_2048(screen = screen , in_game = in_game)
         
-    
     if not in_game and key.close() and not player.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
         running = False
     
@@ -104,8 +86,6 @@ while running:
         # Check if mod change is allowed
         player.change_map(background)
     
-    # On garde en mémoire l'état des touches
-    player.act_hist_touches()
 
     # Update the screen
     pygame.display.flip()
