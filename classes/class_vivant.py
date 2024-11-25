@@ -301,19 +301,6 @@ class Vivant:
             self.x -= deplacement_left
         if deplacement_right is not None:
             self.x += deplacement_right
-         
-    def move(self):
-        #Change la diection du joueur
-        self.act_direction()
-        
-        # On regarde si le joueur est en plein saut et on actualise sa data
-        self.check_if_jumping()
-                
-        # Changement du skin
-        self.change_skin()
-            
-        # Déplacement du perso
-        self.deplacer_perso()
     
     def take_damage(self , damage):
         self.health -= damage
@@ -415,9 +402,6 @@ Affiche le mob sur l'écran du joueur
 
 mob.y_up(), mob.y_down(), mob.x_left(), mob.x_right()
 Coordonnées des pixels au bord du mob
-
-mob.move()
-Fait bouger le mob et changer le skin
 
 mob.take_damage(damage)
 Attaque le mib. Renvoie True s'il est mort
