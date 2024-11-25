@@ -256,15 +256,7 @@ class Player(Vivant):
             self.direction = None
         self.wanna_jump = key.up()
         self.act_hist_touches()
-
-
-class Zombie(Vivant):
-    def __init__(self , x_spawn : int, y_spawn : int):
-        super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Zombie" , health = 100 , dx = 2)
-    
-    def act_direction(self):
-        pass #Définir un truc pour actualiser la direction des mobs
-    
+   
     
     
 """
