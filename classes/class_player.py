@@ -18,7 +18,9 @@ class Player(Vivant):
         inventory --> list of items in the inventory
         health --> life points of the player
         """
-        super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Player" , health = 100 , dx = 5)
+        super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Player" , health = 100 , dx = 10)
+        self.map = "Mine"
+        self.in_game = False
         self.name = name
         self.height_screen = height_screen
         self.width_screen = width_screen
@@ -58,10 +60,6 @@ class Player(Vivant):
     def get_y_screen(self):
         return self.y_screen
         
-    def render(self , screen):
-        screen.blit(self.skin, (self.get_x_screen(), self.get_y_screen()))
-        self.draw_inventory(screen)
-    
     def do_events(self , background):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -89,12 +87,15 @@ class Player(Vivant):
                 m = max(m , tuile)
         return m
     
-    def change_map(self , background):
-        if 38 * 40 <= self.x_left() and self.x_right() <= 40 * 40 and 6 * 40 == self.y_up():
+    def change_map(self):
+        if 38 * 40 <= self.x_left() and self.x_right() < 40 * 40 and 6 * 40 == self.y_up():
             if not self.changed:
-                    background.change_mod()
+                    if self.map == "Mine":
+                        self.map = "Maison"
+                    elif self.map == "Maison":
+                        self.map = "Mine"
                     self.changed = True
-        else:
+        elif 38 * 40 > self.x_right() or self.x_left() >= 40 * 40 or self.y_down() < 5 * 40 or self.y_up() >= 7 * 40:
             self.changed = False
     
     def act_hist_touches(self):
@@ -148,17 +149,18 @@ class Player(Vivant):
                     self.skin = self.dict_skins["Mining Left Purple"]
                 
     def move(self):
-        #Change la diection du joueur
-        self.act_direction()
-        
-        # On regarde si le joueur est en plein saut et on actualise sa data
-        self.check_if_jumping()
-                
-        # Changement du skin
-        self.change_skin()
+        if not self.is_playing_2048:
+            #Change la diection du joueur
+            self.act_direction()
             
-        # Déplacement du perso
-        self.deplacer_perso()
+            # On regarde si le joueur est en plein saut et on actualise sa data
+            self.check_if_jumping()
+                    
+            # Changement du skin
+            self.change_skin()
+                
+            # Déplacement du perso
+            self.deplacer_perso()
     
     def mining_or_breaking(self , background , event):
         x_screen, y_screen = pygame.mouse.get_pos() #Position du click sur l'écran
@@ -199,12 +201,12 @@ class Player(Vivant):
                         break
                     
                     
-    def play_2048(self , screen , in_game):
+    def play_2048(self , screen):
         if self.is_playing_2048:
             keys = []
-            for key in self.inventory_tuiles.keys():
-                if self.inventory_tuiles[key]>0:
-                    keys.append([int(key),self.inventory_tuiles[key]])
+            for int_key in self.inventory_tuiles.keys():
+                if self.inventory_tuiles[int_key]>0:
+                    keys.append([int(int_key),self.inventory_tuiles[int_key]])
             add = True
             while add and len(keys)>0:
                 r = randint(0, len(keys) - 1)
@@ -218,15 +220,16 @@ class Player(Vivant):
             self.is_playing_2048 = jeu(self.grille , screen , self.hist_touches)
         
         if self.is_playing_2048:
-            in_game = True
-        elif in_game:
+            self.in_game = True
+        elif self.in_game:
             if not key.close():
-                in_game = False
+                self.in_game = False
         else:
-            in_game = False
-        
-        return in_game
-    
+            self.in_game = False
+
+        if not self.in_game and key.close() and not self.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
+            return False
+        return True
     
     def draw_inventory(self , screen):
         font = pygame.font.Font(None, int(36 * screen.get_height() / 1080))
@@ -280,8 +283,8 @@ y_spawn = indice bloc en haut de spawn
 height_screen , width_screen : paramètres de l'écran
 name : nom
 
-player.render(screen)
-Affiche le joueur sur l'écran, et son inventaire
+player.render(screen , player2)
+Affiche le joueur sur l'écran du joueur2, et son inventaire
 
 player.y_up(), player.y_down(), player.x_left(), player.x_right()
 Coordonnées des pixels au bord du joueur

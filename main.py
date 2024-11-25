@@ -15,7 +15,6 @@ the player can onlyyy add and destroy blocks around him (i.e 80px around him)
 
 """
 
-
 # Pygame initialization
 pygame.init()
 
@@ -35,8 +34,9 @@ background = Background()
 #Create the player
 player = Player(height_screen = SCREEN_HEIGHT , width_screen = SCREEN_WIDTH , name = "Player 1")
 zombie = Zombie(x_spawn = 40 , y_spawn = 0)
-in_game =  False
 
+list_player = [player]
+list_mob = [zombie]
 
 # Game loop
 running = True
@@ -63,40 +63,42 @@ display_loading_screen(screen)
 pygame.mixer.music.load(resources("assets/audio/game.mp3"))
 pygame.mixer.music.play(-1)  # Loop the music
 
-while running:     
+while running:
+    background.crea_block_near(list_player , list_mob)
+    
     
     running = player.do_events(background = background)
-    
-    in_game = player.play_2048(screen = screen , in_game = in_game)
+    running = player.play_2048(screen = screen)
         
-    if not in_game and key.close() and not player.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
-        running = False
     
     if not player.is_playing_2048:
         # Clear the screen
         screen.fill(WHITE)
 
         # Render the background and players
-        background.render(screen = screen , player = player , zombie = zombie) # Affiche le background avec les blocs
-        player.render(screen) # Affiche le joueur
-        zombie.render(screen , player)
-
-        # Draw the inventory
-        player.draw_inventory(screen)
+        background.render(screen = screen , player = player) # Affiche le background avec les blocs
+        for all_players in list_player:
+            all_players.render(screen , player)
+        for all_mobs in list_mob:
+            all_mobs.render(screen , player)
         
-        player.move()
-        zombie.move(player)
+    for all_players in list_player:
+        all_players.move()
+    for all_mobs in list_mob:
+        all_mobs.move(list_player)
         
-        # Check if mod change is allowed
-        player.change_map(background)
-    
+    # Check if mod change is allowed
+    for all_players in list_player:
+        all_players.change_map()
 
     # Update the screen
     pygame.display.flip()
 
     # Cap the frame rate
-    clock.tick(60)
+    clock.tick(30)
 
 # Quit Pygame
 pygame.mixer.music.stop()
 pygame.quit()
+
+

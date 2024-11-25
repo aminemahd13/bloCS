@@ -20,8 +20,8 @@ class Vivant:
         self.direction_skin = "right"
         self.stade_animation = 1
         self.v_ini = 0
-        self.V0 = 564 #Vitesse initiale lors d'un saut
-        self.g = round(self.V0**2 / (2 * 2.27 * 40)) #Gravité, pour sauter d'une hauteur max de 2.3 blocs
+        self.V0 = 468 #Vitesse initiale lors d'un saut
+        self.g = round(self.V0**2 / (2 * 2.3 * 40)) #Gravité, pour sauter d'une hauteur max de 2.3 blocs
         self.compteur_jump = 0
         self.dist_real = 0
         self.dist_theo = 0
@@ -235,7 +235,7 @@ class Vivant:
         if self.jump: #Si le joueur est en plein saut
             #On calcule la nouvelle distance théorique
             self.compteur_jump += 1
-            self.dist_theo = (self.v_ini - self.g * self.compteur_jump // 120) * self.compteur_jump // 60
+            self.dist_theo = (self.v_ini - self.g * self.compteur_jump // 60) * self.compteur_jump // 30
             #Déplacement à effectuer
             depl = self.dist_theo - self.dist_real
             self.dist_real = self.dist_theo #On actualise la vraie distance
