@@ -376,13 +376,13 @@ class Vivant:
         """
         return self.x + self.taille_block - 1
     
-    def render(self , screen , player):
+    def render(self , player):
         """
         Affiche le mob sur l'écran.
         """
         x_screen = self.x - player.x_left() + player.get_x_screen()
         y_screen = self.y - player.y_up() + player.get_y_screen()
-        screen.blit(self.skin, (x_screen, y_screen))
+        player.screen.blit(self.skin, (x_screen, y_screen))
 
     
 

@@ -5,6 +5,10 @@ from game.main import jeu , spawn_new_tile
 from random import randint
 from utils.textures import block_images
 from classes.class_vivant import Vivant
+from screens.menu import display_menu, display_tips
+from screens.loading_screen import display_loading_screen
+from resources import resources
+from utils.creer_direction import creer_direction
 
 
 
@@ -19,6 +23,7 @@ class Player(Vivant):
         health --> life points of the player
         """
         super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Player" , health = 100 , dx = 10)
+        self.loaded_game = False
         self.map = "Mine"
         self.in_game = False
         self.name = name
@@ -55,21 +60,55 @@ class Player(Vivant):
             "1024" : 0,
             "2048" : 0
         }
+    
+    def initialize(self):
+        # Screen dimensions
+        SCREEN_WIDTH = self.width_screen
+        SCREEN_HEIGHT = self.height_screen
+
+        # Create the game screen
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("bloCS")
+        # Initialize mixer for background music
+        pygame.mixer.init()
+
+        # Display the menu
+        while True:
+            choice = display_menu(self.screen)
+            if choice == "Start Game":
+                self.loaded_game = True
+                break
+            elif choice == "Tips":
+                display_tips(self.screen)
+            elif choice == "Quit":
+                pygame.quit()
+                exit()
+
+        # Display the loading screen
+        display_loading_screen(self.screen)
+
+        # Play game background music
+        pygame.mixer.music.load(resources("assets/audio/game.mp3"))
+        pygame.mixer.music.play(-1)  # Loop the music
+        return self.loaded_game
+    
+    
     def get_x_screen(self):
         return self.x_screen
     def get_y_screen(self):
         return self.y_screen
         
     def do_events(self , background):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.mouse_click(background = background , event = event)
-            elif event.type == self.RESET_MINING_EVENT:
-                self.mining = False
-                pygame.time.set_timer(self.RESET_MINING_EVENT, 0)  # Stop the timer
-        return True
+        if self.loaded_game:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.mouse_click(background = background , event = event)
+                elif event.type == self.RESET_MINING_EVENT:
+                    self.mining = False
+                    pygame.time.set_timer(self.RESET_MINING_EVENT, 0)  # Stop the timer
+            return True
     
     def mouse_click(self , background , event):
         if self.is_playing_2048:
@@ -88,15 +127,16 @@ class Player(Vivant):
         return m
     
     def change_map(self):
-        if 38 * 40 <= self.x_left() and self.x_right() < 40 * 40 and 6 * 40 == self.y_up():
-            if not self.changed:
-                    if self.map == "Mine":
-                        self.map = "Maison"
-                    elif self.map == "Maison":
-                        self.map = "Mine"
-                    self.changed = True
-        elif 38 * 40 > self.x_right() or self.x_left() >= 40 * 40 or self.y_down() < 5 * 40 or self.y_up() >= 7 * 40:
-            self.changed = False
+        if self.loaded_game:
+            if 38 * 40 <= self.x_left() and self.x_right() < 40 * 40 and 6 * 40 == self.y_up():
+                if not self.changed:
+                        if self.map == "Mine":
+                            self.map = "Maison"
+                        elif self.map == "Maison":
+                            self.map = "Mine"
+                        self.changed = True
+            elif 38 * 40 > self.x_right() or self.x_left() >= 40 * 40 or self.y_down() < 5 * 40 or self.y_up() >= 7 * 40:
+                self.changed = False
     
     def act_hist_touches(self):
         self.hist_touches["close"] = key.close()
@@ -149,7 +189,7 @@ class Player(Vivant):
                     self.skin = self.dict_skins["Mining Left Purple"]
                 
     def move(self):
-        if not self.is_playing_2048:
+        if not self.is_playing_2048 and self.loaded_game:
             #Change la diection du joueur
             self.act_direction()
             
@@ -201,7 +241,7 @@ class Player(Vivant):
                         break
                     
                     
-    def play_2048(self , screen):
+    def play_2048(self):
         if self.is_playing_2048:
             keys = []
             for int_key in self.inventory_tuiles.keys():
@@ -217,7 +257,7 @@ class Player(Vivant):
                     self.inventory_tuiles[str(keys[r][0])] -= 1
                     if keys[r][1] == 0:
                         keys.pop(r)
-            self.is_playing_2048 = jeu(self.grille , screen , self.hist_touches)
+            self.is_playing_2048 = jeu(self.grille , self.screen , self.hist_touches)
         
         if self.is_playing_2048:
             self.in_game = True
@@ -231,18 +271,18 @@ class Player(Vivant):
             return False
         return True
     
-    def draw_inventory(self , screen):
-        font = pygame.font.Font(None, int(36 * screen.get_height() / 1080))
+    def draw_inventory(self):
+        font = pygame.font.Font(None, int(36 * self.screen.get_height() / 1080))
         x_offset = 10
         y_offset = 10
         for i, block_type in enumerate(self.block_types):
             block_image = block_images[block_type]
             if i+1 == self.selected_block:
-                pygame.draw.rect(screen, (0, 255, 0), (x_offset + i * int(90 * screen.get_height() / 1080) - 5, y_offset - 5, int(50 * screen.get_height() / 1080), int(50 * screen.get_height() / 1080)), 3)
-            screen.blit(block_image, (x_offset + i * int(90 * screen.get_height() / 1080), y_offset))
+                pygame.draw.rect(self.screen, (0, 255, 0), (x_offset + i * int(90 * self.screen.get_height() / 1080) - 5, y_offset - 5, int(50 * self.screen.get_height() / 1080), int(50 * self.screen.get_height() / 1080)), 3)
+            self.screen.blit(block_image, (x_offset + i * int(90 * self.screen.get_height() / 1080), y_offset))
             n = self.inventory[block_type]
             text = font.render(str(n), True, (0, 0, 0))
-            screen.blit(text, (x_offset + i * int(90 * screen.get_height() / 1080) + int(45 * screen.get_height() / 1080), y_offset + int(10 * screen.get_height() / 1080)))
+            self.screen.blit(text, (x_offset + i * int(90 * self.screen.get_height() / 1080) + int(45 * self.screen.get_height() / 1080), y_offset + int(10 * self.screen.get_height() / 1080)))
     
     
     def add_inventory(self,item) -> None:
@@ -263,13 +303,7 @@ class Player(Vivant):
     
     
     def act_direction(self):
-        if key.right() and (not self.hist_touches["right"] or not key.left()):
-            self.direction = "right"
-        elif key.left() and (not self.hist_touches["left"] or not key.right()):
-            self.direction = "left"
-        else:
-            self.direction = None
-        self.wanna_jump = key.up()
+        self.direction , self.wanna_jump = creer_direction(self.hist_touches)
         self.act_hist_touches()
    
     

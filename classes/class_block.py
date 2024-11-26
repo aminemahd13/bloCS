@@ -44,15 +44,15 @@ class Block:
 
 
 
-    def render(self, screen , player) -> None:
+    def render(self , player) -> None:
         """
         Affiche le bloc sur l'écran du joueur.
         """
         x_screen , y_screen = coord_to_screen(x = self.x , y = self.y , player = player)
         if self.type != "Tuile":
-            screen.blit(textures_dict[self.type] , (x_screen , y_screen))
+            player.screen.blit(textures_dict[self.type] , (x_screen , y_screen))
         else:
-            screen.blit(textures_dict[self.type][self.value] , (x_screen , y_screen))
+            player.screen.blit(textures_dict[self.type][self.value] , (x_screen , y_screen))
     
     
     def y_up(self):

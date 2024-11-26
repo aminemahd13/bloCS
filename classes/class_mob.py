@@ -20,10 +20,10 @@ class Zombie(Vivant):
         # Déplacement du perso
         self.deplacer_perso()
     
-    def act_direction(self, list_players):
+    def act_direction(self, dict_players):
         dist2 = None
         player = None
-        for all_players in list_players:
+        for all_players in dict_players.values():
             if all_players.map == self.map:
                 if dist2 is None:
                     dist3 = (all_players.x_left() - self.x_left())**2 + (all_players.y_up() - self.y_up())**2

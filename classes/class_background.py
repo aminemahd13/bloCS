@@ -217,38 +217,42 @@ class Background:
         return False
     
     
-    def render(self, player : Player, screen) -> None:
+    def render(self, player : Player) -> None:
         """
         Affiche le background.
         """
+        # Clear the screen
+        player.screen.fill((255,255,255))
         if self.mode == 1:
             x_screen , y_screen = indice_to_screen(x_indice = -2 * 39 , y_indice = 0 , player = player)
-            screen.blit(self.back_texture, (x_screen , y_screen))
+            player.screen.blit(self.back_texture, (x_screen , y_screen))
         for liste in self.dict_block[player.map].values():
             for block in liste:
                 x_screen , y_screen = coord_to_screen(x = block.x , y = block.y , player = player)
                 if 1 - self.__taille_block <= x_screen <= player.width_screen and 1 - self.__taille_block <= y_screen <= player.height_screen:
                     #On affiche uniquement les blocs qui se situent dans la map
-                    block.render(screen = screen , player = player)
+                    block.render(player = player)
     
-    def crea_block_near(self , list_player : list , list_mob : list):
-        for player in list_player:
+    def crea_block_near(self , dict_player : dict , dict_mob : dict):
+        for player in dict_player.values():
             player.block_near = []
-        for mob in list_mob:
-            mob.block_near = []
+        for types in dict_mob.values():
+            for mob in types:
+                mob.block_near = []
         
         for map , dictionnaire in self.dict_block.items():
             for liste in dictionnaire.values():
                 for block in liste:
-                    for player in list_player:
+                    for player in dict_player.values():
                         if player.map == map:
                             if block.x_right() >= player.x_left() - 20 and block.x_left() <= player.x_right() + 20 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:
                                 player.block_near.append(block)
                     
-                    for mob in list_mob:
-                        if mob.map == map:
-                            if block.x_right() >= mob.x_left() - 20 and block.x_left() <= mob.x_right() + 20 and mob.y_up() - 50 <= block.y_down() and block.y_up()<= mob.y_down() + 50:
-                                mob.block_near.append(block)
+                    for types in dict_mob.values():
+                        for mob in types:
+                            if mob.map == map:
+                                if block.x_right() >= mob.x_left() - 20 and block.x_left() <= mob.x_right() + 20 and mob.y_up() - 50 <= block.y_down() and block.y_up()<= mob.y_down() + 50:
+                                    mob.block_near.append(block)
                     
     
 
