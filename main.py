@@ -1,7 +1,6 @@
 import pygame
 from classes.class_background import Background
 from classes.class_entities import Entities
-from utils.creer_direction import creer_direction
 
 player_name = "Player 1"
 height_screen = 1080
@@ -28,7 +27,6 @@ while running:
     running = entities.play(background = background , player_name = player_name)
     entities.move()
     entities.render(player_name = player_name , background = background)
-    #Actualiser touches
 
     
     # Update the screen
