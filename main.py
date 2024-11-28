@@ -2,10 +2,6 @@ import pygame
 from classes.class_background import Background
 from classes.class_entities import Entities
 
-player_name = "Player 1"
-height_screen = 1080
-width_screen = 1920
-
 # Pygame initialization
 pygame.init()
 
@@ -20,6 +16,7 @@ clock = pygame.time.Clock()
 while True:
     entities.play(background = background)
     entities.move()
+    
     received_data = {
         "player_id" : {
             "right" : False,
@@ -44,5 +41,7 @@ while True:
     
     data_entities = entities.recup_and_crea_data(received_data)
     #Envoyer data_entities à chaque utilisateur
+    
+    #Faire un truc où dès qu'un joueur voulant venir a été accepté, on lui dit que c'est bon et on lui envoie son id de joueur
 
     clock.tick(30)
