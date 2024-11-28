@@ -263,6 +263,7 @@ class Player(Vivant):
     
     def crea_data(self):
         return {
+            "name" : self.name,
             "loaded_game" : self.loaded_game,
             "map" : self.map,
             "is_playing_2048" : self.is_playing_2048,
