@@ -234,25 +234,31 @@ class Background:
                     block.render(player = player)
     
     def crea_block_near(self , dict_player : dict , dict_mob : dict):
+        map_players = {}
+        map_mobs = {
+            "Mine" : [],
+            "Maison" : []
+        }
+        
         for player in dict_player.values():
             player.block_near = []
+            if player.map not in map_players:
+                map_players[player.map] = []
+            map_players[player.map].append(player)
         for types in dict_mob.values():
             for mob in types:
                 mob.block_near = []
+                map_mobs[mob.map].append(mob)
         
-        for map , dictionnaire in self.dict_block.items():
-            for liste in dictionnaire.values():
+        for map in map_players.keys():
+            for liste in self.dict_block[map].values():
                 for block in liste:
-                    for player in dict_player.values():
-                        if player.map == map:
-                            if block.x_right() >= player.x_left() - 20 and block.x_left() <= player.x_right() + 20 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:
-                                player.block_near.append(block)
-                    
-                    for types in dict_mob.values():
-                        for mob in types:
-                            if mob.map == map:
-                                if block.x_right() >= mob.x_left() - 20 and block.x_left() <= mob.x_right() + 20 and mob.y_up() - 50 <= block.y_down() and block.y_up()<= mob.y_down() + 50:
-                                    mob.block_near.append(block)
+                    for player in map_players[map]:
+                        if block.x_right() >= player.x_left() - 20 and block.x_left() <= player.x_right() + 20 and player.y_up() - 50 <= block.y_down() and block.y_up()<= player.y_down() + 50:
+                            player.block_near.append(block)
+                    for mob in map_mobs[map]:
+                        if block.x_right() >= mob.x_left() - 20 and block.x_left() <= mob.x_right() + 20 and mob.y_up() - 50 <= block.y_down() and block.y_up()<= mob.y_down() + 50:
+                            mob.block_near.append(block)
                     
     
 

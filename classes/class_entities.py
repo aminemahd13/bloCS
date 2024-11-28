@@ -20,9 +20,9 @@ class Entities:
         self.players_dict.pop(name)
         self.player_names.remove(name)
     
-    def add_mob(self , type , map):
+    def add_mob(self , type , map , x_spawn , y_spawn):
         #A changer, x_spawn et y_spawn dépendent de plein de choses
-        mob = eval(f"{type}(x_spawn = 10 , y_spawn = 0)")
+        mob = eval(f"{type}(x_spawn = x_spawn , y_spawn = y_spawn)")
         mob.map = map
         self.mobs_dict[type].append(mob)
     
@@ -44,6 +44,7 @@ class Entities:
             for all_types in self.mobs_dict.values():
                 for mob in all_types:
                     mob.render(player)
+            player.draw_inventory()
     
     def move(self):
         for all_players in self.players_dict.values():
@@ -64,3 +65,7 @@ class Entities:
     
     def initialize(self , player_name):
         return self.players_dict[player_name].initialize()
+    
+    def close(self , player_name):
+        self.players_dict[player_name].close()
+        self.remove_player(player_name)

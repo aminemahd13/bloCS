@@ -1,12 +1,9 @@
 import utils.key_handler as key
 
-def creer_direction(hist_touches):
-    if key.right() and (not hist_touches["right"] or not key.left()):
-            direction = "right"
-    elif key.left() and (not hist_touches["left"] or not key.right()):
-        direction = "left"
-    else:
-        direction = None
-    wanna_jump = key.up()
+def creer_direction(dict_touches):
+    dict_touches["right"] = key.right()
+    dict_touches["left"] = key.left()
+    dict_touches["up"] = key.up()
+    dict_touches["echap"] = key.close()
+    dict_touches["number"] = key.get_number()
     
-    return direction , wanna_jump

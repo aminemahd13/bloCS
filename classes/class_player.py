@@ -1,6 +1,5 @@
 import pygame
 from utils.coord_to_screen import screen_to_coord, coord_to_indice
-import utils.key_handler as key
 from game.main import jeu , spawn_new_tile
 from random import randint
 from utils.textures import block_images
@@ -9,6 +8,7 @@ from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
 from resources import resources
 from utils.creer_direction import creer_direction
+from classes.class_block import DirtBlock, StoneBlock, ObsidianBlock, BedrockBlock
 
 
 
@@ -35,7 +35,8 @@ class Player(Vivant):
         self.changed = False
         self.grille = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
         self.mining = False
-        self.hist_touches = {"right" : key.right() , "left" : key.left() , "echap" : key.close()}
+        self.dict_touches = {"right" : False , "left" : False , "up" : False , "echap" : False , "number" : 1}
+        self.hist_touches = {"right" : False , "left" : False , "echap" : False}
         self.selected_block = 1
         self.block_types = ["Dirt", "Stone", "Obsidian", "Bedrock"]
         # Define a custom event for resetting the mining state
@@ -118,7 +119,6 @@ class Player(Vivant):
         else:
             self.mining_or_breaking(background = background , event = event)
     
-    
     def tuile_max(self):
         m = 0
         for ligne in self.grille:
@@ -139,11 +139,11 @@ class Player(Vivant):
                 self.changed = False
     
     def act_hist_touches(self):
-        self.hist_touches["close"] = key.close()
-        self.hist_touches["right"] = key.right()
-        self.hist_touches["left"] = key.left()
-        self.hist_touches["up"] = key.up()
-        key_get_number = key.get_number()
+        self.hist_touches["close"] = self.dict_touches["echap"]
+        self.hist_touches["right"] = self.dict_touches["right"]
+        self.hist_touches["left"] = self.dict_touches["left"]
+        self.hist_touches["up"] = self.dict_touches["up"]
+        key_get_number = self.dict_touches["number"]
         if key_get_number != -1: #Si on clique sur un chiffre correct pour sélectionner un bloc
             self.selected_block = int(key_get_number) #On change la sélection        
 
@@ -214,11 +214,11 @@ class Player(Vivant):
                     selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
                     if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
                         new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
-                        if background.add_block(new_block): #Si le bloc a été placé
+                        if background.add_block(new_block , self.map): #Si le bloc a été placé
                                 self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
             elif event.button == 3:  # Right click to remove a block
                 added = False
-                for key , values in background.dict_block.items():
+                for key , values in background.dict_block[self.map].items():
                     for i , block in enumerate(values):
                         if block.x_indice == x_indice and block.y_indice == y_indice:
                             if block.type != "Game":
@@ -262,12 +262,12 @@ class Player(Vivant):
         if self.is_playing_2048:
             self.in_game = True
         elif self.in_game:
-            if not key.close():
+            if not self.dict_touches["echap"]:
                 self.in_game = False
         else:
             self.in_game = False
 
-        if not self.in_game and key.close() and not self.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
+        if not self.in_game and self.dict_touches["echap"] and not self.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
             return False
         return True
     
@@ -303,9 +303,20 @@ class Player(Vivant):
     
     
     def act_direction(self):
-        self.direction , self.wanna_jump = creer_direction(self.hist_touches)
+        if self.dict_touches["right"] and (not self.hist_touches["right"] or not self.dict_touches["left"]):
+            self.direction = "right"
+        elif self.dict_touches["left"] and (not self.hist_touches["left"] or not self.dict_touches["right"]):
+            self.direction = "left"
+        else:
+            self.direction = None
+        self.wanna_jump = self.dict_touches["up"]
         self.act_hist_touches()
+        creer_direction(self.dict_touches)
    
+    def close(self):
+       # Quit Pygame
+        pygame.mixer.music.stop()
+        pygame.quit()
     
     
 """
