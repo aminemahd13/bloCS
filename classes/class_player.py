@@ -1,13 +1,10 @@
 import pygame
-from utils.coord_to_screen import screen_to_coord, coord_to_indice
-from game.main import jeu , spawn_new_tile
-from random import randint
+from game.main import jeu
 from utils.textures import block_images
 from classes.class_vivant import Vivant
 from screens.menu import display_menu, display_tips
 from screens.loading_screen import display_loading_screen
 from resources import resources
-from utils.creer_direction import creer_direction
 from classes.class_block import DirtBlock, StoneBlock, ObsidianBlock, BedrockBlock
 
 

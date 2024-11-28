@@ -40,30 +40,6 @@ class Block:
         else:
             player.screen.blit(textures_dict[self.type][self.value] , (x_screen , y_screen))
     
-    
-    def y_up(self):
-        """
-        Coordonnée y en haut.
-        """
-        return self.y
-    
-    def y_down(self):
-        """
-        Coordonnée y en bas.
-        """
-        return self.y + self.taille - 1
-    
-    def x_left(self):
-        """
-        Coordonnée x à gauche.
-        """
-        return self.x
-    
-    def x_right(self):
-        """
-        Coordonnée x à droite.
-        """
-        return self.x + self.taille - 1
 
 
 class DirtBlock(Block):

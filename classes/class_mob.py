@@ -6,19 +6,6 @@ class Zombie(Vivant):
         super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Zombie" , health = 100 , dx = 4)
         self.map = "Mine"
         self.distance_chasse = 10 * 40
- 
-    def move(self , player):
-        #Change la diection du joueur
-        self.act_direction(player)
-        
-        # On regarde si le joueur est en plein saut et on actualise sa data
-        self.check_if_jumping()
-                
-        # Changement du skin
-        self.change_skin()
-            
-        # Déplacement du perso
-        self.deplacer_perso()
     
     def act_direction(self, dict_players):
         dist2 = None

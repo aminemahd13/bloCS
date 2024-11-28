@@ -1,5 +1,3 @@
-from random import randint
-
 def coord_to_screen(x : int , y : int , player) -> tuple:
     x = x - player.x_left() + player.get_x_screen()
     y = y - player.y_up() + player.get_y_screen()
