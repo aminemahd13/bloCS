@@ -22,8 +22,18 @@ class Player(Vivant):
         inventory --> list of items in the inventory
         health --> life points of the player
         """
+        {
+            "loaded_game" : self.loaded_game,
+            "map" : self.map,
+            "in_game" : self.in_game,
+            "is_playing_2048" : self.is_playing_2048,
+            "changed" : self.changed,
+            "grille" : self.grille,
+            "mining" : self.mining
+        }
         super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Player" , health = 100 , dx = 10)
         self.loaded_game = False
+        self.screen = None
         self.map = "Mine"
         self.in_game = False
         self.name = name
@@ -317,6 +327,9 @@ class Player(Vivant):
        # Quit Pygame
         pygame.mixer.music.stop()
         pygame.quit()
+    
+    def crea_data(self):
+        return 
     
     
 """
