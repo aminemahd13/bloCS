@@ -30,20 +30,6 @@ class Block:
         self.texture = None
         self.tuile_required = tuile_required
 
-    def take_damage(self , damage : int , tuile_max : int) -> bool:
-        """
-        Réduit la vie du bloc.
-        Renvoie True si le bloc est cassé, False sinon.
-        """
-        if self.breakable and tuile_max >= self.tuile_required:
-            self.health -= damage
-            if self.health <= 0:
-                return True
-            return False
-        return False
-
-
-
     def render(self , player) -> None:
         """
         Affiche le bloc sur l'écran du joueur.
