@@ -20,12 +20,29 @@ clock = pygame.time.Clock()
 while True:
     entities.play(background = background)
     entities.move()
-    #On actualise la direction des joueurs avec les données reçues
-    #On regarde si un joueur veut se connecter
-    #On indique si un mob/joueur a été supprimé ou ajouté
-    #On envoie la data des joueurs et des mobs
-    #On envoie quel block a été placé/détruit
-    data = entities.crea_data()
+    received_data = {
+        "player_id" : {
+            "right" : False,
+            "left" : False,
+            "up" : False,
+            "echap" : False,
+            "number" : -1,
+            "click" : None #ou [x_screen , y_screen , id_click (1 ou 3)]
+        },
+        "player2_id" : {
+            "right" : False,
+            "left" : False,
+            "up" : False,
+            "echap" : False,
+            "number" : -1,
+            "click" : None
+        },
+        "wanna_join" : [["player_name" , 1080 , 1920]],
+        "wanna_quit" : [["player_id"]]
+    } #Faire en sorte que ça soit la data envoyée des utilisateurs
+    #On actualise le dict s'il y a de nouvelles valeurs d'entrée
+    
+    data_entities = entities.recup_and_crea_data(received_data)
+    #Envoyer data à chaque utilisateur
 
-    # Cap the frame rate
     clock.tick(30)

@@ -384,8 +384,7 @@ class Vivant:
             "skin_name" : self.skin_name,
             "health" : self.health,
             "x" : self.x,
-            "y" : self.y,
-            "id" : self.id
+            "y" : self.y
         }
 
     

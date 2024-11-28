@@ -24,7 +24,6 @@ class Player(Vivant):
         """
         super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Player" , health = 100 , dx = 10)
         self.running = True
-        self.click = None
         self.loaded_game = False
         self.screen = None
         self.map = "Mine"
@@ -38,7 +37,7 @@ class Player(Vivant):
         self.changed = False
         self.grille = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
         self.mining = False
-        self.dict_touches = {"right" : False , "left" : False , "up" : False , "echap" : False , "number" : 1}
+        self.dict_touches = {"right" : False , "left" : False , "up" : False , "echap" : False , "number" : 1 , "click" : None}
         self.hist_touches = {"right" : False , "left" : False , "echap" : False}
         self.selected_block = 1
         self.block_types = ["Dirt", "Stone", "Obsidian", "Bedrock"]
@@ -98,21 +97,21 @@ class Player(Vivant):
         
     def do_events(self , background):
         if self.loaded_game:
-            if self.click is not None:
-                self.mouse_click(background = background , click = self.click)
+            if self.dict_touches["click"] is not None:
+                self.mouse_click(background = background)
             for event in pygame.event.get():
                 if event.type == self.RESET_MINING_EVENT:
                     self.mining = False
                     pygame.time.set_timer(self.RESET_MINING_EVENT, 0)  # Stop the timer
             self.running = True
     
-    def mouse_click(self , background , click):
+    def mouse_click(self , background):
         if self.is_playing_2048:
-            x_screen, y_screen = click[0] , click[1]
+            x_screen, y_screen = self.dict_touches["click"][0] , self.dict_touches["click"][1]
             if 50 <= x_screen <= 250 and 50 <= y_screen <= 110:  # Clic sur le bouton Quitter
                 self.is_playing_2048 = False
         else:
-            self.mining_or_breaking(background = background , click = click)
+            self.mining_or_breaking(background = background)
     
     def tuile_max(self):
         m = 0
@@ -197,21 +196,21 @@ class Player(Vivant):
             # Déplacement du perso
             self.deplacer_perso()
     
-    def mining_or_breaking(self , background , click):
-        x_screen, y_screen = click[0] , click[1] #Position du click sur l'écran
+    def mining_or_breaking(self , background):
+        x_screen, y_screen = self.dict_touches["click"][0] , self.dict_touches["click"][1] #Position du click sur l'écran
         #On converti ces coordonnées en coordonnées relatives au background (en px)
         x , y = screen_to_coord(x_screen = x_screen , y_screen = y_screen , player = self)
         x_indice , y_indice = coord_to_indice(x = x , y = y)
         if self.x_left() - 80 <= x <= self.x_right() + 80 and self.y_up() - 80 <= y <= self.y_down() + 80:
             #Si on est dans une fenêtre de 2 blocs sur les côtés
-            if click[2] == 1 and not (self.x_left()<=x<=self.x_right() and self.y_up()<=y<=self.y_down()):  # Left click to place a block
+            if self.dict_touches["click"][2] == 1 and not (self.x_left()<=x<=self.x_right() and self.y_up()<=y<=self.y_down()):  # Left click to place a block
                 if x_indice*40+40-1<self.x_left() or x_indice*40>self.x_right() or y_indice*40>self.y_down() or y_indice*40+40-1<self.y_up():
                     selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
                     if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
                         new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
                         if background.add_block(new_block , self.map): #Si le bloc a été placé
                                 self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
-            elif click[2] == 3:  # Right click to remove a block
+            elif self.dict_touches["click"][2] == 3:  # Right click to remove a block
                 added = False
                 for key , values in background.dict_block[self.map].items():
                     for i , block in enumerate(values):
@@ -270,7 +269,6 @@ class Player(Vivant):
             "grille" : self.grille,
             "selected_block" : self.selected_block,
             "inventory" : self.inventory,
-            "inventory_tuiles" : self.inventory_tuiles,
             "skin_name" : self.skin_name,
             "health" : self.health,
             "x" : self.x,
