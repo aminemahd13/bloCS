@@ -1,5 +1,4 @@
 from classes.class_vivant import Vivant
-from random import randint
 
 class Zombie(Vivant):
     def __init__(self , x_spawn : int, y_spawn : int):

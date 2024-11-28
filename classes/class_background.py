@@ -1,7 +1,6 @@
 from classes.class_block import Block, DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock , Wood1Block , Wood2Block , DoorupBlock , DoordownBlock, TuileBlock , GameBlock
 from classes.class_player import Player
-from utils.coord_to_screen import coord_to_screen, screen_to_coord, coord_to_indice, indice_to_screen, indices_randoms
-import pygame
+from utils.coord_to_screen import coord_to_indice
 from utils.lists_blocks import block_lists
 from utils.house_list import house_blocks
 from utils.textures import texture_background
@@ -37,11 +36,11 @@ class Background:
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
         coord = [x_indice , y_indice]
-        block_here = False
         if coord in self.dict_block[map]:
-            block_here = True
-        self.dict_block[map][coord] = eval(f"{type}Block(x_indice = x_indice , y_indice = y_indice)")
-        return block_here
+            return False
+        else:
+            self.dict_block[map][coord] = eval(f"{type}Block(x_indice = x_indice , y_indice = y_indice)")
+            return True
 
     def damage_block(self , damage : int, player : Player , map : str , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> bool:
         """
@@ -62,7 +61,10 @@ class Background:
         
     
     def crea_block_near(self , dict_player : dict , dict_mob : dict):
-        map_players = {}
+        map_players = {
+            "Mine" : [],
+            "Maison" : []
+        }
         map_mobs = {
             "Mine" : [],
             "Maison" : []
@@ -70,8 +72,6 @@ class Background:
         
         for player in dict_player.values():
             player.block_near = []
-            if player.map not in map_players:
-                map_players[player.map] = []
             map_players[player.map].append(player)
         for types in dict_mob.values():
             for mob in types:

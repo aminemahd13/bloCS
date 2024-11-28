@@ -1,6 +1,3 @@
-from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
-
-
 class Vivant:
     def __init__(self , type : str , x_spawn : int , y_spawn : int , health : int , dx : int):
         # [x,y] à changer en fonction du milieu de la map

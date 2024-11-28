@@ -1,7 +1,4 @@
-import pygame
-from utils.coord_to_screen import coord_to_screen, coord_to_indice
-from resources import resources
-from utils.textures import textures_dict
+from utils.coord_to_screen import coord_to_indice
 
 
 
@@ -27,7 +24,6 @@ class Block:
         self.breakable = breakable
         self.health = health
         self.drop_item = drop_item
-        self.texture = None
         self.tuile_required = tuile_required
 
     def take_damage(self , damage : int , tuile_max : int) -> bool:
