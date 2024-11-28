@@ -1,10 +1,4 @@
-import pygame
-import sys
 import random
-from utils import key_handler
-
-# Initialize Pygame
-pygame.init()
 
 # Constants
 SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
@@ -28,38 +22,6 @@ TILE_COLORS = {
     2048: (237, 194, 46),
 }
 TEXT_COLOR = (119, 110, 101)
-
-# Fonts
-FONT = pygame.font.Font(None, FONT_SIZE)
-
-
-# Helper Functions
-def draw_grid(grid, screen , animation_offsets=None):
-    screen.fill(BACKGROUND_COLOR)
-    for row in range(GRID_SIZE):
-        for col in range(GRID_SIZE):
-            value = grid[row][col]
-            rect_x = (col-2) * TILE_SIZE + SCREEN_WIDTH // 2
-            rect_y = (row-2) * TILE_SIZE + SCREEN_HEIGHT // 2
-            tile_color = TILE_COLORS.get(value, (60, 58, 50))
-
-            # Apply animation offsets
-            if animation_offsets and (row, col) in animation_offsets:
-                offset_x, offset_y = animation_offsets[(row, col)]
-                rect_x += offset_x
-                rect_y += offset_y
-
-            pygame.draw.rect(
-                screen,
-                tile_color,
-                (rect_x, rect_y, TILE_SIZE - 2 * PADDING, TILE_SIZE - 2 * PADDING),
-                border_radius=8,
-            )
-
-            if value != 0:
-                text = FONT.render(str(value), True, TEXT_COLOR)
-                text_rect = text.get_rect(center=(rect_x + TILE_SIZE // 2 - PADDING, rect_y + TILE_SIZE // 2 - PADDING))
-                screen.blit(text, text_rect)
 
 
 def spawn_new_tile(grid , value):
@@ -129,30 +91,19 @@ def is_game_over(grid):
                 return False
     return True
 
-def draw_quit_button(screen):
-    button_color = (255, 69, 58)
-    button_rect = pygame.Rect(50, 50, 200, 60)  # Rectangle du bouton
-    pygame.draw.rect(screen, button_color, button_rect, border_radius=10)
-
-    text = FONT.render("Quitter", True, (255, 255, 255))
-    text_rect = text.get_rect(center=button_rect.center)
-    screen.blit(text, text_rect)
-
-    return button_rect
-
 
 # Main game loop
-def jeu(grid, screen, hist_touches):
-        # Gérer les entrées clavier
-    if key_handler.close() and not hist_touches["close"]:
+def jeu(grid, hist_touches , dict_touches):
+    # Gérer les entrées clavier
+    if dict_touches["echap"] and not hist_touches["close"]:
         return False
-    elif key_handler.up():
+    elif dict_touches["up"] and not hist_touches["up"]:
         direction = "UP"
-    elif key_handler.down():
+    elif dict_touches["down"] and not hist_touches["down"]:
         direction = "DOWN"
-    elif key_handler.left():
+    elif dict_touches["left"] and not hist_touches["left"]:
         direction = "LEFT"
-    elif key_handler.right():
+    elif dict_touches["right"] and not hist_touches["right"]:
         direction = "RIGHT"
     else:
         direction = None
@@ -162,10 +113,6 @@ def jeu(grid, screen, hist_touches):
         if moved:
             if is_game_over(grid):
                 return False
-
-    draw_grid(grid, screen)
-    # Dessiner le bouton Quitter
-    quit_button_rect = draw_quit_button(screen)
     return True
 
 

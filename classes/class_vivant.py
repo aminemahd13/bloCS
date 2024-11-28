@@ -1,5 +1,5 @@
 from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
-from utils.textures import PlayerSkin, ZombieSkin
+
 
 class Vivant:
     def __init__(self , type : str , x_spawn : int , y_spawn : int , health : int , dx : int):
@@ -11,6 +11,8 @@ class Vivant:
         inventory --> list of items in the inventory
         health --> life points of the player
         """
+        self.map = None
+        self.id = 0
         self.jump = False #Est en plein saut
         self.wanna_jump = False #Veut sauter
         self.type = type
@@ -30,8 +32,7 @@ class Vivant:
         self.direction = None #Horizontal , vertical
         self.block_near = []
         self.health = health
-        self.dict_skins = eval(f"{type}Skin")
-        self.skin = self.dict_skins["Standing Right"]
+        self.skin_name = "Standing Right"
     
     def check_right(self, deplacement : int) -> int:
         """
@@ -322,10 +323,10 @@ class Vivant:
         #Jumping
         if self.jump:
             if self.direction_skin == "right":
-                self.skin = self.dict_skins["Jumping Right"]
+                self.skin_name = "Jumping Right"
                  
             elif self.direction_skin == "left":
-                self.skin = self.dict_skins["Jumping Left"]
+                self.skin_name = "Jumping Left"
             
         #Not jumping
         else:
@@ -340,17 +341,17 @@ class Vivant:
             #Moving right
             if self.direction_skin == "right":
                 if self.stade_animation <= 10:
-                    self.skin = self.dict_skins["Walking Right"]
+                    self.skin_name = "Walking Right"
                 else :
-                    self.skin = self.dict_skins["Standing Right"]
+                    self.skin_name = "Standing Right"
                         
                 
             #Moving left  
             elif self.direction_skin == "left":
                 if self.stade_animation <= 10:
-                    self.skin = self.dict_skins["Walking Left"]
+                    self.skin_name = "Walking Left"
                 else :
-                    self.skin = self.dict_skins["Standing Left"]
+                    self.skin_name = "Standing Left"
     
     def y_up(self):
         """
@@ -376,13 +377,16 @@ class Vivant:
         """
         return self.x + self.taille_block - 1
     
-    def render(self , player):
-        """
-        Affiche le mob sur l'écran.
-        """
-        x_screen = self.x - player.x_left() + player.get_x_screen()
-        y_screen = self.y - player.y_up() + player.get_y_screen()
-        player.screen.blit(self.skin, (x_screen, y_screen))
+    def crea_data(self):
+        return {
+            "map" : self.map,
+            "type" : self.type,
+            "skin_name" : self.skin_name,
+            "health" : self.health,
+            "x" : self.x,
+            "y" : self.y,
+            "id" : self.id
+        }
 
     
 

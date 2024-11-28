@@ -8,6 +8,7 @@ class Entities:
         self.mobs_dict = {
             "Zombie" : []
         }
+        self.mob_id = 0
     
     def add_player(self , name , height_screen , width_screen): 
         while name in self.player_names:
@@ -24,6 +25,8 @@ class Entities:
         #A changer, x_spawn et y_spawn dépendent de plein de choses
         mob = eval(f"{type}(x_spawn = x_spawn , y_spawn = y_spawn)")
         mob.map = map
+        mob.id = self.mob_id
+        self.mob_id += 1
         self.mobs_dict[type].append(mob)
     
     def remove_mob(self , type , map):
@@ -32,19 +35,6 @@ class Entities:
                 self.mobs_dict[type].pop(i)
                 return True
         return False
-    
-    def render(self , player_name , background):
-        player = self.players_dict[player_name]
-        if not player.is_playing_2048:
-        # Render the background and players
-            background.render(player = player) # Affiche le background avec les blocs
-            for all_players in self.players_dict.values():
-                if all_players.loaded_game:
-                    all_players.render(player)
-            for all_types in self.mobs_dict.values():
-                for mob in all_types:
-                    mob.render(player)
-            player.draw_inventory()
     
     def move(self):
         for all_players in self.players_dict.values():
@@ -55,17 +45,21 @@ class Entities:
             for mob in all_types:
                 mob.move(self.players_dict)
     
-    def play(self , background , player_name):
-        player = self.players_dict[player_name]
+    def play(self , background):
         background.crea_block_near(self.players_dict , self.mobs_dict)
-        running = True
-        running = player.do_events(background = background)
-        running = player.play_2048()
-        return running
+        for player in self.players_dict.values():
+            player.do_events(background = background)
+            player.play_2048()
     
-    def initialize(self , player_name):
-        return self.players_dict[player_name].initialize()
-    
-    def close(self , player_name):
-        self.players_dict[player_name].close()
-        self.remove_player(player_name)
+    def crea_data(self):
+        data = {
+            "Player" : {},
+            "Mob" : {}
+                }
+        for all_players in self.players_dict.values():
+            data["Player"][all_players.name] = all_players.crea_data()
+        for all_types in self.mobs_dict.values():
+            for mob in all_types:
+                data["Mob"][mob.id] = mob.crea_data()
+        
+        return data
