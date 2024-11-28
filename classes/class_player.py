@@ -10,18 +10,11 @@ from classes.class_block import DirtBlock, StoneBlock, ObsidianBlock, BedrockBlo
 
 
 class Player(Vivant):
-    def __init__(self , height_screen : int , width_screen : int , x_spawn : int = 33 , y_spawn : int = 6, name : str = "Player 1"):
-        # [x,y] à changer en fonction du milieu de la map
-        """Initializes the player
-        name --> string, name of the player
-        coordinates --> list of 2 integers [x,y] if coordinates = None then the player will be placed at the center of the map
-        skin --> string, path to the skin of the player
-        inventory --> list of items in the inventory
-        health --> life points of the player
-        """
-        super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Player" , health = 100 , dx = 10)
+    def __init__(self , height_screen : int = 1080 , width_screen : int = 1920 , name : str = "Player 1"):
+        super().__init__(type = "Player")
         self.loaded_game = False
         self.screen = None
+        self.taille_block = 40
         self.map = "Mine"
         self.name = name
         self.height_screen = height_screen
@@ -75,7 +68,7 @@ class Player(Vivant):
                     
     def play_2048(self):
         if self.is_playing_2048:
-            jeu(self.grille , self.screen)
+            jeu(self.grille , self.screen) #On affiche la grille
     
     def draw_inventory(self):
         font = pygame.font.Font(None, int(36 * self.screen.get_height() / 1080))
@@ -95,55 +88,3 @@ class Player(Vivant):
         pygame.mixer.music.stop()
         pygame.quit()
     
-    
-"""
-Utilisation
-
-player = Player(height_screen : int , width_screen : int , x_spawn : int , y_spawn : int , name : str)
-x_spawn = indice bloc en haut de spawn
-y_spawn = indice bloc en haut de spawn
-height_screen , width_screen : paramètres de l'écran
-name : nom
-
-player.render(screen , player2)
-Affiche le joueur sur l'écran du joueur2, et son inventaire
-
-player.y_up(), player.y_down(), player.x_left(), player.x_right()
-Coordonnées des pixels au bord du joueur
-
-player.move()
-Fait bouger le joueur et changer le skin
-
-player.take_damage(damage)
-Attaque le joueur. Renvoie True s'il est mort
-
-player.add_inventory(item)
-Ajoute 1 item dans l'inventaire
-
-player.remove_inventory(item)
-Enlève 1 item dans l'inventaire
-
-player.add_inventory_tuiles(value)
-Ajoute 1 tuile value dans l'inventaire
-
-player.remove_inventory_tuiles(value)
-Enlève 1 tuile value dans l'inventaire
-
-player.change_map(background)
-Change la map du background
-
-player.do_events(background)
-Regarde les clics de souris
-Renvoie True si le jeu continue, False sinon
-
-player.block_near
-liste de blocs aux alentours du joueur
-"""
-
-
-
-
-
-
-
-

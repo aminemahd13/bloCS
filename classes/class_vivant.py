@@ -1,8 +1,7 @@
-from classes.class_block import DirtBlock, StoneBlock, WoodBlock, BedrockBlock, ObsidianBlock
 from utils.textures import PlayerSkin, ZombieSkin
 
 class Vivant:
-    def __init__(self , type : str , x_spawn : int , y_spawn : int , health : int , dx : int):
+    def __init__(self , type):
         # [x,y] à changer en fonction du milieu de la map
         """Initializes the player
         name --> string, name of the player
@@ -12,10 +11,9 @@ class Vivant:
         health --> life points of the player
         """
         self.type = type
-        self.taille_block = 40
-        self.x = x_spawn * self.taille_block
-        self.y = y_spawn * self.taille_block
-        self.health = health
+        self.x = 0
+        self.y = 0
+        self.health = 0
         self.dict_skins = eval(f"{type}Skin")
         self.skin = self.dict_skins["Standing Right"]
         self.skin_name = "Standing Right"

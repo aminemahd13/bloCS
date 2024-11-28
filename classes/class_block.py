@@ -6,7 +6,7 @@ from utils.textures import textures_dict
 
 
 class Block:
-    def __init__(self , is_solid : bool = True, breakable : bool = True , health : int = 100, drop_item: str = None , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , tuile_required : int = 0):
+    def __init__(self , health : int = 100 , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
         """
         Initialize a block.
         :params x_indice , y_indice : Representing the block's position in the map.
@@ -17,18 +17,11 @@ class Block:
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
         self.taille = 40
-        self.x_indice = x_indice
-        self.y_indice = y_indice
         self.x = x_indice * self.taille #Coordonnées en px
         self.y = y_indice * self.taille #Coordonnées en px
         self.type = None
         self.value = None
-        self.is_solid = is_solid
-        self.breakable = breakable
         self.health = health
-        self.drop_item = drop_item
-        self.texture = None
-        self.tuile_required = tuile_required
 
     def render(self , player) -> None:
         """
@@ -44,70 +37,64 @@ class Block:
 
 class DirtBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 50 , tuile_required = 16)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 50)
         self.type = "Dirt"
 
 
 class StoneBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 400 , tuile_required = 64)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 400)
         self.type = "Stone"
 
 class ObsidianBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 1200 , tuile_required = 256)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 1200)
         self.type = "Obsidian"
 
 
 class WoodBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
         self.type = "Wood"
 
 
 class BedrockBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 300 , tuile_required = 0)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 300)
         self.type = "Bedrock"
         
 class Wood1Block(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
         self.type = "Wood1"
 
 class Wood2Block(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None , is_solid = False):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = is_solid , breakable = False , health = 100)
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
         self.type = "Wood2"
         
 class DoorupBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
         self.type = "Doorup"
         
 class DoordownBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = False , breakable = False , health = 100)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
         self.type = "Doordown"
     
     
 
 class TuileBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None, value : int = 2):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
         self.value = value
-        if value in [8,16]:
-            self.tuile_required = 16
-        elif value in [32,64]:
-            self.tuile_required = 64
-        elif value in [128,256,512]:
-            self.tuile_required = 256
         self.type = "Tuile"
 
 
 class GameBlock(Block):
     def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
         self.type = "Game"
 
 

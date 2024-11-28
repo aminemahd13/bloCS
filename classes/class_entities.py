@@ -13,8 +13,7 @@ class Entities:
         self.players_dict.pop(id)
     
     def add_mob(self , type , id):
-        #A changer, x_spawn et y_spawn dépendent de plein de choses
-        mob = eval(f"{type}(x_spawn = 0 , y_spawn = 0)")
+        mob = eval(f"{type}()")
         self.mobs_dict[id] = mob
     
     def remove_mob(self , id):
