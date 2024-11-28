@@ -43,6 +43,6 @@ while True:
     #On actualise le dict s'il y a de nouvelles valeurs d'entrée
     
     data_entities = entities.recup_and_crea_data(received_data)
-    #Envoyer data à chaque utilisateur
+    #Envoyer data_entities à chaque utilisateur
 
     clock.tick(30)
