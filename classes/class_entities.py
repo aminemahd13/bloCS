@@ -46,7 +46,8 @@ class Entities:
     def recup_and_crea_data(self , received_data):
         data = {
             "Player" : {},
-            "Mob" : {}
+            "Mob" : {},
+            "Joined" : []
                 }
         for player in self.players_dict.values():
             player.dict_touches = received_data[player.id]
@@ -57,11 +58,13 @@ class Entities:
                 received_data["wanna_quit"].remove(id_wanna_quit)
         
         for i , wanna_join in enumerate(received_data["wanna_join"]):
-            self.add_player(wanna_join[0] , wanna_join[1] , wanna_join[2])
+            player_id = self.add_player(wanna_join[0] , wanna_join[1] , wanna_join[2])
             received_data["wanna_join"].pop(i)
+            #Faire un truc à ajouter dans la liste data["Joined"] avec le joueur qui a rejoint et son identifiant de joueur
         
         for player in self.players_dict.values():
             data["Player"][player.id] = player.crea_data()
         for mob in self.mobs_dict.values():
             data["Mob"][mob.id] = mob.crea_data()
+        
         return data
