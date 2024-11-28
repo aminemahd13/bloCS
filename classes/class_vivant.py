@@ -18,13 +18,17 @@ class Vivant:
         self.health = health
         self.dict_skins = eval(f"{type}Skin")
         self.skin = self.dict_skins["Standing Right"]
+        self.skin_name = "Standing Right"
+    
+    def change_skin(self):
+        self.skin = self.dict_skins[self.skin_name]
     
     def render(self , player):
         """
         Affiche le mob sur l'écran.
         """
         x_screen = self.x - player.x + player.x_screen
-        y_screen = self.y - player.y + player.y_scree
+        y_screen = self.y - player.y + player.y_screen
         player.screen.blit(self.skin, (x_screen, y_screen))
 
     

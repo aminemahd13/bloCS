@@ -4,34 +4,21 @@ from classes.class_player import Player
 class Entities:
     def __init__(self):
         self.players_dict = {}
-        self.player_names = []
-        self.mobs_dict = {
-            "Zombie" : []
-        }
+        self.mobs_dict = {}
     
-    def add_player(self , name , height_screen , width_screen): 
-        while name in self.player_names:
-            name = name + "0"
-        self.players_dict[name] = Player(height_screen = height_screen , width_screen = width_screen , name = name)
-        self.player_names.append(name)
-        return name
+    def add_player(self , id):
+        self.players_dict[id] = Player(height_screen = 1080 , width_screen = 1920 , name = "Player 1")
     
-    def remove_player(self , name):
-        self.players_dict.pop(name)
-        self.player_names.remove(name)
+    def remove_player(self , id):
+        self.players_dict.pop(id)
     
-    def add_mob(self , type , map , x_spawn , y_spawn):
+    def add_mob(self , type , id):
         #A changer, x_spawn et y_spawn dépendent de plein de choses
-        mob = eval(f"{type}(x_spawn = x_spawn , y_spawn = y_spawn)")
-        mob.map = map
-        self.mobs_dict[type].append(mob)
+        mob = eval(f"{type}(x_spawn = 0 , y_spawn = 0)")
+        self.mobs_dict[id] = mob
     
-    def remove_mob(self , type , map):
-        for i , mob in enumerate(self.mobs_dict[type]):
-            if mob.map == map:
-                self.mobs_dict[type].pop(i)
-                return True
-        return False
+    def remove_mob(self , id):
+        self.mobs_dict.pop(id)
     
     def render(self , player_name , background):
         player = self.players_dict[player_name]
@@ -41,9 +28,8 @@ class Entities:
             for all_players in self.players_dict.values():
                 if all_players.loaded_game:
                     all_players.render(player)
-            for all_types in self.mobs_dict.values():
-                for mob in all_types:
-                    mob.render(player)
+            for mob in self.mobs_dict.values():
+                mob.render(player)
             player.draw_inventory()
     
     def initialize(self , player_name):
@@ -51,4 +37,37 @@ class Entities:
     
     def close(self , player_name):
         self.players_dict[player_name].close()
-        self.remove_player(player_name)
+    
+    def recup_data(self , received_data):
+        server_players_id = [player_id for player_id in received_data["Player"].keys()]
+        local_players_id = [player_id for player_id in self.players_dict.keys()]
+        
+        for player_id in server_players_id:
+            if player_id not in local_players_id:
+                self.add_player(player_id)
+        
+        for player_id in local_players_id:
+            if player_id not in server_players_id:
+                self.remove_player(player_id)
+        
+        server_mobs_id = [mob_id for mob_id in received_data["Mob"].keys()]
+        local_mobs_id = [mob_id for mob_id in self.mobs_dict.keys()]
+        
+        for mob_id in server_mobs_id:
+            if mob_id not in local_mobs_id:
+                self.add_mob(type = received_data["Mob"][mob_id]["type"] , id = mob_id)
+        
+        for mob_id in local_mobs_id:
+            if mob_id not in server_mobs_id:
+                self.remove_mob(mob_id)
+        
+        
+        for player_id , player_data in received_data["Player"].items():
+            for prop_id , prop in player_data.items():
+                eval(f"self.players_dict[player_id].{prop_id} = {prop}")
+            self.players_dict[player_id].change_skin()
+        
+        for mob_id , mob_data in received_data["Mob"].items():
+            for prop_id , prop in mob_data.items():
+                eval(f"self.mobs_dict[mob_id].{prop_id} = {prop}")
+            self.mobs_dict[mob_id].change_skin()

@@ -1,7 +1,4 @@
 import pygame
-import sys
-import random
-from utils import key_handler
 
 # Initialize Pygame
 pygame.init()
@@ -61,74 +58,6 @@ def draw_grid(grid, screen , animation_offsets=None):
                 text_rect = text.get_rect(center=(rect_x + TILE_SIZE // 2 - PADDING, rect_y + TILE_SIZE // 2 - PADDING))
                 screen.blit(text, text_rect)
 
-
-def spawn_new_tile(grid , value):
-    empty_tiles = [(row, col) for row in range(GRID_SIZE) for col in range(GRID_SIZE) if grid[row][col] == 0]
-    if empty_tiles:
-        row, col = random.choice(empty_tiles)
-        grid[row][col] = int(value)
-        return True
-    return False
-
-
-def move(grid, direction):
-    moved = False
-    animation_offsets = {}
-    original_grid = [row[:] for row in grid]
-
-    def compress(row):
-        new_row = [num for num in row if num != 0]
-        new_row += [0] * (GRID_SIZE - len(new_row))
-        return new_row
-
-    def merge(row):
-        for i in range(len(row) - 1):
-            if row[i] != 0 and row[i] == row[i + 1]:
-                row[i] *= 2
-                row[i + 1] = 0
-        return row
-
-    for row in range(GRID_SIZE):
-        if direction in ("LEFT", "RIGHT"):
-            current_row = grid[row][:]
-            if direction == "LEFT":
-                current_row = compress(current_row)
-                current_row = merge(current_row)
-                current_row = compress(current_row)
-            elif direction == "RIGHT":
-                current_row = compress(current_row[::-1])
-                current_row = merge(current_row)
-                current_row = compress(current_row)[::-1]
-            grid[row] = current_row
-
-        elif direction in ("UP", "DOWN"):
-            current_col = [grid[i][row] for i in range(GRID_SIZE)]
-            if direction == "UP":
-                current_col = compress(current_col)
-                current_col = merge(current_col)
-                current_col = compress(current_col)
-            elif direction == "DOWN":
-                current_col = compress(current_col[::-1])
-                current_col = merge(current_col)
-                current_col = compress(current_col)[::-1]
-            for i in range(GRID_SIZE):
-                grid[i][row] = current_col[i]
-
-    moved = original_grid != grid
-    return moved, animation_offsets
-
-
-def is_game_over(grid):
-    for row in range(GRID_SIZE):
-        for col in range(GRID_SIZE):
-            if grid[row][col] == 0:
-                return False
-            if col < GRID_SIZE - 1 and grid[row][col] == grid[row][col + 1]:
-                return False
-            if row < GRID_SIZE - 1 and grid[row][col] == grid[row + 1][col]:
-                return False
-    return True
-
 def draw_quit_button(screen):
     button_color = (255, 69, 58)
     button_rect = pygame.Rect(50, 50, 200, 60)  # Rectangle du bouton
@@ -138,35 +67,13 @@ def draw_quit_button(screen):
     text_rect = text.get_rect(center=button_rect.center)
     screen.blit(text, text_rect)
 
-    return button_rect
-
 
 # Main game loop
-def jeu(grid, screen, hist_touches):
-        # Gérer les entrées clavier
-    if key_handler.close() and not hist_touches["close"]:
-        return False
-    elif key_handler.up():
-        direction = "UP"
-    elif key_handler.down():
-        direction = "DOWN"
-    elif key_handler.left():
-        direction = "LEFT"
-    elif key_handler.right():
-        direction = "RIGHT"
-    else:
-        direction = None
-
-    if direction:
-        moved, _ = move(grid, direction)
-        if moved:
-            if is_game_over(grid):
-                return False
-
+def jeu(grid, screen):
     draw_grid(grid, screen)
     # Dessiner le bouton Quitter
-    quit_button_rect = draw_quit_button(screen)
-    return True
+    draw_quit_button(screen)
+
 
 
 

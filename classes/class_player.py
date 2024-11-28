@@ -26,41 +26,23 @@ class Player(Vivant):
         self.loaded_game = False
         self.screen = None
         self.map = "Mine"
-        self.in_game = False
         self.name = name
         self.height_screen = height_screen
         self.width_screen = width_screen
         self.x_screen = width_screen // 2 - self.taille_block // 2
         self.y_screen = height_screen // 2 - self.taille_block
         self.is_playing_2048 = False
-        self.changed = False
         self.grille = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
-        self.mining = False
         self.dict_touches = {"right" : False , "left" : False , "up" : False , "echap" : False , "number" : 1}
         self.hist_touches = {"right" : False , "left" : False , "echap" : False}
         self.selected_block = 1
         self.block_types = ["Dirt", "Stone", "Obsidian", "Bedrock"]
-        # Define a custom event for resetting the mining state
-        self.RESET_MINING_EVENT = pygame.USEREVENT + 1
         
         self.inventory = {
             "Dirt" : 10,
             "Stone" : 0,
             "Obsidian" : 0,
             "Bedrock" : 0
-        }
-        self.inventory_tuiles = {
-            "2" : 0,
-            "4" : 0,
-            "8" : 0,
-            "16" : 0,
-            "32" : 0,
-            "64" : 0,
-            "128" : 0,
-            "256" : 0,
-            "512" : 0,
-            "1024" : 0,
-            "2048" : 0
         }
     
     def initialize(self):
@@ -96,33 +78,7 @@ class Player(Vivant):
                     
     def play_2048(self):
         if self.is_playing_2048:
-            keys = []
-            for int_key in self.inventory_tuiles.keys():
-                if self.inventory_tuiles[int_key]>0:
-                    keys.append([int(int_key),self.inventory_tuiles[int_key]])
-            add = True
-            while add and len(keys)>0:
-                r = randint(0, len(keys) - 1)
-                value = keys[r][0]
-                add = spawn_new_tile(grid = self.grille , value = value)
-                if add:
-                    keys[r][1] -= 1
-                    self.inventory_tuiles[str(keys[r][0])] -= 1
-                    if keys[r][1] == 0:
-                        keys.pop(r)
-            self.is_playing_2048 = jeu(self.grille , self.screen , self.hist_touches)
-        
-        if self.is_playing_2048:
-            self.in_game = True
-        elif self.in_game:
-            if not self.dict_touches["echap"]:
-                self.in_game = False
-        else:
-            self.in_game = False
-
-        if not self.in_game and self.dict_touches["echap"] and not self.hist_touches["close"]: # Si on clique sur échap, le jeu se ferme
-            return False
-        return True
+            jeu(self.grille , self.screen)
     
     def draw_inventory(self):
         font = pygame.font.Font(None, int(36 * self.screen.get_height() / 1080))

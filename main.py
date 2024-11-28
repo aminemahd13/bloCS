@@ -15,19 +15,55 @@ entities = Entities()
 # Initialize the background
 background = Background()
 
-#Demander puis recevoir tout les changements de blocs et entitées
-#Demander d'ajouter le joueur
-
 #Create the player
 running = entities.initialize(player_name = player_name) #Ecran d'accueil. Renvoie True si l'utilisateur veut jouer
 
-#Si on run, on envoie une demande de jeu au serveur
-#Si elle est acceptée, alors on joue
+#Si l'utilisateur veut jouer, alors on envoie une requête au serveur
+#Lorsque cette requête est acceptée, on recoit un truc qui nous indique qu'on peut jouer
+#On doit recevoir notre identifiant de joueur
+player_id = 0
 
 # Game loop
 clock = pygame.time.Clock()
 
 while running:
+    received_data = {
+        "Player" : {
+            "player_id1" : {
+                "name" : "Player 1",
+                "loaded_game" : True,
+                "map" : "Mine",
+                "is_playing_2048" : False,
+                "grille" : [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
+                "selected_block" : 1,
+                "inventory" : {
+                    "Dirt" : 10,
+                    "Stone" : 0,
+                    "Obsidian" : 0,
+                    "Bedrock" : 0
+                },
+                "skin_name" : "Standing Right",
+                "health" : 100,
+                "x" : 30,
+                "y" : 70,
+                "running" : True
+            }
+        },
+        
+        "Mob" : {
+            "mob_id1" : {
+                "map" : "Mine",
+                "type" : "Zombie",
+                "skin_name" : "Standing Left",
+                "health" : 100,
+                "x" : 20,
+                "y" : 0
+            }
+        }
+    } #On actualise la data reçue de la part du serveur
+    
+    entities.recup_data(received_data)
+    
     data_sent = {
         "right" : key.right(),
         "left" : key.left(),
@@ -36,16 +72,12 @@ while running:
         "number" : key.get_number(),
         "click" : None
     }
-    #On regare où il click
+    #On regare où il click et on actualise data_sent en conséquence
+    #S'il click, data_sent["click"] = [x_screen , y_screen , id_du_click (1 ou 3)]
+    #Sinon, data_sent["click"] = None
     
+    #Envoyer les données
     
-    data_received = {
-        "Player" : 
-    }
-    
-    
-    #Envoyer les données du clavier et de la souris
-    #Recevoir les données et actualiser background et entities
     entities.render(player_name = player_name , background = background)
 
     
@@ -56,3 +88,5 @@ while running:
     clock.tick(30)
 
 entities.close(player_name)
+
+#On dit au serveur qu'on quitte le jeu
