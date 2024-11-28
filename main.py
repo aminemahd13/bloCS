@@ -2,6 +2,10 @@ import pygame
 from classes.class_background import Background
 from classes.class_entities import Entities
 import utils.key_handler as key
+from classes.class_client import MultiClient
+
+client = MultiClient()
+
 
 player_name = "Player 1"
 height_screen = 1080
@@ -27,6 +31,8 @@ player_id = 0
 clock = pygame.time.Clock()
 
 while running:
+    received_data = client.received_data()
+    """
     received_data = {
         "Player" : {
             "player_id1" : {
@@ -60,7 +66,9 @@ while running:
                 "y" : 0
             }
         }
-    } #On actualise la data reçue de la part du serveur
+    }
+    """
+    #On actualise la data reçue de la part du serveur
     
     entities.recup_data(received_data)
     
@@ -76,7 +84,7 @@ while running:
     #S'il click, data_sent["click"] = [x_screen , y_screen , id_du_click (1 ou 3)]
     #Sinon, data_sent["click"] = None
     
-    #Envoyer les données
+    client.send_dict(data_sent)
     
     entities.render(player_name = player_name , background = background)
 
