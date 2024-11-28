@@ -14,18 +14,17 @@ entities = Entities()
 # Initialize the background
 background = Background()
 
+#Demander puis recevoir tout les changements de blocs et entitées
+#Demander d'ajouter le joueur
+
 #Create the player
-player_name = entities.add_player(name = player_name , height_screen = height_screen , width_screen = width_screen)
 running = entities.initialize(player_name = player_name) #Ecran d'accueil. Renvoie True si l'utilisateur veut jouer
-
-entities.add_mob(type = "Zombie" , map = "Mine" , x_spawn = 10 , y_spawn = 0)
-
 # Game loop
 clock = pygame.time.Clock()
 
 while running:
-    running = entities.play(background = background , player_name = player_name)
-    entities.move()
+    #Envoyer les données du clavier et de la souris
+    #Recevoir les données et actualiser background et entities
     entities.render(player_name = player_name , background = background)
 
     

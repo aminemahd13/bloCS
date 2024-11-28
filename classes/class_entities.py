@@ -46,23 +46,6 @@ class Entities:
                     mob.render(player)
             player.draw_inventory()
     
-    def move(self):
-        for all_players in self.players_dict.values():
-            if all_players.loaded_game:
-                all_players.move()
-                all_players.change_map()
-        for all_types in self.mobs_dict.values():
-            for mob in all_types:
-                mob.move(self.players_dict)
-    
-    def play(self , background , player_name):
-        player = self.players_dict[player_name]
-        background.crea_block_near(self.players_dict , self.mobs_dict)
-        running = True
-        running = player.do_events(background = background)
-        running = player.play_2048()
-        return running
-    
     def initialize(self , player_name):
         return self.players_dict[player_name].initialize()
     

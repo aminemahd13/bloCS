@@ -24,6 +24,7 @@ class Player(Vivant):
         """
         super().__init__(x_spawn = x_spawn , y_spawn = y_spawn , type = "Player" , health = 100 , dx = 10)
         self.loaded_game = False
+        self.screen = None
         self.map = "Mine"
         self.in_game = False
         self.name = name
@@ -91,155 +92,7 @@ class Player(Vivant):
         # Play game background music
         pygame.mixer.music.load(resources("assets/audio/game.mp3"))
         pygame.mixer.music.play(-1)  # Loop the music
-        return self.loaded_game
-    
-    
-    def get_x_screen(self):
-        return self.x_screen
-    def get_y_screen(self):
-        return self.y_screen
-        
-    def do_events(self , background):
-        if self.loaded_game:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.mouse_click(background = background , event = event)
-                elif event.type == self.RESET_MINING_EVENT:
-                    self.mining = False
-                    pygame.time.set_timer(self.RESET_MINING_EVENT, 0)  # Stop the timer
-            return True
-    
-    def mouse_click(self , background , event):
-        if self.is_playing_2048:
-            x_screen, y_screen = pygame.mouse.get_pos()
-            if 50 <= x_screen <= 250 and 50 <= y_screen <= 110:  # Clic sur le bouton Quitter
-                self.is_playing_2048 = False
-        else:
-            self.mining_or_breaking(background = background , event = event)
-    
-    def tuile_max(self):
-        m = 0
-        for ligne in self.grille:
-            for tuile in ligne:
-                m = max(m , tuile)
-        return m
-    
-    def change_map(self):
-        if self.loaded_game:
-            if 38 * 40 <= self.x_left() and self.x_right() < 40 * 40 and 6 * 40 == self.y_up():
-                if not self.changed:
-                        if self.map == "Mine":
-                            self.map = "Maison"
-                        elif self.map == "Maison":
-                            self.map = "Mine"
-                        self.changed = True
-            elif 38 * 40 > self.x_right() or self.x_left() >= 40 * 40 or self.y_down() < 5 * 40 or self.y_up() >= 7 * 40:
-                self.changed = False
-    
-    def act_hist_touches(self):
-        self.hist_touches["close"] = self.dict_touches["echap"]
-        self.hist_touches["right"] = self.dict_touches["right"]
-        self.hist_touches["left"] = self.dict_touches["left"]
-        self.hist_touches["up"] = self.dict_touches["up"]
-        key_get_number = self.dict_touches["number"]
-        if key_get_number != -1: #Si on clique sur un chiffre correct pour sélectionner un bloc
-            self.selected_block = int(key_get_number) #On change la sélection        
-
-    def change_skin(self) -> None:
-        
-        """Player Movement
-        keyboard_jump --> True or False if jump
-        keyboard_direction --> string, direction of the player
-        mining --> True or False if mining
-        we change skin depending on the direction or if he jump or mining
-        """
-        #Not mining
-        if not self.mining:                        
-            super().change_skin()
-        
-        #Mining
-        else:
-            self.moving = False
-            if self.direction is not None:
-                self.direction_skin = self.direction
-                self.moving = True
-            else:
-                self.moving = False
-            tuile_max = self.tuile_max()
-            if self.direction_skin == "right":
-                if tuile_max in [0 , 2 , 4 , 8]:
-                    self.skin = self.dict_skins["Mining Right"]
-                elif tuile_max in [16 , 32]:
-                    self.skin = self.dict_skins["Mining Right Grey"]
-                elif tuile_max in [64 , 128]:
-                    self.skin = self.dict_skins["Mining Right Gold"]
-                else:
-                    self.skin = self.dict_skins["Mining Right Purple"]
-                
-            elif self.direction_skin == "left":
-                if tuile_max in [0 , 2 , 4 , 8]:
-                    self.skin = self.dict_skins["Mining Left"]
-                elif tuile_max in [16 , 32]:
-                    self.skin = self.dict_skins["Mining Left Grey"]
-                elif tuile_max in [64 , 128]:
-                    self.skin = self.dict_skins["Mining Left Gold"]
-                else:
-                    self.skin = self.dict_skins["Mining Left Purple"]
-                
-    def move(self):
-        if not self.is_playing_2048 and self.loaded_game:
-            #Change la diection du joueur
-            self.act_direction()
-            
-            # On regarde si le joueur est en plein saut et on actualise sa data
-            self.check_if_jumping()
-                    
-            # Changement du skin
-            self.change_skin()
-                
-            # Déplacement du perso
-            self.deplacer_perso()
-    
-    def mining_or_breaking(self , background , event):
-        x_screen, y_screen = pygame.mouse.get_pos() #Position du click sur l'écran
-        #On converti ces coordonnées en coordonnées relatives au background (en px)
-        x , y = screen_to_coord(x_screen = x_screen , y_screen = y_screen , player = self)
-        x_indice , y_indice = coord_to_indice(x = x , y = y)
-        if self.x_left() - 80 <= x <= self.x_right() + 80 and self.y_up() - 80 <= y <= self.y_down() + 80:
-            #Si on est dans une fenêtre de 2 blocs sur les côtés
-            if event.button == 1 and not (self.x_left()<=x<=self.x_right() and self.y_up()<=y<=self.y_down()):  # Left click to place a block
-                if x_indice*40+40-1<self.x_left() or x_indice*40>self.x_right() or y_indice*40>self.y_down() or y_indice*40+40-1<self.y_up():
-                    selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
-                    if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
-                        new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
-                        if background.add_block(new_block , self.map): #Si le bloc a été placé
-                                self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
-            elif event.button == 3:  # Right click to remove a block
-                added = False
-                for key , values in background.dict_block[self.map].items():
-                    for i , block in enumerate(values):
-                        if block.x_indice == x_indice and block.y_indice == y_indice:
-                            if block.type != "Game":
-                                if block.take_damage(damage = 100 , tuile_max = self.tuile_max()):
-                                    values.pop(i)
-                                    if block.type == "Tuile":
-                                        self.inventory_tuiles[str(block.value)] += 1
-                                    else:
-                                        self.add_inventory(key)
-                                added=True
-                                #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
-                                self.mining = True
-                                pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
-                                break
-                            else:
-                                self.is_playing_2048 = True
-                                added=True
-                                break
-                    if added:
-                        break
-                    
+        return self.loaded_game                    
                     
     def play_2048(self):
         if self.is_playing_2048:
@@ -284,35 +137,6 @@ class Player(Vivant):
             text = font.render(str(n), True, (0, 0, 0))
             self.screen.blit(text, (x_offset + i * int(90 * self.screen.get_height() / 1080) + int(45 * self.screen.get_height() / 1080), y_offset + int(10 * self.screen.get_height() / 1080)))
     
-    
-    def add_inventory(self,item) -> None:
-        """Add item to the inventory"""
-        self.inventory[item] += 1
-       
-        
-    def remove_inventory(self,item) -> None:
-        """Remove item to the inventory"""
-        self.inventory[item] -= 1
-
-
-    def add_inventory_tuiles(self , value):
-        self.inventory_tuiles[str(value)] += 1
-    
-    def remove_inventory_tuiles(self , value):
-        self.inventory_tuiles[str(value)] -= 1
-    
-    
-    def act_direction(self):
-        if self.dict_touches["right"] and (not self.hist_touches["right"] or not self.dict_touches["left"]):
-            self.direction = "right"
-        elif self.dict_touches["left"] and (not self.hist_touches["left"] or not self.dict_touches["right"]):
-            self.direction = "left"
-        else:
-            self.direction = None
-        self.wanna_jump = self.dict_touches["up"]
-        self.act_hist_touches()
-        creer_direction(self.dict_touches)
-   
     def close(self):
        # Quit Pygame
         pygame.mixer.music.stop()
