@@ -46,4 +46,15 @@ class MultiClient:
             print("Connexion au serveur fermée.")
     
     def received_data(self):
-        pass
+        """
+        Reçoit des données du serveur.
+        """
+        if not self.client_socket:
+            raise ConnectionError("Le client n'est pas connecté au serveur.")
+        
+        try:
+            response = self.client_socket.recv(1024).decode('utf-8')
+            return json.loads(response)
+        except Exception as e:
+            print("Erreur lors de la réception des données :", e)
+            return None

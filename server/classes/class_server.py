@@ -62,17 +62,17 @@ class MultiClientServer:
                 conn.send(json.dumps(response).encode('utf-8'))
 
         except ConnectionResetError:
-            print(f"Connexion avec {addr} interrompue")
+            print(f"Connexion réinitialisée par {addr}")
         finally:
             # Fermer la connexion avec le client
             print(f"Connexion avec {addr} terminée")
             conn.close()
 
-    def update_shared_data(self, new_data):
-        """Met à jour le dictionnaire partagé avec les nouvelles données."""
-        with threading.Lock():  # Assure une mise à jour sécurisée dans un environnement multi-thread
-            self.shared_data.update(new_data)
-            print("Données partagées mises à jour :", self.shared_data)
+    def update_shared_data(self, received_dict):
+        """
+        Met à jour les données partagées avec les informations reçues des clients.
+        """
+        self.shared_data.update(received_dict)
     
     def send_data(self , data):
         pass

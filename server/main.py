@@ -1,4 +1,5 @@
 import pygame
+import threading
 from classes.class_background import Background
 from classes.class_entities import Entities
 from classes.class_server import MultiClientServer
@@ -21,6 +22,27 @@ pygame.init()
 entities = Entities()
 # Initialize the background
 background = Background()
+
+def update_received_data():
+    global received_data
+    while True:
+        received_data = server.shared_data
+        pygame.time.wait(100)  # Attendre 100ms avant de mettre à jour à nouveau
+
+def send_data_entities():
+    while True:
+        data_entities = entities.recup_and_crea_data(received_data)
+        pygame.time.wait(100)  # Attendre 100ms avant d'envoyer à nouveau
+
+# Start server
+server_thread = threading.Thread(target=server.start_server)
+server_thread.start()
+
+# Start threads for updating and sending data
+update_thread = threading.Thread(target=update_received_data)
+send_thread = threading.Thread(target=send_data_entities)
+update_thread.start()
+send_thread.start()
 
 # Game loop
 clock = pygame.time.Clock()

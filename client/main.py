@@ -1,4 +1,5 @@
 import pygame
+import threading
 from classes.class_background import Background
 from classes.class_entities import Entities
 import utils.key_handler as key
@@ -8,6 +9,26 @@ received_data = {}
 data_sent = {}
 
 client = MultiClient()
+
+# Connect to the server
+client.connect()
+
+def send_data_continuously():
+    while running:
+        client.send_dict(data_sent)
+        pygame.time.wait(100)  # Attendre 100ms avant d'envoyer à nouveau
+
+def receive_data_continuously():
+    global received_data
+    while running:
+        received_data = client.received_data()
+        pygame.time.wait(100)  # Attendre 100ms avant de recevoir à nouveau
+
+# Start threads for sending and receiving data
+send_thread = threading.Thread(target=send_data_continuously)
+receive_thread = threading.Thread(target=receive_data_continuously)
+send_thread.start()
+receive_thread.start()
 
 #Faire un truc qui envoie en continu data_sent au serveur et qui réceptionne received_data
 
@@ -45,7 +66,7 @@ while running:
                 "loaded_game" : True,
                 "map" : "Mine",
                 "is_playing_2048" : False,
-                "grille" : [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
+                "grille" : [[0,0,0,0],[0,0,0,0],[0,0,0,0]],
                 "selected_block" : 1,
                 "inventory" : {
                     "Dirt" : 10,
