@@ -4,7 +4,12 @@ from classes.class_entities import Entities
 import utils.key_handler as key
 from classes.class_client import MultiClient
 
+received_data = {}
+data_sent = {}
+
 client = MultiClient()
+
+#Faire un truc qui envoie en continu data_sent au serveur et qui réceptionne received_data
 
 
 player_name = "Player 1"
@@ -23,6 +28,7 @@ background = Background()
 running = entities.initialize(player_name = player_name) #Ecran d'accueil. Renvoie True si l'utilisateur veut jouer
 
 #Si l'utilisateur veut jouer, alors on envoie une requête au serveur
+#Il faut y avoir le nom du joueur et ses dimensions d'écran
 #Lorsque cette requête est acceptée, on recoit un truc qui nous indique qu'on peut jouer
 #On doit recevoir notre identifiant de joueur
 player_id = 0
@@ -31,7 +37,6 @@ player_id = 0
 clock = pygame.time.Clock()
 
 while running:
-    received_data = client.received_data()
     """
     received_data = {
         "Player" : {
@@ -69,9 +74,7 @@ while running:
     }
     """
     #On actualise la data reçue de la part du serveur
-    
-    entities.recup_data(received_data)
-    
+        
     data_sent = {
         "right" : key.right(),
         "left" : key.left(),
@@ -83,8 +86,6 @@ while running:
     #On regare où il click et on actualise data_sent en conséquence
     #S'il click, data_sent["click"] = [x_screen , y_screen , id_du_click (1 ou 3)]
     #Sinon, data_sent["click"] = None
-    
-    client.send_dict(data_sent)
     
     entities.render(player_name = player_name , background = background)
 

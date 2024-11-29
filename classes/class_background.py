@@ -18,12 +18,15 @@ class Background:
         
         for block_type in ["Game" , "Wood1" , "Doorup" , "Doordown"]:
             for coord in house_blocks[block_type]:
+                coord = (coord[0] , coord[1])
                 dict_block_house[coord] = eval(f"{block_type}Block(x_indice = coord[0] , y_indice = coord[1])")
         for coord in house_blocks["Wood2"]:
-            dict_block_house[coord] = Wood2Block(x_indice = coord[0] , y_indice = coord[1] , is_solid = True)
+            coord = (coord[0] , coord[1])
+            dict_block_house[coord] = Wood2Block(x_indice = coord[0] , y_indice = coord[1])
                 
         for block_type in ["Dirt" , "Stone" , "Wood2" , "Wood1" , "Doorup" , "Doordown" , "Obsidian" , "Wood" , "Bedrock"]:
             for coord in block_lists[block_type]:
+                coord = (coord[0] , coord[1])
                 dict_block_background[coord] = eval(f"{block_type}Block(x_indice = coord[0] , y_indice = coord[1])")
         
         self.dict_block["Mine"] = dict_block_background
@@ -37,12 +40,22 @@ class Background:
         """
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
-        coord = [x_indice , y_indice]
+        coord = (x_indice , y_indice)
         block_here = False
         if coord in self.dict_block[map]:
             block_here = True
         self.dict_block[map][coord] = eval(f"{type}Block(x_indice = x_indice , y_indice = y_indice)")
         return block_here
+    
+    def remove_block(self , map , x : int = None , y : int = None , x_indice : int = None , y_indice : int = None) -> bool:
+        """
+        Enlève le bloc.
+        """
+        if x_indice is None:
+            x_indice , y_indice = coord_to_indice(x = x , y = y)
+        coord = (x_indice , y_indice)
+        if coord in self.dict_block[map]:
+            self.dict_block[map].pop(coord)
     
     
     def render(self, player : Player) -> None:
