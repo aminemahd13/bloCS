@@ -1,5 +1,6 @@
 from classes.class_mob import Zombie
 from classes.class_player import Player
+from copy import deepcopy
 
 class Entities:
     def __init__(self):
@@ -44,23 +45,21 @@ class Entities:
             player.play_2048()
     
     def recup_and_crea_data(self , received_data):
+        received_data_copy = deepcopy(received_data)
         data = {
             "Player" : {},
             "Mob" : {},
             "Joined" : []
                 }
         for player in self.players_dict.values():
-            player.dict_touches = received_data[player.id]
+            player.dict_touches = received_data_copy["Players"][player.id]
         
-        for id_wanna_quit in received_data["wanna_quit"]:
-            if id_wanna_quit in self.players_dict:
-                self.players_dict.pop(id_wanna_quit)
-                received_data["wanna_quit"].remove(id_wanna_quit)
+        #Enlever le joueur d'identifiant player_id dans le serveur
+        #self.players_dict.pop(player_id)
         
-        for i , wanna_join in enumerate(received_data["wanna_join"]):
-            player_id = self.add_player(wanna_join[0] , wanna_join[1] , wanna_join[2])
-            received_data["wanna_join"].pop(i)
-            #Faire un truc à ajouter dans la liste data["Joined"] avec le joueur qui a rejoint et son identifiant de joueur
+        #Ajouter un joueur de nom player_name, dimension d'écran height, width
+        #player_id = self.add_player(player_name , height , width)
+        #Envoyer player_id à l'utilisateur concerné
         
         for player in self.players_dict.values():
             data["Player"][player.id] = player.crea_data()
