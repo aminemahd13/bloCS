@@ -3,7 +3,6 @@ from classes.class_player import Player
 from utils.coord_to_screen import coord_to_indice
 from utils.lists_blocks import block_lists
 from utils.house_list import house_blocks
-from utils.textures import texture_background
 
 
 
@@ -13,16 +12,18 @@ class Background:
         dict_block_background = {}
         dict_block_house = {}
         self.dict_block = {}
-        self.back_texture = texture_background
         
         for block_type in ["Game" , "Wood1" , "Doorup" , "Doordown"]:
             for coord in house_blocks[block_type]:
+                coord = (coord[0] , coord[1])
                 dict_block_house[coord] = eval(f"{block_type}Block(x_indice = coord[0] , y_indice = coord[1])")
         for coord in house_blocks["Wood2"]:
+            coord = (coord[0] , coord[1])
             dict_block_house[coord] = Wood2Block(x_indice = coord[0] , y_indice = coord[1] , is_solid = True)
                 
         for block_type in ["Dirt" , "Stone" , "Wood2" , "Wood1" , "Doorup" , "Doordown" , "Obsidian" , "Wood" , "Bedrock"]:
             for coord in block_lists[block_type]:
+                coord = (coord[0] , coord[1])
                 dict_block_background[coord] = eval(f"{block_type}Block(x_indice = coord[0] , y_indice = coord[1])")
         
         self.dict_block["Mine"] = dict_block_background
@@ -35,7 +36,7 @@ class Background:
         """
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
-        coord = [x_indice , y_indice]
+        coord = (x_indice , y_indice)
         if coord in self.dict_block[map]:
             return False
         else:
@@ -50,7 +51,7 @@ class Background:
         """
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
-        coord = [x_indice , y_indice]
+        coord = (x_indice , y_indice)
         if coord in self.dict_block[map]:
             block = self.dict_block[map][coord]
             if block.take_damage(damage , player.tuile_max()):
