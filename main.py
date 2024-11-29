@@ -87,6 +87,8 @@ while running:
     #S'il click, data_sent["click"] = [x_screen , y_screen , id_du_click (1 ou 3)]
     #Sinon, data_sent["click"] = None
     
+    entities.recup_data(received_data)
+    
     entities.render(player_name = player_name , background = background)
 
     
