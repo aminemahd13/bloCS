@@ -1,0 +1,127 @@
+import pygame
+from utils.coord_to_screen import coord_to_screen, coord_to_indice
+from resources import resources
+from utils.textures import textures_dict
+
+
+
+class Block:
+    def __init__(self , health : int = 100 , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        """
+        Initialize a block.
+        :params x_indice , y_indice : Representing the block's position in the map.
+        :param is_solid: Whether the block can be passed through.
+        :param breakable: Whether the block can be broken.
+        :param health: The starting health of the block.
+        """
+        if x_indice is None:
+            x_indice , y_indice = coord_to_indice(x = x , y = y)
+        self.taille = 40
+        self.x = x_indice * self.taille #Coordonnées en px
+        self.y = y_indice * self.taille #Coordonnées en px
+        self.type = None
+        self.value = None
+        self.health = health
+
+    def render(self , player) -> None:
+        """
+        Affiche le bloc sur l'écran du joueur.
+        """
+        x_screen , y_screen = coord_to_screen(x = self.x , y = self.y , player = player)
+        if self.type != "Tuile":
+            player.screen.blit(textures_dict[self.type] , (x_screen , y_screen))
+        else:
+            player.screen.blit(textures_dict[self.type][self.value] , (x_screen , y_screen))
+    
+
+
+class DirtBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 50)
+        self.type = "Dirt"
+
+
+class StoneBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 400)
+        self.type = "Stone"
+
+class ObsidianBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 1200)
+        self.type = "Obsidian"
+
+
+class WoodBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
+        self.type = "Wood"
+
+
+class BedrockBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 300)
+        self.type = "Bedrock"
+        
+class Wood1Block(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
+        self.type = "Wood1"
+
+class Wood2Block(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
+        self.type = "Wood2"
+        
+class DoorupBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
+        self.type = "Doorup"
+        
+class DoordownBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
+        self.type = "Doordown"
+    
+    
+
+class TuileBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None, value : int = 2):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
+        self.value = value
+        self.type = "Tuile"
+
+
+class GameBlock(Block):
+    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
+        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , health = 100)
+        self.type = "Game"
+
+
+
+
+
+
+
+
+
+
+
+"""
+Utilisation
+
+Initialisation :
+wood = WoodBlock(x : int , y : int)
+stone = StoneBlock(x :  , y : int
+dirt = DirtBlock(x : int , y : int)
+bedrock = BedrockBlock(x : int , y : int)
+
+Attaquer un bloc :
+block.take_damage(damage : int) -> bool
+Attaque le bloc. Renvoie True si le bloc est détruit, False sinon.
+
+Afficher le bloc :
+block.render() -> None
+Affiche le bloc
+
+"""
