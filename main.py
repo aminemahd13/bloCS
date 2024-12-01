@@ -17,7 +17,7 @@ async def main():
     addr = server.server.sockets[0].getsockname()
     print(f"Listening on {addr}")
     # Lancement du serveur dans une tâche asynchrone
-    server_task = asyncio.create_task(server.run_server())
+    server_task = asyncio.ensure_future(server.run_server())
 
     # Boucle de jeu
     clock = pygame.time.Clock()

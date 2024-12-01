@@ -87,7 +87,9 @@ class GameServer:
         try:
             # Étape 1 : Attente de la demande du joueur
             player_request = await reader.read(1024)
+            print("reception : OK")
             player_request = json.loads(player_request.decode())
+            print(f"{player_request}")
             if verif_player_request(player_request):
                 # Étape 2 : Génération d'un player_id et envoi de la confirmation
                 player_id = str(uuid4())
