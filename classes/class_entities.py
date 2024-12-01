@@ -7,15 +7,12 @@ class Entities:
         self.players_dict = {}
         self.mobs_dict = {}
         self.mob_id = 0
-        self.player_id = 0
     
-    def add_player(self , name , height_screen , width_screen):
-        self.player_id += 1
+    def add_player(self , name , player_id , height_screen , width_screen):
         player = Player(height_screen = height_screen , width_screen = width_screen , name = name)
-        player.id = self.player_id
         player.map = "Mine"
-        self.players_dict[self.player_id] = player
-        return self.player_id
+        player.id = player_id
+        self.players_dict[player_id] = player
     
     def remove_player(self , player_id):
         self.players_dict.pop(player_id)
@@ -44,15 +41,11 @@ class Entities:
             player.do_events(background = background)
             player.play_2048()
     
-    def recup_and_crea_data(self , received_data):
-        received_data_copy = deepcopy(received_data)
+    def crea_data(self):
         data = {
             "Player" : {},
-            "Mob" : {},
-            "Joined" : []
-                }
-        for player in self.players_dict.values():
-            player.dict_touches = received_data_copy["Players"][player.id]
+            "Mob" : {}
+        }
         
         #Enlever le joueur d'identifiant player_id dans le serveur
         #self.players_dict.pop(player_id)
