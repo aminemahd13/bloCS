@@ -1,81 +1,46 @@
 import pygame
-import threading
-from classes.class_background import Background
-from classes.class_entities import Entities
-from classes.class_server import MultiClientServer
+from classes.class_server import GameServer
+import utils.key_handler as key
+import asyncio
 
-received_data = {
-    "Players" : {}
-} #Donnée reçue des joueurs
-data_entities = {}
+async def main():
+    # Initialisation de pygame
+    pygame.init()
+    pygame.display.set_mode((100, 100))  # Création d'une fenêtre invisible pour gérer les événements clavier
 
-server = MultiClientServer()
+    # Création du serveur
+    server = GameServer(host="127.0.0.1", port=8888)
+    # Tentative de démarrer le serveur
+    print(f"Attempting to start server on {server.host}:{server.port}")
+    server.server = await asyncio.start_server(server.handle_client, server.host, server.port)
+    print("Server started")
+    addr = server.server.sockets[0].getsockname()
+    print(f"Listening on {addr}")
+    # Lancement du serveur dans une tâche asynchrone
+    server_task = asyncio.create_task(server.run_server())
 
-#Faire une sorte de thread qui actualise received_data en continu
-#Et un autre qui envoie data_entities en continu
-#Faire en sorte de pouvoir ajouter un joueur ou l'enlever en fonction des requêtes
+    # Boucle de jeu
+    clock = pygame.time.Clock()
+    running = True
 
-# Pygame initialization
-pygame.init()
+    while running:
+        # Mise à jour des événements Pygame
+        pygame.event.pump()
 
-# Initialize entities
-entities = Entities()
-# Initialize the background
-background = Background()
+        # Logique du serveur
+        server.play()
 
-def update_received_data():
-    global received_data
-    while True:
-        received_data = server.shared_data
-        pygame.time.wait(100)  # Attendre 100ms avant de mettre à jour à nouveau
+        # Gestion de la fermeture via la touche 'close'
+        if key.close():
+            running = False
 
-def send_data_entities():
-    while True:
-        data_entities = entities.recup_and_crea_data(received_data)
-        pygame.time.wait(100)  # Attendre 100ms avant d'envoyer à nouveau
+        clock.tick(30)  # Limiter le jeu à 30 FPS
 
-# Start server
-server_thread = threading.Thread(target=server.start_server)
-server_thread.start()
+    # Arrêt du serveur après la fin de la boucle de jeu
+    await server.stop_server()
 
-# Start threads for updating and sending data
-update_thread = threading.Thread(target=update_received_data)
-send_thread = threading.Thread(target=send_data_entities)
-update_thread.start()
-send_thread.start()
+    # Annulation de la tâche du serveur
+    server_task.cancel()
 
-# Game loop
-clock = pygame.time.Clock()
-
-while True:
-    entities.play(background = background)
-    entities.move()
-    
-    """
-    received_data = {
-        "Players" : {
-            "player_id" : {
-                "right" : False,
-                "left" : False,
-                "up" : False,
-                "echap" : False,
-                "number" : -1,
-                "click" : None #ou [x_screen , y_screen , id_click (1 ou 3)]
-            },
-            "player2_id" : {
-                "right" : False,
-                "left" : False,
-                "up" : False,
-                "echap" : False,
-                "number" : -1,
-                "click" : None
-            }
-        }
-    } 
-    """
-    
-    data_entities = entities.recup_and_crea_data(received_data)
-    
-    #Faire un truc où dès qu'un joueur voulant venir a été accepté, on lui dit que c'est bon et on lui envoie son id de joueur
-
-    clock.tick(30)
+if __name__ == "__main__":
+    asyncio.run(main())

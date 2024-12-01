@@ -36,35 +36,16 @@ class Player(Vivant):
         }
     
     def initialize(self):
-        # Screen dimensions
-        SCREEN_WIDTH = self.width_screen
-        SCREEN_HEIGHT = self.height_screen
-
+        self.loaded_game = True
         # Create the game screen
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = pygame.display.set_mode((self.width_screen, self.height_screen))
         pygame.display.set_caption("bloCS")
         # Initialize mixer for background music
         pygame.mixer.init()
-
-        # Display the menu
-        while True:
-            choice = display_menu(self.screen)
-            if choice == "Start Game":
-                self.loaded_game = True
-                break
-            elif choice == "Tips":
-                display_tips(self.screen)
-            elif choice == "Quit":
-                pygame.quit()
-                exit()
-
-        # Display the loading screen
-        display_loading_screen(self.screen)
-
         # Play game background music
         pygame.mixer.music.load(resources("assets/audio/game.mp3"))
         pygame.mixer.music.play(-1)  # Loop the music
-        return self.loaded_game                    
+    
                     
     def play_2048(self):
         if self.is_playing_2048:
