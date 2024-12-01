@@ -7,8 +7,8 @@ class Entities:
         self.players_dict = {}
         self.mobs_dict = {}
     
-    def add_player(self , id):
-        self.players_dict[id] = Player(height_screen = 1080 , width_screen = 1920 , name = "Player 1")
+    def add_player(self , id , height_screen , width_screen , name):
+        self.players_dict[id] = Player(height_screen = height_screen , width_screen = width_screen , name = name)
     
     def remove_player(self , id):
         self.players_dict.pop(id)
@@ -20,8 +20,8 @@ class Entities:
     def remove_mob(self , id):
         self.mobs_dict.pop(id)
     
-    def render(self , player_name , background):
-        player = self.players_dict[player_name]
+    def render(self , player_id , background):
+        player = self.players_dict[player_id]
         if not player.is_playing_2048:
         # Render the background and players
             background.render(player = player) # Affiche le background avec les blocs
@@ -32,43 +32,39 @@ class Entities:
                 mob.render(player)
             player.draw_inventory()
     
-    def initialize(self , player_name):
-        return self.players_dict[player_name].initialize()
-    
-    def close(self , player_name):
-        self.players_dict[player_name].close()
+    def close(self , player_id):
+        self.players_dict[player_id].close()
     
     def recup_data(self , received_data):
-        new_received_data = deepcopy(received_data)
-        server_players_id = [player_id for player_id in new_received_data["Player"].keys()]
+        server_players_id = [player_id for player_id in received_data["Player"].keys()]
         local_players_id = [player_id for player_id in self.players_dict.keys()]
         
         for player_id in server_players_id:
             if player_id not in local_players_id:
-                self.add_player(player_id)
+                self.add_player(player_id , 1080 , 1920 , received_data["Player"]["name"])
         
         for player_id in local_players_id:
             if player_id not in server_players_id:
                 self.remove_player(player_id)
         
-        server_mobs_id = [mob_id for mob_id in new_received_data["Mob"].keys()]
+        server_mobs_id = [mob_id for mob_id in received_data["Mob"].keys()]
         local_mobs_id = [mob_id for mob_id in self.mobs_dict.keys()]
         
         for mob_id in server_mobs_id:
             if mob_id not in local_mobs_id:
-                self.add_mob(type = new_received_data["Mob"][mob_id]["type"] , id = mob_id)
+                self.add_mob(type = received_data["Mob"][mob_id]["type"] , id = mob_id)
         
         for mob_id in local_mobs_id:
             if mob_id not in server_mobs_id:
                 self.remove_mob(mob_id)
         
         
-        for player_id , player_data in new_received_data["Player"].items():
+        for player_id , player_data in received_data["Player"].items():
             for prop_id , prop in player_data.items():
                 eval(f"self.players_dict[player_id].{prop_id} = {prop}")
             self.players_dict[player_id].change_skin()
         
-        for mob_id , mob_data in new_received_data["Mob"].items():
+        for mob_id , mob_data in received_data["Mob"].items():
             for prop_id , prop in mob_data.items():
                 eval(f"self.mobs_dict[mob_id].{prop_id} = {prop}")
             self.mobs_dict[mob_id].change_skin()
