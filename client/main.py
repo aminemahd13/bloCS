@@ -54,8 +54,7 @@ async def main():
             clock.tick(30)
 
         await client.close()
-        client_task.cancel()
-
+    server_task.cancel()
 
 if __name__ == "__main__":
     asyncio.run(main())
