@@ -33,7 +33,7 @@ async def main():
 
 
     client = GameClient(host = "127.0.0.1", port = 8888)
-    asyncio.run(client.connect_to_server(player_name , height_screen , width_screen))
+    server_task = asyncio.create_task(client.connect_to_server(player_name , height_screen , width_screen))
 
 
     if client.running:
@@ -52,6 +52,7 @@ async def main():
             clock.tick(30)
 
         await client.close()
+    server_task.cancel()
 
 if __name__ == "__main__":
     asyncio.run(main())
