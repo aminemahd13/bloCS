@@ -33,11 +33,12 @@ async def main():
 
 
     client = GameClient(host = "127.0.0.1", port = 8888)
+    print("Trying to connect...")
     await client.connect_to_server(player_name , height_screen , width_screen)
-
+    print("Connection : OK")
 
     if client.running:
-        client_task = asyncio.create_task(client.handle_connection2())
+        client_task = asyncio.ensure_future(client.handle_connection2())
         # Game loop
         clock = pygame.time.Clock()
 

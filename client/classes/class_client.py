@@ -30,11 +30,14 @@ class GameClient:
             "height_screen" : height,
             "width_screen" : width
         }
+        print("Trying to send request")
         self.writer.write(json.dumps(player_request).encode())
         await self.writer.drain()
+        print("Request sent")
 
         # Étape 2 : Réception de la confirmation et du player_id
         response = await self.reader.read(1024)
+        print("response : OK")
         response = json.loads(response.decode())
         if response["status"] == "accepted":
             self.running = True
