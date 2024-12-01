@@ -1,46 +1,94 @@
-import pygame
-from classes.class_server import GameServer
-import utils.key_handler as key
 import asyncio
+import logging
+from typing import Optional
+from dataclasses import dataclass
+
+@dataclass
+class ServerConfig:
+    host: str = "127.0.0.1"
+    port: int = 55000
+    max_clients: int = 10
+
+class GameServer:
+    def __init__(self, config: ServerConfig = ServerConfig()):
+        self.config = config
+        self.server: Optional[asyncio.Server] = None
+        self.clients = set()
+        self.running = False
+        self.setup_logging()
+
+    def setup_logging(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+        self.logger = logging.getLogger('GameServer')
+
+    async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        addr = writer.get_extra_info('peername')
+        self.logger.info(f"New connection from {addr}")
+        
+        if len(self.clients) >= self.config.max_clients:
+            self.logger.warning(f"Max clients reached, rejecting {addr}")
+            writer.close()
+            await writer.wait_closed()
+            return
+
+        self.clients.add(writer)
+        try:
+            while self.running:
+                data = await reader.read(1024)
+                if not data:
+                    break
+                # Process data here
+                # await self.broadcast(data, writer)
+        except Exception as e:
+            self.logger.error(f"Error handling client {addr}: {e}")
+        finally:
+            self.clients.remove(writer)
+            writer.close()
+            await writer.wait_closed()
+            self.logger.info(f"Connection closed for {addr}")
+
+    async def broadcast(self, data: bytes, sender: asyncio.StreamWriter):
+        for client in self.clients:
+            if client != sender:
+                try:
+                    client.write(data)
+                    await client.drain()
+                except Exception as e:
+                    self.logger.error(f"Error broadcasting to client: {e}")
+
+    async def start(self):
+        self.running = True
+        try:
+            self.server = await asyncio.start_server(
+                self.handle_client,
+                self.config.host,
+                self.config.port
+            )
+            addr = self.server.sockets[0].getsockname()
+            self.logger.info(f"Server started on {addr}")
+            await self.server.serve_forever()
+        except Exception as e:
+            self.logger.error(f"Server error: {e}")
+            self.running = False
+
+    async def stop(self):
+        self.running = False
+        if self.server:
+            self.server.close()
+            await self.server.wait_closed()
+            self.logger.info("Server stopped")
 
 async def main():
-    # Initialisation de pygame
-    pygame.init()
-    pygame.display.set_mode((100, 100))  # Création d'une fenêtre invisible pour gérer les événements clavier
-
-    # Création du serveur
-    server = GameServer(host="127.0.0.1", port=8888)
-    # Tentative de démarrer le serveur
-    print(f"Attempting to start server on {server.host}:{server.port}")
-    server.server = await asyncio.start_server(server.handle_client, server.host, server.port)
-    print("Server started")
-    addr = server.server.sockets[0].getsockname()
-    print(f"Listening on {addr}")
-    # Lancement du serveur dans une tâche asynchrone
-    server_task = asyncio.create_task(server.run_server())
-
-    # Boucle de jeu
-    clock = pygame.time.Clock()
-    running = True
-
-    while running:
-        # Mise à jour des événements Pygame
-        pygame.event.pump()
-
-        # Logique du serveur
-        server.play()
-
-        # Gestion de la fermeture via la touche 'close'
-        if key.close():
-            running = False
-
-        clock.tick(30)  # Limiter le jeu à 30 FPS
-
-    # Arrêt du serveur après la fin de la boucle de jeu
-    await server.stop_server()
-
-    # Annulation de la tâche du serveur
-    server_task.cancel()
+    config = ServerConfig()
+    server = GameServer(config)
+    
+    try:
+        await server.start()
+    except KeyboardInterrupt:
+        await server.stop()
 
 if __name__ == "__main__":
     asyncio.run(main())

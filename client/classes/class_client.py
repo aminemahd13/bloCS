@@ -1,90 +1,92 @@
-import asyncio
+import socket
 import json
+import threading
 from classes.class_entities import Entities
 from classes.class_background import Background
 import utils.key_handler as key
-
+import logging
 
 class GameClient:
-    def __init__(self, host , port):
+    def __init__(self, host="127.0.0.1", port=55000):
         self.host = host
         self.port = port
-        self.writer = None
-        self.reader = None
+        self.socket = None
         self.player_id = None
         self.running = False
         self.entities = Entities()
         self.background = Background()
+        self.setup_logging()
 
-    async def connect_to_server(self , player_name , height , width):
+    def setup_logging(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+        self.logger = logging.getLogger('GameClient')
+
+    def connect_to_server(self, player_name, height, width):
         try:
-            self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
-            await self.handle_connection(player_name , height , width)
-        except Exception as e:
-            print(f"Error connecting to server: {e}")
-
-    async def handle_connection(self, player_name , height , width):
-        # Étape 1 : Envoi de la demande de connexion
-        player_request = {
-            "name" : player_name,
-            "height_screen" : height,
-            "width_screen" : width
-        }
-        print("Trying to send request")
-        self.writer.write(json.dumps(player_request).encode())
-        await self.writer.drain()
-        print("Request sent")
-
-        # Étape 2 : Réception de la confirmation et du player_id
-        response = await self.reader.read(1024)
-        print("response : OK")
-        response = json.loads(response.decode())
-        if response["status"] == "accepted":
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.socket.connect((self.host, self.port))
             self.running = True
-            self.player_id = response["player_id"]
-            self.entities.add_player(self.player_id , height , width , player_name)
-            self.entities.players_dict[self.player_id].initialize()
-            print(f"Connected with player_id: {self.player_id}")
-        else:
-            self.running = False
-            print("Error while connection")
-
-    async def handle_connection2(self):
-        # Étape 3 : Échange continu des données
-        try:
-            while self.running:
-                # Envoi des données du joueur
-                data_dict = {
-                    "right" : key.right(),
-                    "left" : key.left(),
-                    "up" : key.up(),
-                    "echap" : key.close(),
-                    "number" : key.get_number(),
-                    "click" : None
-                }
-                self.writer.write(json.dumps(data_dict).encode())
-                await self.writer.drain()
-                # Lecture des données des mobs
-                mobs_data = await self.reader.read(1024)
-                mobs_data = json.loads(mobs_data.decode())
-                self.entities.recup_data(mobs_data)
-
-                # Pause avant le prochain envoi
-                await asyncio.sleep(0.01)
+            self.handle_connection(player_name, height, width)
         except Exception as e:
-            self.running = False
-            print(f"Error during game loop: {e}")
-        finally:
-            # Étape 4 : Déconnexion
+            self.logger.error(f"Error connecting to server: {e}")
             self.running = False
 
-    def render(self):
-        self.entities.render(player_id = self.player_id , background = self.background)
-    
-    async def close(self):
-        if self.writer:
-            self.writer.close()
-            await self.writer.wait_closed()
-        print("Disconnected from server.")
-        self.entities.players_dict[self.player_id].close()
+    def handle_connection(self, player_name, height, width):
+        # Initial connection request
+        player_request = {
+            "name": player_name,
+            "height": height,
+            "width": width
+        }
+        self.send_data(player_request)
+        
+        # Start receive thread
+        receive_thread = threading.Thread(target=self.receive_data)
+        receive_thread.daemon = True
+        receive_thread.start()
 
+    def send_data(self, data):
+        try:
+            json_data = json.dumps(data)
+            self.socket.send(json_data.encode())
+        except Exception as e:
+            self.logger.error(f"Error sending data: {e}")
+            self.running = False
+
+    def receive_data(self):
+        while self.running:
+            try:
+                data = self.socket.recv(4096)
+                if not data:
+                    break
+                json_data = json.loads(data.decode())
+                self.handle_server_message(json_data)
+            except Exception as e:
+                self.logger.error(f"Error receiving data: {e}")
+                self.running = False
+                break
+
+    def handle_server_message(self, data):
+        # Handle different types of server messages
+        # Example:
+        # if "player_id" in data:
+        #     self.player_id = data["player_id"]
+        pass
+
+    def disconnect(self):
+        self.running = False
+        if self.socket:
+            try:
+                self.socket.close()
+                self.logger.info("Disconnected from server")
+            except Exception as e:
+                self.logger.error(f"Error disconnecting: {e}")
+
+    def update(self):
+        # Game update logic here
+        if not self.running:
+            return False
+        return True

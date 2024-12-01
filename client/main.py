@@ -1,16 +1,16 @@
 import pygame
-import asyncio
+import sys
 from classes.class_client import GameClient
-import utils.key_handler as key
-from screens.loading_screen import display_loading_screen
 from screens.menu import display_menu, display_tips
+from screens.loading_screen import display_loading_screen
 
-async def main():
+def main():
+    # Initialize Pygame
     pygame.init()
-
     screen = pygame.display.set_mode((1920, 1080))
-    pygame.display.set_caption("bloCS - Menu")
-    # Display the menu
+    pygame.display.set_caption("Multiplayer Game")
+
+    # Menu loop
     while True:
         choice = display_menu(screen)
         if choice == "Start Game":
@@ -19,42 +19,49 @@ async def main():
             display_tips(screen)
         elif choice == "Quit":
             pygame.quit()
-            exit()
+            sys.exit()
 
-    # Display the loading screen
+    # Display loading screen
     display_loading_screen(screen)
 
-    del screen
-
-
+    # Game setup
     player_name = "Player 1"
     height_screen = 1080
     width_screen = 1920
 
-
-    client = GameClient(host = "127.0.0.1", port = 8888)
+    # Initialize client
+    client = GameClient(host="127.0.0.1", port=55000)
     print("Trying to connect...")
-    await client.connect_to_server(player_name , height_screen , width_screen)
-    print("Connection : OK")
+    client.connect_to_server(player_name, height_screen, width_screen)
+    print("Connection: OK")
 
-    if client.running:
-        client_task = asyncio.ensure_future(client.handle_connection2())
-        # Game loop
-        clock = pygame.time.Clock()
-
+    # Game loop
+    clock = pygame.time.Clock()
+    try:
         while client.running:
-            client.render()
-            # Update the screen
-            pygame.display.flip()
-            
-            if key.close():
-                client.running = False
-            
-            # Cap the frame rate
-            clock.tick(30)
+            # Event handling
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    client.running = False
+                # Handle other events...
 
-        await client.close()
-        client_task.cancel()
+            # Game updates
+            if not client.update():
+                break
+
+            # Render
+            screen.fill((0, 0, 0))  # Clear screen
+            # Draw game elements here
+            pygame.display.flip()
+
+            # Cap framerate
+            clock.tick(60)
+
+    finally:
+        # Cleanup
+        client.disconnect()
+        pygame.quit()
+        sys.exit()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
