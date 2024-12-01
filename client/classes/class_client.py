@@ -10,6 +10,7 @@ class GameClient:
         self.host = host
         self.port = port
         self.writer = None
+        self.reader = None
         self.player_id = None
         self.running = False
         self.entities = Entities()
@@ -17,23 +18,23 @@ class GameClient:
 
     async def connect_to_server(self , player_name , height , width):
         try:
-            reader, self.writer = await asyncio.open_connection(self.host, self.port)
-            await self.handle_connection(reader, self.writer , player_name , height , width)
+            self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
+            await self.handle_connection(player_name , height , width)
         except Exception as e:
             print(f"Error connecting to server: {e}")
 
-    async def handle_connection(self, reader, writer , player_name , height , width):
+    async def handle_connection(self, player_name , height , width):
         # Étape 1 : Envoi de la demande de connexion
         player_request = {
             "name" : player_name,
             "height_screen" : height,
             "width_screen" : width
         }
-        writer.write(json.dumps(player_request).encode())
-        await writer.drain()
+        self.writer.write(json.dumps(player_request).encode())
+        await self.writer.drain()
 
         # Étape 2 : Réception de la confirmation et du player_id
-        response = await reader.read(1024)
+        response = await self.reader.read(1024)
         response = json.loads(response.decode())
         if response["status"] == "accepted":
             self.running = True
@@ -41,38 +42,36 @@ class GameClient:
             self.entities.add_player(self.player_id , height , width , player_name)
             self.entities.players_dict[self.player_id].initialize()
             print(f"Connected with player_id: {self.player_id}")
-
-            # Étape 3 : Échange continu des données
-            try:
-                while self.running:
-                    # Envoi des données du joueur
-                    data_dict = {
-                        "right" : key.right(),
-                        "left" : key.left(),
-                        "up" : key.up(),
-                        "echap" : key.close(),
-                        "number" : key.get_number(),
-                        "click" : None
-                    }
-                    writer.write(json.dumps(data_dict).encode())
-                    await writer.drain()
-
-                    # Lecture des données des mobs
-                    mobs_data = await reader.read(1024)
-                    mobs_data = json.loads(mobs_data.decode())
-                    print(f"Received mobs data: {mobs_data}")
-                    self.entities.recup_data(mobs_data)
-
-                    # Pause avant le prochain envoi
-                    await asyncio.sleep(0.01)
-            except Exception as e:
-                self.running = False
-                print(f"Error during game loop: {e}")
-            finally:
-                # Étape 4 : Déconnexion
-                self.running = False
-            
         else:
+            self.running = False
+            print("Error while connection")
+
+    async def handle_connection2(self):
+        # Étape 3 : Échange continu des données
+        try:
+            while self.running:
+                # Envoi des données du joueur
+                data_dict = {
+                    "right" : key.right(),
+                    "left" : key.left(),
+                    "up" : key.up(),
+                    "echap" : key.close(),
+                    "number" : key.get_number(),
+                    "click" : None
+                }
+                self.writer.write(json.dumps(data_dict).encode())
+                await self.writer.drain()
+                # Lecture des données des mobs
+                mobs_data = await self.reader.read(1024)
+                mobs_data = json.loads(mobs_data.decode())
+                self.entities.recup_data(mobs_data)
+
+                # Pause avant le prochain envoi
+                await asyncio.sleep(0.01)
+        except Exception as e:
+            self.running = False
+            print(f"Error during game loop: {e}")
+        finally:
             # Étape 4 : Déconnexion
             self.running = False
 
