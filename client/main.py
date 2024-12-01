@@ -37,6 +37,7 @@ async def main():
 
 
     if client.running:
+        client_task = asyncio.create_task(client.handle_connection2())
         # Game loop
         clock = pygame.time.Clock()
 
