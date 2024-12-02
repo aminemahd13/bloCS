@@ -46,11 +46,8 @@ def main():
                 # Handle other events...
 
             # Game updates
-            if not client.update():
-                break
+            client.update()
 
-            # Render
-            screen.fill((0, 0, 0))  # Clear screen
             # Draw game elements here
             pygame.display.flip()
 
