@@ -6,6 +6,7 @@ from classes.class_background import Background
 import utils.key_handler as key
 import logging
 
+
 class GameClient:
     def __init__(self, host="127.0.0.1", port=55000):
         self.host = host
@@ -41,20 +42,38 @@ class GameClient:
             "height": height,
             "width": width
         }
-        self.send_data(player_request)
+        json_data = json.dumps(player_request)
+        self.socket.send(json_data.encode())
+        
+        data = self.socket.recv(4096)
+        self.player_id = json.loads(data.decode())
+        
+        self.entities.add_player(self.player_id , height , width , player_name)
         
         # Start receive thread
         receive_thread = threading.Thread(target=self.receive_data)
         receive_thread.daemon = True
         receive_thread.start()
+        
+        send_thread = threading.Thread(target=self.send_data)
+        send_thread.daemon = True
+        send_thread.start()
 
-    def send_data(self, data):
-        try:
-            json_data = json.dumps(data)
-            self.socket.send(json_data.encode())
-        except Exception as e:
-            self.logger.error(f"Error sending data: {e}")
-            self.running = False
+    def send_data(self):
+        while self.running:
+            try:
+                data = {
+                    "right" : key.right(),
+                    "left" : key.left(),
+                    "up" : key.up(),
+                    "echap" : key.close(),
+                    "click" : None
+                }
+                json_data = json.dumps(data)
+                self.socket.send(json_data.encode())
+            except Exception as e:
+                self.logger.error(f"Error sending data: {e}")
+                self.running = False
 
     def receive_data(self):
         while self.running:
@@ -74,7 +93,9 @@ class GameClient:
         # Example:
         # if "player_id" in data:
         #     self.player_id = data["player_id"]
-        pass
+        self.entities.recup_data(data)
+        if not data["Player"][self.player_id]["running"]:
+            self.running = False
 
     def disconnect(self):
         self.running = False
@@ -87,6 +108,5 @@ class GameClient:
 
     def update(self):
         # Game update logic here
-        if not self.running:
-            return False
-        return True
+        self.background.render(self.entities.players_dict[self.player_id])
+        self.entities.render(self.player_id , self.background)
