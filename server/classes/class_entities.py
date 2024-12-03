@@ -1,12 +1,15 @@
 from classes.class_mob import Zombie
 from classes.class_player import Player
-from copy import deepcopy
+from utils.calcul_teinte import calculer_teinte
 
 class Entities:
     def __init__(self):
         self.players_dict = {}
         self.mobs_dict = {}
         self.mob_id = 0
+        self.compteur_frame = 1
+        self.fps = 30
+        self.teinte = 255
     
     def add_player(self , name , player_id , height_screen , width_screen):
         player = Player(height_screen = height_screen , width_screen = width_screen , name = name)
@@ -34,6 +37,11 @@ class Entities:
                 all_players.change_map()
         for mob in self.mobs_dict.values():
             mob.move(self.players_dict)
+        self.teinte = calculer_teinte(self.compteur_frame , self.fps)
+        if self.compteur_frame == 24 * self.fps:
+            self.compteur_frame = 1
+        else:
+            self.compteur_frame += 1
     
     def play(self , background):
         background.crea_block_near(self.players_dict , self.mobs_dict)
