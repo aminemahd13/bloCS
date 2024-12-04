@@ -40,6 +40,7 @@ class GameServer:
                 data = await reader.read(1024)
                 if not data:
                     break
+                self.logger.debug(f"Received data from {addr}: {data}")
                 # Process data here
                 # await self.broadcast(data, writer)
         except Exception as e:

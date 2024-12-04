@@ -27,11 +27,13 @@ class GameServer:
         
     async def handle_client(self, reader, writer):
         addr = writer.get_extra_info('peername')
+        print(f"New connection from {addr}")
 
         player_id = None
         try:
             # Étape 1 : Attente de la demande du joueur
             player_request = await reader.read(1024)
+            print(f"Received player request: {player_request}")
             player_request = json.loads(player_request.decode())
             if verif_client_request(player_request):
                 # Étape 2 : Génération d'un player_id et envoi de la confirmation
@@ -41,6 +43,7 @@ class GameServer:
                 confirmation = {"status": "accepted", "player_id": player_id}
                 writer.write(json.dumps(confirmation).encode())
                 await writer.drain()
+                print(f"Sent confirmation to {addr}: {confirmation}")
 
                 # Étape 3 : Échange continu entre le joueur et le serveur
                 while True:
@@ -48,6 +51,7 @@ class GameServer:
                         # Lecture des données du joueur
                         data = await asyncio.wait_for(reader.read(1024), timeout=5.0)
                         if data:
+                            print(f"Received data from {addr}: {data}")
                             data_dict = json.loads(data.decode())
                             if verif_data_received(data_dict , player_request["height_screen"] , player_request["width_screen"]):
                                 self.entities.players_dict[player_id].dict_touches = data_dict
@@ -58,14 +62,16 @@ class GameServer:
                         # Envoi des données des mobs au joueur
                         writer.write(json.dumps(self.sent_data).encode())
                         await writer.drain()
+                        print(f"Sent data to {addr}: {self.sent_data}")
                     except asyncio.TimeoutError:
                         break
             else:
                 confirmation = {"status": "refused", "player_id": None}
                 writer.write(json.dumps(confirmation).encode())
                 await writer.drain()
-        except Exception:
-            pass
+                print(f"Sent refusal to {addr}: {confirmation}")
+        except Exception as e:
+            print(f"Error handling client {addr}: {e}")
         finally:
             # Étape 4 : Gestion de la déconnexion
             if player_id and player_id in self.players:
@@ -74,6 +80,7 @@ class GameServer:
             await writer.wait_closed()
             if player_id and player_id in self.entities.players_dict:
                 self.entities.remove_player(player_id)
+            print(f"Connection closed for {addr}")
 
     async def run_server(self):
         try:

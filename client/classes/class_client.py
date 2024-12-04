@@ -3,10 +3,11 @@ import json
 import threading
 from classes.class_entities import Entities
 from classes.class_background import Background
-from utils.verif import verif_data_received , verif_request_received
+from utils.verif import verif_data_received, verif_request_received
 import utils.key_handler as key
 import logging
-
+from send_dict import send_dict
+from recv_dict import recv_dict
 
 class GameClient:
     def __init__(self, host="127.0.0.1", port=55000):
@@ -31,6 +32,7 @@ class GameClient:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.host, self.port))
             self.running = True
+            self.logger.info("Connected to server")
             self.handle_connection(player_name, height, width)
         except Exception as e:
             self.logger.error(f"Error connecting to server: {e}")
@@ -43,15 +45,13 @@ class GameClient:
             "height": height,
             "width": width
         }
-        json_data = json.dumps(player_request)
-        self.socket.send(json_data.encode())
+        send_dict(self.socket, player_request)
         
-        data = self.socket.recv(4096)
-        data_dict = json.loads(data.decode())
+        data_dict = recv_dict(self.socket)
         if verif_request_received(data_dict):
             if data_dict["player_id"] is not None:
                 self.player_id = data_dict["player_id"]
-                self.entities.add_player(self.player_id , height , width , player_name)
+                self.entities.add_player(self.player_id, height, width, player_name)
                 # Start receive thread
                 receive_thread = threading.Thread(target=self.receive_data)
                 receive_thread.daemon = True
@@ -71,14 +71,15 @@ class GameClient:
         while self.running:
             try:
                 data = {
-                    "right" : key.right(),
-                    "left" : key.left(),
-                    "up" : key.up(),
-                    "echap" : key.close(),
-                    "click" : None
+                    "right": key.right(),
+                    "left": key.left(),
+                    "up": key.up(),
+                    "echap": key.close(),
+                    "click": None
                 }
                 json_data = json.dumps(data)
                 self.socket.send(json_data.encode())
+                send_dict(self.socket, data)
             except Exception as e:
                 self.logger.error(f"Error sending data: {e}")
                 self.running = False
@@ -86,21 +87,16 @@ class GameClient:
     def receive_data(self):
         while self.running:
             try:
-                data = self.socket.recv(4096)
-                if not data:
+                data_dict = recv_dict(self.socket)
+                if not data_dict:
                     break
-                json_data = json.loads(data.decode())
-                self.handle_server_message(json_data)
+                self.handle_server_message(data_dict)
             except Exception as e:
                 self.logger.error(f"Error receiving data: {e}")
                 self.running = False
                 break
 
     def handle_server_message(self, data):
-        # Handle different types of server messages
-        # Example:
-        # if "player_id" in data:
-        #     self.player_id = data["player_id"]
         if verif_data_received(data):
             self.entities.recup_data(data)
             if not data["Player"][self.player_id]["running"]:
@@ -116,6 +112,5 @@ class GameClient:
                 self.logger.error(f"Error disconnecting: {e}")
 
     def update(self):
-        # Game update logic here
         self.background.render(self.entities.players_dict[self.player_id])
-        self.entities.render(self.player_id , self.background)
+        self.entities.render(self.player_id, self.background)
