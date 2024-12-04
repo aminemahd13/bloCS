@@ -23,7 +23,7 @@ def main():
 
     # Display loading screen
     display_loading_screen(screen)
-
+    
     # Game setup
     player_name = "Player 1"
     height_screen = 1080
@@ -34,6 +34,8 @@ def main():
     print("Trying to connect...")
     client.connect_to_server(player_name, height_screen, width_screen)
     print("Connection: OK")
+    
+    del screen
 
     # Game loop
     clock = pygame.time.Clock()

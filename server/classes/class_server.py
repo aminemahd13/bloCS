@@ -3,62 +3,7 @@ import json
 from uuid import uuid4
 from classes.class_entities import Entities
 from classes.class_background import Background
-
-
-
-
-
-def verif_received_data_touches(data , height , width):
-    if type(data) != dict:
-        return False
-    if len(data) != 6:
-        return False
-    for test in ["right" , "left" , "up" , "echap"]:
-        if test not in data:
-            return False
-        if type(data[test])!= bool:
-            return False
-    if "number" not in data:
-        return False
-    if type(data["number"]) != int:
-        return False
-    if not(1<=data["number"]<=4):
-        return False
-    if "click" not in data:
-        return False
-    if data["click"] is None:
-        return True
-    if type(data["click"]) != list:
-        return False
-    if len(data["click"]) != 3:
-        return False
-    for i in range(3):
-        if type(data["click"][i]) != int:
-            return False
-    if not(0<=data["click"][0]<=width and 0<=data["click"][1]<=height and data["click"][2] in [1,3]):
-        return False
-    return True
-
-def verif_player_request(data):
-    if type(data) != dict:
-        return False
-    if len(data) != 3:
-        return False
-    for test in ["name" , "height_screen" , "width_screen"]:
-        if test not in data:
-            return False
-    if type(data["name"]) != str:
-        return False
-    if type(data["height_screen"]) != int:
-        return False
-    if type(data["width_screen"]) != int:
-        return False
-    if not(0<=data["height_screen"]<=1080):
-        return False
-    if not(0<=data["width_screen"]<=1920):
-        return False
-    return True
-    
+from utils.verif import verif_data_received , verif_client_request
 
 
 class GameServer:
@@ -88,7 +33,7 @@ class GameServer:
             # Étape 1 : Attente de la demande du joueur
             player_request = await reader.read(1024)
             player_request = json.loads(player_request.decode())
-            if verif_player_request(player_request):
+            if verif_client_request(player_request):
                 # Étape 2 : Génération d'un player_id et envoi de la confirmation
                 player_id = str(uuid4())
                 self.players[player_id] = (writer, asyncio.get_event_loop().time())
@@ -104,7 +49,7 @@ class GameServer:
                         data = await asyncio.wait_for(reader.read(1024), timeout=5.0)
                         if data:
                             data_dict = json.loads(data.decode())
-                            if verif_received_data_touches(data_dict , player_request["height_screen"] , player_request["width_screen"]):
+                            if verif_data_received(data_dict , player_request["height_screen"] , player_request["width_screen"]):
                                 self.entities.players_dict[player_id].dict_touches = data_dict
                             self.players[player_id] = (writer, asyncio.get_event_loop().time())
                         else:

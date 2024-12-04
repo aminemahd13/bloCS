@@ -3,6 +3,7 @@ import json
 import threading
 from classes.class_entities import Entities
 from classes.class_background import Background
+from utils.verif import verif_data_received , verif_request_received
 import utils.key_handler as key
 import logging
 
@@ -46,18 +47,25 @@ class GameClient:
         self.socket.send(json_data.encode())
         
         data = self.socket.recv(4096)
-        self.player_id = json.loads(data.decode())
-        
-        self.entities.add_player(self.player_id , height , width , player_name)
-        
-        # Start receive thread
-        receive_thread = threading.Thread(target=self.receive_data)
-        receive_thread.daemon = True
-        receive_thread.start()
-        
-        send_thread = threading.Thread(target=self.send_data)
-        send_thread.daemon = True
-        send_thread.start()
+        data_dict = json.loads(data.decode())
+        if verif_request_received(data_dict):
+            if data_dict["player_id"] is not None:
+                self.player_id = data_dict["player_id"]
+                self.entities.add_player(self.player_id , height , width , player_name)
+                # Start receive thread
+                receive_thread = threading.Thread(target=self.receive_data)
+                receive_thread.daemon = True
+                receive_thread.start()
+                
+                send_thread = threading.Thread(target=self.send_data)
+                send_thread.daemon = True
+                send_thread.start()
+                
+                self.running = True
+            else:
+                self.running = False
+        else:
+            self.running = False
 
     def send_data(self):
         while self.running:
@@ -93,9 +101,10 @@ class GameClient:
         # Example:
         # if "player_id" in data:
         #     self.player_id = data["player_id"]
-        self.entities.recup_data(data)
-        if not data["Player"][self.player_id]["running"]:
-            self.running = False
+        if verif_data_received(data):
+            self.entities.recup_data(data)
+            if not data["Player"][self.player_id]["running"]:
+                self.running = False
 
     def disconnect(self):
         self.running = False
