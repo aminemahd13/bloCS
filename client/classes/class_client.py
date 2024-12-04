@@ -42,8 +42,8 @@ class GameClient:
         # Initial connection request
         player_request = {
             "name": player_name,
-            "height": height,
-            "width": width
+            "height_screen": height,      # Changed from "height" to "height_screen"
+            "width_screen": width         # Changed from "width" to "width_screen"
         }
         send_dict(self.socket, player_request)
         

@@ -43,7 +43,9 @@ class GameServer:
         try:
             player_request = await recv_dict_async(reader)
             self.logger.debug(f"Received player request: {player_request}")
+            
             if player_request and verif_client_request(player_request):
+                self.logger.info(f"Player request verified for {addr}")
                 # Setup player
                 player_id = str(uuid4())
                 self.players[player_id] = (writer, asyncio.get_event_loop().time())
@@ -90,6 +92,7 @@ class GameServer:
                         self.logger.info(f"Timeout waiting for data from {addr}. Closing connection.")
                         break
             else:
+                self.logger.warning(f"Player request verification failed for {addr}: {player_request}")
                 confirmation = {"status": "refused", "player_id": None}
                 await send_dict_async(writer, confirmation)
                 self.logger.info(f"Sent refusal to {addr}: {confirmation}")
