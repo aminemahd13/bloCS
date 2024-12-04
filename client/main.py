@@ -35,8 +35,6 @@ def main():
     client.connect_to_server(player_name, height_screen, width_screen)
     print("Connection: OK")
     
-    del screen
-
     # Game loop
     clock = pygame.time.Clock()
     try:

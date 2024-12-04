@@ -56,6 +56,7 @@ class GameClient:
                 # Receive game map
                 game_map = recv_dict(self.socket)
                 self.background.update_map(game_map)
+                self.logger.info(f"Received game map: {game_map}")
                 
                 # Start receive thread
                 receive_thread = threading.Thread(target=self.receive_data)
@@ -85,6 +86,7 @@ class GameClient:
                 json_data = json.dumps(data)
                 self.socket.send(json_data.encode())
                 send_dict(self.socket, data)
+                self.logger.info(f"Sent data: {json_data}")
             except Exception as e:
                 self.logger.error(f"Error sending data: {e}")
                 self.running = False
@@ -95,6 +97,7 @@ class GameClient:
                 data_dict = recv_dict(self.socket)
                 if not data_dict:
                     break
+                self.logger.info(f"Received data: {data_dict}")
                 if "map" in data_dict:
                     self.background.update_map(data_dict["map"])
                 else:
@@ -120,5 +123,6 @@ class GameClient:
                 self.logger.error(f"Error disconnecting: {e}")
 
     def update(self):
-        self.background.render(self.entities.players_dict[self.player_id])
-        self.entities.render(self.player_id, self.background)
+        if self.player_id in self.entities.players_dict:
+            self.background.render(self.entities.players_dict[self.player_id])
+            self.entities.render(self.player_id, self.background)
