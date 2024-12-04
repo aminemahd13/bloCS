@@ -4,7 +4,7 @@ from uuid import uuid4
 from classes.class_entities import Entities
 from classes.class_background import Background
 from utils.verif import verif_data_received , verif_client_request
-
+from send_dict import send_dict
 
 class GameServer:
     def __init__(self, host , port):
@@ -44,6 +44,9 @@ class GameServer:
                 writer.write(json.dumps(confirmation).encode())
                 await writer.drain()
                 print(f"Sent confirmation to {addr}: {confirmation}")
+
+                # Send game map
+                send_dict(writer, self.background.dict_block)
 
                 # Étape 3 : Échange continu entre le joueur et le serveur
                 while True:

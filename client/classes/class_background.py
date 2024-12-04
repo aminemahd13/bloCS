@@ -72,4 +72,6 @@ class Background:
             if 1 - self.__taille_block <= x_screen <= player.width_screen and 1 - self.__taille_block <= y_screen <= player.height_screen:
                 #On affiche uniquement les blocs qui se situent dans la map
                 block.render(player = player)
-    
+
+    def update_map(self, game_map):
+        self.dict_block = game_map

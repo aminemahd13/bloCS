@@ -6,8 +6,8 @@ from classes.class_background import Background
 from utils.verif import verif_data_received, verif_request_received
 import utils.key_handler as key
 import logging
-from send_dict import send_dict
-from recv_dict import recv_dict
+from utils.send_dict import send_dict
+from utils.recv_dict import recv_dict
 
 class GameClient:
     def __init__(self, host="127.0.0.1", port=55000):
@@ -52,6 +52,11 @@ class GameClient:
             if data_dict["player_id"] is not None:
                 self.player_id = data_dict["player_id"]
                 self.entities.add_player(self.player_id, height, width, player_name)
+                
+                # Receive game map
+                game_map = recv_dict(self.socket)
+                self.background.update_map(game_map)
+                
                 # Start receive thread
                 receive_thread = threading.Thread(target=self.receive_data)
                 receive_thread.daemon = True
@@ -90,7 +95,10 @@ class GameClient:
                 data_dict = recv_dict(self.socket)
                 if not data_dict:
                     break
-                self.handle_server_message(data_dict)
+                if "map" in data_dict:
+                    self.background.update_map(data_dict["map"])
+                else:
+                    self.handle_server_message(data_dict)
             except Exception as e:
                 self.logger.error(f"Error receiving data: {e}")
                 self.running = False
