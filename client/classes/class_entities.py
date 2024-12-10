@@ -35,13 +35,13 @@ class Entities:
     def close(self , player_id):
         self.players_dict[player_id].close()
     
-    def recup_data(self , received_data):
+    def recup_data(self, received_data):
         server_players_id = [player_id for player_id in received_data["Player"].keys()]
         local_players_id = [player_id for player_id in self.players_dict.keys()]
         
         for player_id in server_players_id:
             if player_id not in local_players_id:
-                self.add_player(player_id , 1080 , 1920 , received_data["Player"]["name"])
+                self.add_player(player_id, 1080, 1920, received_data["Player"][player_id]["name"])
         
         for player_id in local_players_id:
             if player_id not in server_players_id:
@@ -52,19 +52,24 @@ class Entities:
         
         for mob_id in server_mobs_id:
             if mob_id not in local_mobs_id:
-                self.add_mob(type = received_data["Mob"][mob_id]["type"] , id = mob_id)
+                self.add_mob(type=received_data["Mob"][mob_id]["type"], id=mob_id)
         
         for mob_id in local_mobs_id:
-            if mob_id not in server_mobs_id:
+            if mob_id not in server_players_id:
                 self.remove_mob(mob_id)
         
-        
-        for player_id , player_data in received_data["Player"].items():
+        for player_id, player_data in received_data["Player"].items():
+            player = self.players_dict[player_id]
+            player.x = player_data.get("x", player.x)
+            player.y = player_data.get("y", player.y)
             for prop_id , prop in player_data.items():
                 eval(f"self.players_dict[player_id].{prop_id} = {prop}")
-            self.players_dict[player_id].change_skin()
+            player.change_skin()
         
-        for mob_id , mob_data in received_data["Mob"].items():
+        for mob_id, mob_data in received_data["Mob"].items():
+            mob = self.mobs_dict[mob_id]
+            mob.x = mob_data.get("x", mob.x)
+            mob.y = mob_data.get("y", mob.y)
             for prop_id , prop in mob_data.items():
                 eval(f"self.mobs_dict[mob_id].{prop_id} = {prop}")
-            self.mobs_dict[mob_id].change_skin()
+            mob.change_skin()

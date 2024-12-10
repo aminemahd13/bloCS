@@ -87,4 +87,3 @@ class Background:
                 for mob in map_mobs[map]:
                     if block.x_right() >= mob.x_left() - 20 and block.x_left() <= mob.x_right() + 20 and mob.y_up() - 50 <= block.y_down() and block.y_up()<= mob.y_down() + 50:
                         mob.block_near.append(block)
-    

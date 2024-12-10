@@ -115,21 +115,15 @@ class DoordownBlock(Block):
     
 
 class TuileBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None, value : int = 2):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = True , health = 100)
-        self.value = value
-        if value in [8,16]:
-            self.tuile_required = 16
-        elif value in [32,64]:
-            self.tuile_required = 64
-        elif value in [128,256,512]:
-            self.tuile_required = 256
+    def __init__(self, x_indice: int = None, y_indice: int = None, x: int = None, y: int = None, value: int = 2):
+        super().__init__(x_indice=x_indice, y_indice=y_indice, x=x, y=y, is_solid=True, breakable=True, health=50)
         self.type = "Tuile"
+        self.value = value
 
 
 class GameBlock(Block):
-    def __init__(self , x_indice : int = None , y_indice : int = None , x : int = None , y : int = None):
-        super().__init__(x_indice = x_indice , y_indice = y_indice , x = x , y = y , is_solid = True , breakable = False , health = 100)
+    def __init__(self, x_indice: int = None, y_indice: int = None, x: int = None, y: int = None):
+        super().__init__(x_indice=x_indice, y_indice=y_indice, x=x, y=y, is_solid=False, breakable=False, health=100)
         self.type = "Game"
 
 

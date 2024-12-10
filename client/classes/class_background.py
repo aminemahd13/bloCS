@@ -4,7 +4,7 @@ from utils.coord_to_screen import coord_to_screen, coord_to_indice, indice_to_sc
 from utils.lists_blocks import block_lists
 from utils.house_list import house_blocks
 from utils.textures import texture_background
-
+import pygame
 
 
 class Background:
@@ -58,20 +58,21 @@ class Background:
             self.dict_block[map].pop(coord)
     
     
-    def render(self, player : Player) -> None:
+    def render(self, player: Player) -> None:
         """
         Affiche le background.
         """
         # Clear the screen
-        player.screen.fill((255,255,255))
+        player.screen.fill((255, 255, 255))
         if self.mode == 1:
-            x_screen , y_screen = indice_to_screen(x_indice = -2 * 39 , y_indice = 0 , player = player)
-            player.screen.blit(self.back_texture, (x_screen , y_screen))
+            x_screen, y_screen = indice_to_screen(x_indice=-2 * 39, y_indice=0, player=player)
+            player.screen.blit(self.back_texture, (x_screen, y_screen))
         for block in self.dict_block[player.map].values():
-            x_screen , y_screen = coord_to_screen(x = block.x , y = block.y , player = player)
-            if 1 - self.__taille_block <= x_screen <= player.width_screen and 1 - self.__taille_block <= y_screen <= player.height_screen:
-                #On affiche uniquement les blocs qui se situent dans la map
-                block.render(player = player)
+            x_screen, y_screen = coord_to_screen(x=block.x, y=block.y, player=player)
+            if (1 - self.__taille_block) <= x_screen <= player.width_screen and (1 - self.__taille_block) <= y_screen <= player.height_screen:
+                # On affiche uniquement les blocs qui se situent dans la map
+                block.render(player=player)
+        pygame.display.flip()  # Update the full display Surface to the screen
 
     def update_map(self, game_map):
         self.dict_block = game_map

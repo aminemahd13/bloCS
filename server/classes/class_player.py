@@ -191,44 +191,35 @@ class Player(Vivant):
             # Déplacement du perso
             self.deplacer_perso()
     
-    def mining_or_breaking(self , background):
-        x_screen, y_screen = self.dict_touches["click"][0] , self.dict_touches["click"][1] #Position du click sur l'écran
-        #On converti ces coordonnées en coordonnées relatives au background (en px)
-        x , y = screen_to_coord(x_screen = x_screen , y_screen = y_screen , player = self)
-        x_indice , y_indice = coord_to_indice(x = x , y = y)
+    def mining_or_breaking(self, background):
+        x_screen, y_screen = self.dict_touches["click"][0], self.dict_touches["click"][1]  # Position du click sur l'écran
+        # Convertir ces coordonnées en coordonnées relatives au background (en px)
+        x, y = screen_to_coord(x_screen=x_screen, y_screen=y_screen, player=self)
+        x_indice, y_indice = coord_to_indice(x=x, y=y)
         if self.x_left() - 80 <= x <= self.x_right() + 80 and self.y_up() - 80 <= y <= self.y_down() + 80:
-            #Si on est dans une fenêtre de 2 blocs sur les côtés
-            if self.dict_touches["click"][2] == 1 and not (self.x_left()<=x<=self.x_right() and self.y_up()<=y<=self.y_down()):  # Left click to place a block
-                if x_indice*40+40-1<self.x_left() or x_indice*40>self.x_right() or y_indice*40>self.y_down() or y_indice*40+40-1<self.y_up():
-                    selected_block_type = self.block_types[self.selected_block - 1] #Type de bloc sélectionné
-                    if self.inventory[selected_block_type] > 0: #Si on en a dans notre inventaire
-                        new_block = eval(f"{selected_block_type}Block(x_indice = x_indice , y_indice = y_indice)") #Création de l'objet block
-                        if background.add_block(new_block , self.map): #Si le bloc a été placé
-                                self.remove_inventory(selected_block_type) #On l'enlève de l'inventaire
-            elif self.dict_touches["click"][2] == 3:  # Right click to remove a block
-                added = False
-                for key , values in background.dict_block[self.map].items():
-                    for i , block in enumerate(values):
-                        if block.x_indice == x_indice and block.y_indice == y_indice:
-                            if block.type != "Game":
-                                if block.take_damage(damage = 100 , tuile_max = self.tuile_max()):
-                                    values.pop(i)
-                                    if block.type == "Tuile":
-                                        self.inventory_tuiles[str(block.value)] += 1
-                                    else:
-                                        self.add_inventory(key)
-                                added=True
-                                #Remarque : met automatiquement le bloc dans l'inventaire du joueur s'il est détruit
-                                self.mining = True
-                                pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 1 second
-                                break
-                            else:
-                                self.is_playing_2048 = True
-                                added=True
-                                break
-                    if added:
-                        break
-                    
+            # Si on est dans une fenêtre de 2 blocs sur les côtés
+            if self.dict_touches["click"][2] == 1 and not (self.x_left() <= x <= self.x_right() and self.y_up() <= y <= self.y_down()):
+                # Left click to place a block
+                selected_block_type = self.block_types[self.selected_block - 1]  # Type de bloc sélectionné
+                if self.inventory.get(selected_block_type, 0) > 0:  # Si on en a dans notre inventaire
+                    new_block = eval(f"{selected_block_type}Block(x_indice=x_indice, y_indice=y_indice)")  # Création de l'objet block
+                    if background.add_block(new_block, self.map):
+                        # Si le bloc a été placé
+                        self.remove_inventory(selected_block_type)  # On l'enlève de l'inventaire
+            elif self.dict_touches["click"][2] == 3:
+                # Right click to remove a block
+                block = background.dict_block[self.map].get((x_indice, y_indice))
+                if block and block.type != "Game":
+                    if block.take_damage(damage=100, tuile_max=self.tuile_max()):
+                        background.remove_block(self.map, x_indice=x_indice, y_indice=y_indice)
+                        if block.type == "Tuile":
+                            self.inventory_tuiles[str(block.value)] += 1
+                        else:
+                            self.add_inventory(block.type)
+                        self.mining = True
+                        pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 0.35 seconds
+                    elif block.type == "Game":
+                        self.is_playing_2048 = True
     
     def add_inventory(self,item) -> None:
         """Add item to the inventory"""
@@ -258,18 +249,18 @@ class Player(Vivant):
     
     def crea_data(self):
         return {
-            "name" : self.name,
-            "loaded_game" : self.loaded_game,
-            "map" : self.map,
-            "is_playing_2048" : self.is_playing_2048,
-            "grille" : self.grille,
-            "selected_block" : self.selected_block,
-            "inventory" : self.inventory,
-            "skin_name" : self.skin_name,
-            "health" : self.health,
-            "x" : self.x,
-            "y" : self.y,
-            "running" : self.running
+            "name": self.name,
+            "loaded_game": self.loaded_game,
+            "map": self.map,
+            "is_playing_2048": self.is_playing_2048,
+            "grille": self.grille,
+            "selected_block": self.selected_block,
+            "inventory": self.inventory,
+            "skin_name": self.skin_name,
+            "health": self.health,
+            "x": self.x,           # Include x position
+            "y": self.y,           # Include y position
+            "running": self.running
         }
     
     

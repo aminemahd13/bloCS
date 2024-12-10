@@ -76,12 +76,20 @@ class GameClient:
     def send_data(self):
         while self.running:
             try:
+                # Get the player's current position
+                player = self.entities.players_dict.get(self.player_id)
+                if player:
+                    position = {"x": player.x, "y": player.y}
+                else:
+                    position = {"x": 0, "y": 0}
+                
                 data = {
                     "right": key.right(),
                     "left": key.left(),
                     "up": key.up(),
                     "echap": key.close(),
-                    "click": None
+                    "click": None,
+                    "position": position  # Include position
                 }
                 json_data = json.dumps(data)
                 self.socket.send(json_data.encode())
