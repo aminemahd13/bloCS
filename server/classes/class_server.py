@@ -29,6 +29,12 @@ class GameServer:
             format='%(asctime)s - %(levelname)s - %(message)s'
         )
         self.logger = logging.getLogger('GameServer')
+        
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        stream_handler.setFormatter(formatter)
+        logging.getLogger().addHandler(stream_handler)
 
     def play(self):
         self.entities.play(background=self.background)
@@ -42,7 +48,7 @@ class GameServer:
         player_id = None
         try:
             player_request = await recv_dict_async(reader)
-            self.logger.debug(f"Received player request: {player_request}")
+            self.logger.debug(f"Received player request from {addr}: {player_request}")
             if player_request and verif_client_request(player_request):
                 self.logger.info(f"Player request verified for {addr}")
                 # Setup player
@@ -57,6 +63,7 @@ class GameServer:
 
                 # Send confirmation
                 confirmation = {"status": "accepted", "player_id": player_id}
+                self.logger.debug(f"Sending confirmation to {addr}: {confirmation}")
                 await send_dict_async(writer, confirmation)
                 self.logger.info(f"Sent confirmation to {addr}: {confirmation}")
 
@@ -66,6 +73,7 @@ class GameServer:
                     "map": self.background.dict_block,
                     "data": self.sent_data
                 }
+                self.logger.debug(f"Sending initial game state to {addr}: {initial_game_state}")
                 await send_dict_async(writer, initial_game_state)
                 self.logger.info(f"Sent initial game state to {addr}")
 
@@ -73,6 +81,7 @@ class GameServer:
                 while True:
                     try:
                         data_dict = await asyncio.wait_for(recv_dict_async(reader), timeout=10.0)
+                        self.logger.debug(f"Received data from {addr}: {data_dict}")
                         if not data_dict:
                             self.logger.info(f"Client disconnected: {addr}")
                             break
@@ -84,7 +93,9 @@ class GameServer:
                                 player.y = data_dict["position"]["y"]
                         
                         # Update and send game state
+                        self.logger.debug("Updating game state")
                         self.play()  # Update game state
+                        self.logger.debug("Game state updated")
                         game_state = {
                             "map": self.background.dict_block,
                             "Player": {pid: p.crea_data() for pid, p in self.entities.players_dict.items()},
@@ -104,6 +115,7 @@ class GameServer:
             else:
                 self.logger.warning(f"Player request verification failed for {addr}: {player_request}")
                 confirmation = {"status": "refused", "player_id": None}
+                self.logger.debug(f"Sending refusal to {addr}: {confirmation}")
                 await send_dict_async(writer, confirmation)
                 self.logger.info(f"Sent refusal to {addr}: {confirmation}")
         except Exception as e:
@@ -121,39 +133,23 @@ class GameServer:
     async def update_and_broadcast(self):
         while self.running:
             try:
+                self.logger.debug("Playing game to update state")
                 self.play()
+                self.logger.debug("Game state played")
+
                 game_state = {
                     "map": self.background.dict_block,
                     "Player": {pid: p.crea_data() for pid, p in self.entities.players_dict.items()},
                     "Mob": {mid: m.crea_data() for mid, m in self.entities.mobs_dict.items()}
                 }
+                self.logger.debug(f"Broadcasting game state: {game_state}")
                 for player_id, (writer, _) in self.players.items():
                     try:
                         await send_dict_async(writer, game_state)
+                        self.logger.debug(f"Sent game state to player {player_id}")
                     except Exception as e:
                         self.logger.error(f"Error sending game state to player {player_id}: {e}")
                 await asyncio.sleep(1 / self.entities.fps)
             except Exception as e:
                 self.logger.error(f"Error in update_and_broadcast: {e}")
-
-    async def run_server(self):
-        self.server = await asyncio.start_server(self.handle_client, self.host, self.port)
-        updater_task = asyncio.create_task(self.update_and_broadcast())
-        async with self.server:
-            await self.server.serve_forever()
-
-    async def stop_server(self):
-        """Arrête proprement le serveur."""
-        print("Stopping server...")
-        self.running = False  # Arrête la gestion des joueurs
-        if self.server:
-            self.server.close()
-            await self.server.wait_closed()
-        # Déconnecte tous les joueurs connectés
-        for player_id, (writer, _) in list(self.players.items()):
-            print(f"Disconnecting player {player_id}...")
-            writer.close()
-            await writer.wait_closed()
-        self.players.clear()
-        print("Server stopped.")
 

@@ -82,7 +82,21 @@ class GameServer:
             await self.server.wait_closed()
             self.logger.info("Server stopped")
 
+def setup_file_logging():
+    file_handler = logging.FileHandler('server.log')
+    file_handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    logging.getLogger().addHandler(file_handler)
+    
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    stream_handler.setFormatter(formatter)
+    logging.getLogger().addHandler(stream_handler)
+
 async def main():
+    setup_file_logging()
     config = ServerConfig()
     server = GameServer(config)
     

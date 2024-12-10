@@ -1,0 +1,7 @@
+2024-12-10 09:12:45,677 - DEBUG - Initialized Background
+2024-12-10 09:12:45,860 - DEBUG - Initialized GameClient
+2024-12-10 09:12:45,861 - INFO - Trying to connect to server...
+2024-12-10 09:12:45,861 - DEBUG - Attempting to connect to 127.0.0.1:55000
+2024-12-10 09:12:45,861 - INFO - Connected to server at 127.0.0.1:55000
+2024-12-10 09:12:45,861 - DEBUG - Sending player request: {'name': 'Player 1', 'height_screen': 1080, 'width_screen': 1920}
+2024-12-10 09:12:45,861 - DEBUG - Sent data: {"name": "Player 1", "height_screen": 1080, "width_screen": 1920}

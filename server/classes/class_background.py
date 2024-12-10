@@ -54,7 +54,9 @@ class Background:
         coord = (x_indice , y_indice)
         if coord in self.dict_block[map]:
             block = self.dict_block[map][coord]
+            self.logger.debug(f"Player {player.name} damaging block {block.type} at ({x_indice}, {y_indice}) with damage {damage}")
             if block.take_damage(damage , player.tuile_max()):
+                self.logger.info(f"Block {block.type} at ({x_indice}, {y_indice}) destroyed by player {player.name}")
                 self.dict_block[map].pop(coord)
                 player.inventory[block.type] += 1
                 return True

@@ -5,6 +5,7 @@ from utils.lists_blocks import block_lists
 from utils.house_list import house_blocks
 from utils.textures import texture_background
 import pygame
+import logging
 
 
 class Background:
@@ -15,6 +16,8 @@ class Background:
         self.dict_block = {}
         self.__taille_block = 40
         self.back_texture = texture_background
+        self.logger = logging.getLogger('Background')
+        self.logger.debug("Initialized Background")
         
         for block_type in ["Game" , "Wood1" , "Doorup" , "Doordown"]:
             for coord in house_blocks[block_type]:
@@ -38,6 +41,7 @@ class Background:
         Ajoute un bloc dans le background.
         Enlève le bloc qu'il y avait de base.
         """
+        self.logger.debug(f"Adding block: {type} at indices ({x_indice}, {y_indice}) on map {map}")
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
         coord = (x_indice , y_indice)
@@ -51,17 +55,17 @@ class Background:
         """
         Enlève le bloc.
         """
+        self.logger.debug(f"Removing block at indices ({x_indice}, {y_indice}) from map {map}")
         if x_indice is None:
             x_indice , y_indice = coord_to_indice(x = x , y = y)
         coord = (x_indice , y_indice)
         if coord in self.dict_block[map]:
             self.dict_block[map].pop(coord)
+        return True
     
     
     def render(self, player: Player) -> None:
-        """
-        Affiche le background.
-        """
+        self.logger.debug("Rendering background for player")
         # Clear the screen
         player.screen.fill((255, 255, 255))
         if self.mode == 1:
@@ -71,8 +75,12 @@ class Background:
             x_screen, y_screen = coord_to_screen(x=block.x, y=block.y, player=player)
             if (1 - self.__taille_block) <= x_screen <= player.width_screen and (1 - self.__taille_block) <= y_screen <= player.height_screen:
                 # On affiche uniquement les blocs qui se situent dans la map
+                # On affiche uniquement les blocs qui se situent dans la map
                 block.render(player=player)
         pygame.display.flip()  # Update the full display Surface to the screen
+        self.logger.debug("Background rendered successfully")
 
     def update_map(self, game_map):
         self.dict_block = game_map
+        self.logger.debug(f"Map updated to: {game_map}")
+        pygame.display.flip()  # Update the full display Surface to the screen

@@ -89,22 +89,27 @@ class Player(Vivant):
         # Convertir ces coordonnées en coordonnées relatives au background (en px)
         x, y = screen_to_coord(x_screen=x_screen, y_screen=y_screen, player=self)
         x_indice, y_indice = coord_to_indice(x=x, y=y)
+        self.logger.debug(f"Mining action at screen ({x_screen}, {y_screen}) which maps to coord ({x}, {y}) and indices ({x_indice}, {y_indice})")
         if self.x_left() - 80 <= x <= self.x_right() + 80 and self.y_up() - 80 <= y <= self.y_down() + 80:
             # Si on est dans une fenêtre de 2 blocs sur les côtés
             if self.dict_touches["click"][2] == 1 and not (self.x_left() <= x <= self.x_right() and self.y_up() <= y <= self.y_down()):
                 # Left click to place a block
                 selected_block_type = self.block_types[self.selected_block - 1]  # Type de bloc sélectionné
+                self.logger.debug(f"Attempting to place block type {selected_block_type}")
                 if self.inventory.get(selected_block_type, 0) > 0:  # Si on en a dans notre inventaire
                     new_block = eval(f"{selected_block_type}Block(x_indice=x_indice, y_indice=y_indice)")  # Création de l'objet block
                     if background.add_block(new_block, self.map):
                         # Si le bloc a été placé
                         self.remove_inventory(selected_block_type)  # On l'enlève de l'inventaire
+                        self.logger.info(f"Placed block type {selected_block_type} at ({x_indice}, {y_indice})")
             elif self.dict_touches["click"][2] == 3:
                 # Right click to remove a block
+                self.logger.debug(f"Attempting to remove block at ({x_indice}, {y_indice})")
                 block = background.dict_block[self.map].get((x_indice, y_indice))
                 if block and block.type != "Game":
                     if block.take_damage(damage=100, tuile_max=self.tuile_max()):
                         background.remove_block(self.map, x_indice=x_indice, y_indice=y_indice)
+                        self.logger.info(f"Removed block type {block.type} at ({x_indice}, {y_indice})")
                         if block.type == "Tuile":
                             self.inventory_tuiles[str(block.value)] += 1
                         else:
@@ -112,5 +117,6 @@ class Player(Vivant):
                         self.mining = True
                         pygame.time.set_timer(self.RESET_MINING_EVENT, 350)  # Set a timer for 0.35 seconds
                     elif block.type == "Game":
+                        self.logger.debug("Entering 2048 game mode")
                         self.is_playing_2048 = True
 
