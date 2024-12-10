@@ -16,10 +16,11 @@ class GameServer:
         self.clients = set()
         self.running = False
         self.setup_logging()
+        self.logger.info("GameServer initialized and logging is set up")  # Added log message
 
     def setup_logging(self):
         logging.basicConfig(
-            level=logging.INFO,
+            level=logging.DEBUG,  # Changed to DEBUG for more detailed logs
             format='%(asctime)s - %(levelname)s - %(message)s'
         )
         self.logger = logging.getLogger('GameServer')
@@ -37,8 +38,10 @@ class GameServer:
         self.clients.add(writer)
         try:
             while self.running:
+                self.logger.debug(f"Waiting to read data from {addr}")  # Added debug log
                 data = await reader.read(1024)
                 if not data:
+                    self.logger.info(f"No data received from {addr}, closing connection")  # Added log
                     break
                 self.logger.debug(f"Received data from {addr}: {data}")
                 # Process data here
@@ -63,6 +66,7 @@ class GameServer:
     async def start(self):
         self.running = True
         try:
+            self.logger.debug("Starting the asyncio server...")  # Added debug log
             self.server = await asyncio.start_server(
                 self.handle_client,
                 self.config.host,
@@ -70,6 +74,7 @@ class GameServer:
             )
             addr = self.server.sockets[0].getsockname()
             self.logger.info(f"Server started on {addr}")
+            self.logger.debug("Entering the server serve_forever loop")  # Added debug log
             await self.server.serve_forever()
         except Exception as e:
             self.logger.error(f"Server error: {e}")
@@ -94,6 +99,7 @@ def setup_file_logging():
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     stream_handler.setFormatter(formatter)
     logging.getLogger().addHandler(stream_handler)
+    logging.getLogger().setLevel(logging.DEBUG)  # Ensure root logger is at DEBUG level
 
 async def main():
     setup_file_logging()
@@ -101,8 +107,10 @@ async def main():
     server = GameServer(config)
     
     try:
+        server.logger.info("Starting the server application")
         await server.start()
     except KeyboardInterrupt:
+        server.logger.info("KeyboardInterrupt received, stopping server")
         await server.stop()
 
 if __name__ == "__main__":

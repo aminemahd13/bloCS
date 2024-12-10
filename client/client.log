@@ -5,3 +5,17 @@
 2024-12-10 09:12:45,861 - INFO - Connected to server at 127.0.0.1:55000
 2024-12-10 09:12:45,861 - DEBUG - Sending player request: {'name': 'Player 1', 'height_screen': 1080, 'width_screen': 1920}
 2024-12-10 09:12:45,861 - DEBUG - Sent data: {"name": "Player 1", "height_screen": 1080, "width_screen": 1920}
+2024-12-10 09:52:15,751 - DEBUG - Initialized Background
+2024-12-10 09:52:15,931 - DEBUG - Initialized GameClient
+2024-12-10 09:52:15,931 - INFO - Trying to connect to server...
+2024-12-10 09:52:15,931 - DEBUG - Attempting to connect to 127.0.0.1:55000
+2024-12-10 09:52:15,931 - INFO - Connected to server at 127.0.0.1:55000
+2024-12-10 09:52:15,931 - DEBUG - Sending player request: {'name': 'Player 1', 'height_screen': 1080, 'width_screen': 1920}
+2024-12-10 09:52:15,931 - DEBUG - Sent data: {"name": "Player 1", "height_screen": 1080, "width_screen": 1920}
+2024-12-10 09:52:31,879 - DEBUG - Received data: 
+2024-12-10 09:52:31,880 - ERROR - Error receiving data: Expecting value: line 1 column 1 (char 0)
+2024-12-10 09:52:31,880 - DEBUG - Received response: None
+2024-12-10 09:52:31,880 - WARNING - Failed to verify server response
+2024-12-10 09:52:31,880 - INFO - Connection status: False
+2024-12-10 09:52:31,881 - INFO - Disconnected from server
+2024-12-10 09:52:31,881 - INFO - Client disconnected
